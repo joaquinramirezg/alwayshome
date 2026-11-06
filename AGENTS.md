@@ -15,6 +15,7 @@ Read first:
 - `docs/hackathon_brief.md`: rules, judging criteria, problem, demo flow, scope
 - `docs/data_dictionary.md`: every processed table, its columns, join keys and limitations
 - `docs/validation_report.md`: data checks and known data problems
+- `docs/TESTING.md`: setup, running the app, the test scripts
 
 ## Rules
 
@@ -56,6 +57,8 @@ uv run python scripts/03_validate.py     # data checks
 ```
 
 Reading new policy PDFs needs `ANTHROPIC_API_KEY` in the environment. Without it, only the cached sample PDFs work and the manual form is the fallback.
+
+Before pushing to `main`, run `uv run python scripts/smoke_test.py` (expects `All checks passed.`).
 
 ## Git
 
