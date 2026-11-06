@@ -1,0 +1,665 @@
+{
+  "11dc11bf03e7a013a2dff1efe34f5618cf56ebab3bb16119287a84d2e28c3a15": {
+    "code_upgrade": {
+      "page": null,
+      "source_text": null,
+      "value": null
+    },
+    "contents_limit": {
+      "page": null,
+      "source_text": null,
+      "value": null
+    },
+    "debris_removal": {
+      "page": null,
+      "source_text": null,
+      "value": null
+    },
+    "deductible_all_perils": {
+      "page": null,
+      "source_text": null,
+      "value": null
+    },
+    "deductible_wildfire": {
+      "page": null,
+      "source_text": null,
+      "value": null
+    },
+    "dic_covers": {
+      "page": null,
+      "source_text": null,
+      "value": null
+    },
+    "discounts_listed": {
+      "page": null,
+      "source_text": null,
+      "value": null
+    },
+    "document_type": {
+      "page": 1,
+      "source_text": "Notice of Non-Renewal",
+      "value": "other"
+    },
+    "dwelling_limit": {
+      "page": null,
+      "source_text": null,
+      "value": null
+    },
+    "dwelling_settlement": {
+      "page": null,
+      "source_text": null,
+      "value": null
+    },
+    "effective_date": {
+      "page": null,
+      "source_text": null,
+      "value": null
+    },
+    "extended_replacement_pct": {
+      "page": null,
+      "source_text": null,
+      "value": null
+    },
+    "insurer_name": {
+      "page": 1,
+      "source_text": "Golden Poppy Mutual Insurance (fictional)",
+      "value": "Golden Poppy Mutual Insurance (fictional)"
+    },
+    "liability_limit": {
+      "page": null,
+      "source_text": null,
+      "value": null
+    },
+    "loss_of_use_limit": {
+      "page": null,
+      "source_text": null,
+      "value": null
+    },
+    "other_structures_limit": {
+      "page": null,
+      "source_text": null,
+      "value": null
+    },
+    "premium_total": {
+      "page": null,
+      "source_text": null,
+      "value": null
+    }
+  },
+  "173486c2de64f3176deec9d2651f026e8317ddb485852c816af94d5e29ab004c": {
+    "code_upgrade": {
+      "page": null,
+      "source_text": null,
+      "value": null
+    },
+    "contents_limit": {
+      "page": null,
+      "source_text": null,
+      "value": null
+    },
+    "debris_removal": {
+      "page": null,
+      "source_text": null,
+      "value": null
+    },
+    "deductible_all_perils": {
+      "page": 1,
+      "source_text": "Deductible - all perils $1,000",
+      "value": 1000
+    },
+    "deductible_wildfire": {
+      "page": null,
+      "source_text": null,
+      "value": null
+    },
+    "dic_covers": {
+      "page": 1,
+      "source_text": "Covered perils added Theft, Water damage, Windstorm, Personal liability",
+      "value": [
+        "theft",
+        "water damage",
+        "windstorm",
+        "liability",
+        "loss of use"
+      ]
+    },
+    "discounts_listed": {
+      "page": null,
+      "source_text": null,
+      "value": null
+    },
+    "document_type": {
+      "page": 1,
+      "source_text": "Difference in Conditions Policy - Declarations",
+      "value": "dic"
+    },
+    "dwelling_limit": {
+      "page": 1,
+      "source_text": "Coverage A - Dwelling (excluding fire) $650,000",
+      "value": 650000
+    },
+    "dwelling_settlement": {
+      "page": 1,
+      "source_text": "Loss settlement - Dwelling Replacement cost",
+      "value": "replacement_cost"
+    },
+    "effective_date": {
+      "page": 1,
+      "source_text": "Effective 2026-03-01 to 2027-03-01",
+      "value": "2026-03-01"
+    },
+    "extended_replacement_pct": {
+      "page": null,
+      "source_text": null,
+      "value": null
+    },
+    "insurer_name": {
+      "page": 1,
+      "source_text": "Sierra Shield Insurance Co. (fictional)",
+      "value": "Sierra Shield Insurance Co. (fictional)"
+    },
+    "liability_limit": {
+      "page": 1,
+      "source_text": "Coverage E - Personal liability $300,000",
+      "value": 300000
+    },
+    "loss_of_use_limit": {
+      "page": 1,
+      "source_text": "Coverage D - Loss of use $130,000",
+      "value": 130000
+    },
+    "other_structures_limit": {
+      "page": null,
+      "source_text": null,
+      "value": null
+    },
+    "premium_total": {
+      "page": 1,
+      "source_text": "Total annual premium $1,450",
+      "value": 1450
+    }
+  },
+  "17448419415ea649618c4c43ab298acb2078c62301a699b548b3135bc1c5af13": {
+    "code_upgrade": {
+      "page": 1,
+      "source_text": "Ordinance or law (HO 04 77) 10% of Coverage A",
+      "value": {
+        "covered": true,
+        "limit": null,
+        "pct": 10
+      }
+    },
+    "contents_limit": {
+      "page": 1,
+      "source_text": "Coverage C - Personal property $450,000",
+      "value": 450000
+    },
+    "debris_removal": {
+      "page": 1,
+      "source_text": "Debris removal Additional 5% of Coverage A",
+      "value": {
+        "covered": true,
+        "limit": null,
+        "pct": null
+      }
+    },
+    "deductible_all_perils": {
+      "page": 1,
+      "source_text": "Deductible - all other perils $2,500",
+      "value": 2500
+    },
+    "deductible_wildfire": {
+      "page": 1,
+      "source_text": "Wildfire deductible 2% of Coverage A ($18,000)",
+      "value": {
+        "amount": 18000,
+        "pct": 2
+      }
+    },
+    "dic_covers": {
+      "page": null,
+      "source_text": null,
+      "value": null
+    },
+    "discounts_listed": {
+      "page": 1,
+      "source_text": "Discount - Safer from Wildfires (Class A roof) -$310",
+      "value": [
+        {
+          "amount": 310,
+          "name": "Safer from Wildfires (Class A roof)"
+        }
+      ]
+    },
+    "document_type": {
+      "page": 1,
+      "source_text": "Homeowners Policy HO-3 - Declarations",
+      "value": "homeowners"
+    },
+    "dwelling_limit": {
+      "page": 1,
+      "source_text": "Coverage A - Dwelling $900,000",
+      "value": 900000
+    },
+    "dwelling_settlement": {
+      "page": 1,
+      "source_text": "Loss settlement - Dwelling Replacement cost",
+      "value": "replacement_cost"
+    },
+    "effective_date": {
+      "page": 1,
+      "source_text": "Effective 2026-07-15 to 2027-07-15",
+      "value": "2026-07-15"
+    },
+    "extended_replacement_pct": {
+      "page": null,
+      "source_text": null,
+      "value": null
+    },
+    "insurer_name": {
+      "page": 1,
+      "source_text": "Golden Poppy Mutual Insurance (fictional)",
+      "value": "Golden Poppy Mutual Insurance (fictional)"
+    },
+    "liability_limit": {
+      "page": 1,
+      "source_text": "Coverage E - Personal liability $500,000",
+      "value": 500000
+    },
+    "loss_of_use_limit": {
+      "page": 1,
+      "source_text": "Coverage D - Loss of use $180,000",
+      "value": 180000
+    },
+    "other_structures_limit": {
+      "page": 1,
+      "source_text": "Coverage B - Other structures $90,000",
+      "value": 90000
+    },
+    "premium_total": {
+      "page": 1,
+      "source_text": "Total annual premium $9,220",
+      "value": 9220
+    }
+  },
+  "62572522b0a7bd765498fb8d91b600e2314d37ffda010fdb72f71f6f87f704e9": {
+    "code_upgrade": {
+      "page": 1,
+      "source_text": "Building code upgrade (HO 04 77) 25% of Coverage A",
+      "value": {
+        "covered": true,
+        "limit": null,
+        "pct": 25
+      }
+    },
+    "contents_limit": {
+      "page": 1,
+      "source_text": "Coverage C - Personal property $700,000",
+      "value": 700000
+    },
+    "debris_removal": {
+      "page": 1,
+      "source_text": "Debris removal Additional 5% of Coverage A",
+      "value": {
+        "covered": true,
+        "limit": null,
+        "pct": null
+      }
+    },
+    "deductible_all_perils": {
+      "page": 1,
+      "source_text": "Deductible - all perils $5,000",
+      "value": 5000
+    },
+    "deductible_wildfire": {
+      "page": null,
+      "source_text": null,
+      "value": null
+    },
+    "dic_covers": {
+      "page": null,
+      "source_text": null,
+      "value": null
+    },
+    "discounts_listed": {
+      "page": null,
+      "source_text": null,
+      "value": null
+    },
+    "document_type": {
+      "page": 1,
+      "source_text": "Homeowners Policy HO-3 - Declarations",
+      "value": "homeowners"
+    },
+    "dwelling_limit": {
+      "page": 1,
+      "source_text": "Coverage A - Dwelling $1,400,000",
+      "value": 1400000
+    },
+    "dwelling_settlement": {
+      "page": 1,
+      "source_text": "Loss settlement - Dwelling Replacement cost",
+      "value": "replacement_cost"
+    },
+    "effective_date": {
+      "page": 1,
+      "source_text": "Effective 2026-05-01 to 2027-05-01",
+      "value": "2026-05-01"
+    },
+    "extended_replacement_pct": {
+      "page": 1,
+      "source_text": "Extended replacement cost 25% above Coverage A",
+      "value": 25
+    },
+    "insurer_name": {
+      "page": 1,
+      "source_text": "Golden Poppy Mutual Insurance (fictional)",
+      "value": "Golden Poppy Mutual Insurance (fictional)"
+    },
+    "liability_limit": {
+      "page": 1,
+      "source_text": "Coverage E - Personal liability $1,000,000",
+      "value": 1000000
+    },
+    "loss_of_use_limit": {
+      "page": 1,
+      "source_text": "Coverage D - Loss of use $280,000",
+      "value": 280000
+    },
+    "other_structures_limit": {
+      "page": 1,
+      "source_text": "Coverage B - Other structures $140,000",
+      "value": 140000
+    },
+    "premium_total": {
+      "page": 1,
+      "source_text": "Total annual premium $4,210",
+      "value": 4210
+    }
+  },
+  "70e6d9bf7f2b4a6c0dd41bd85048f191f2f98a3d63cddaac5aef6552461565c1": {
+    "code_upgrade": {
+      "page": null,
+      "source_text": null,
+      "value": null
+    },
+    "contents_limit": {
+      "page": 1,
+      "source_text": "Coverage C - Personal property $100,000",
+      "value": 100000
+    },
+    "debris_removal": {
+      "page": 1,
+      "source_text": "Debris removal Included within Coverage A limit",
+      "value": {
+        "covered": true,
+        "limit": null,
+        "pct": null
+      }
+    },
+    "deductible_all_perils": {
+      "page": 1,
+      "source_text": "Deductible - all perils $2,500",
+      "value": 2500
+    },
+    "deductible_wildfire": {
+      "page": null,
+      "source_text": null,
+      "value": null
+    },
+    "dic_covers": {
+      "page": null,
+      "source_text": null,
+      "value": null
+    },
+    "discounts_listed": {
+      "page": null,
+      "source_text": null,
+      "value": null
+    },
+    "document_type": {
+      "page": 1,
+      "source_text": "California FAIR Plan Association",
+      "value": "fair_plan"
+    },
+    "dwelling_limit": {
+      "page": 1,
+      "source_text": "Coverage A - Dwelling $650,000",
+      "value": 650000
+    },
+    "dwelling_settlement": {
+      "page": 1,
+      "source_text": "Loss settlement - Dwelling Actual cash value",
+      "value": "actual_cash_value"
+    },
+    "effective_date": {
+      "page": 1,
+      "source_text": "Effective 2026-03-01 to 2027-03-01",
+      "value": "2026-03-01"
+    },
+    "extended_replacement_pct": {
+      "page": null,
+      "source_text": null,
+      "value": null
+    },
+    "insurer_name": {
+      "page": 1,
+      "source_text": "California FAIR Plan Association",
+      "value": "California FAIR Plan Association"
+    },
+    "liability_limit": {
+      "page": null,
+      "source_text": null,
+      "value": null
+    },
+    "loss_of_use_limit": {
+      "page": 1,
+      "source_text": "Coverage D - Fair rental value Not purchased",
+      "value": 0
+    },
+    "other_structures_limit": {
+      "page": 1,
+      "source_text": "Coverage B - Other structures Not purchased",
+      "value": 0
+    },
+    "premium_total": {
+      "page": 1,
+      "source_text": "Total annual premium $6,180",
+      "value": 6180
+    }
+  },
+  "bdf1c775bb4de0be528c08db12e076776ea5ae6a10aac57cbea6235025708712": {
+    "code_upgrade": {
+      "page": 2,
+      "source_text": "Ordinance or law Not included",
+      "value": {
+        "covered": false,
+        "limit": null,
+        "pct": null
+      }
+    },
+    "contents_limit": {
+      "page": 2,
+      "source_text": "Coverage C - Personal property $525,000",
+      "value": 525000
+    },
+    "debris_removal": {
+      "page": 2,
+      "source_text": "Debris removal Additional 5% of Coverage A",
+      "value": {
+        "covered": true,
+        "limit": null,
+        "pct": null
+      }
+    },
+    "deductible_all_perils": {
+      "page": null,
+      "source_text": null,
+      "value": null
+    },
+    "deductible_wildfire": {
+      "page": 2,
+      "source_text": "Wildfire deductible 5% of Coverage A ($52,500)",
+      "value": {
+        "amount": 52500,
+        "pct": 5
+      }
+    },
+    "dic_covers": {
+      "page": null,
+      "source_text": null,
+      "value": null
+    },
+    "discounts_listed": {
+      "page": 2,
+      "source_text": "Discount - Wildfire Prepared Home -$540",
+      "value": [
+        {
+          "amount": 540,
+          "name": "Wildfire Prepared Home"
+        }
+      ]
+    },
+    "document_type": {
+      "page": 1,
+      "source_text": "Homeowners Policy HO-3 - Declarations",
+      "value": "homeowners"
+    },
+    "dwelling_limit": {
+      "page": 2,
+      "source_text": "Coverage A - Dwelling $1,050,000",
+      "value": 1050000
+    },
+    "dwelling_settlement": {
+      "page": 2,
+      "source_text": "Loss settlement - Dwelling Replacement cost",
+      "value": "replacement_cost"
+    },
+    "effective_date": {
+      "page": 1,
+      "source_text": "Effective 2026-09-01 to 2027-09-01",
+      "value": "2026-09-01"
+    },
+    "extended_replacement_pct": {
+      "page": 2,
+      "source_text": "Extended replacement cost 50% above Coverage A",
+      "value": 50
+    },
+    "insurer_name": {
+      "page": 1,
+      "source_text": "Golden Poppy Mutual Insurance (fictional)",
+      "value": "Golden Poppy Mutual Insurance (fictional)"
+    },
+    "liability_limit": {
+      "page": 2,
+      "source_text": "Coverage E - Personal liability $300,000",
+      "value": 300000
+    },
+    "loss_of_use_limit": {
+      "page": 2,
+      "source_text": "Coverage D - Loss of use $210,000",
+      "value": 210000
+    },
+    "other_structures_limit": {
+      "page": null,
+      "source_text": null,
+      "value": null
+    },
+    "premium_total": {
+      "page": 2,
+      "source_text": "Total annual premium $7,980",
+      "value": 7980
+    }
+  },
+  "c58578186f7436bb635513c837cf1c5020d62a3619dea37581f6d92cd4e15314": {
+    "code_upgrade": {
+      "page": null,
+      "source_text": null,
+      "value": null
+    },
+    "contents_limit": {
+      "page": 1,
+      "source_text": "Coverage C - Personal property $100,000",
+      "value": 100000
+    },
+    "debris_removal": {
+      "page": 1,
+      "source_text": "Debris removal Included within Coverage A limit",
+      "value": {
+        "covered": true,
+        "limit": null,
+        "pct": null
+      }
+    },
+    "deductible_all_perils": {
+      "page": 1,
+      "source_text": "Deductible - all perils $2,500",
+      "value": 2500
+    },
+    "deductible_wildfire": {
+      "page": null,
+      "source_text": null,
+      "value": null
+    },
+    "dic_covers": {
+      "page": null,
+      "source_text": null,
+      "value": null
+    },
+    "discounts_listed": {
+      "page": null,
+      "source_text": null,
+      "value": null
+    },
+    "document_type": {
+      "page": 1,
+      "source_text": "California FAIR Plan Association",
+      "value": "fair_plan"
+    },
+    "dwelling_limit": {
+      "page": 1,
+      "source_text": "Coverage A - Dwelling $650,000",
+      "value": 650000
+    },
+    "dwelling_settlement": {
+      "page": 1,
+      "source_text": "Loss settlement - Dwelling Actual cash value",
+      "value": "actual_cash_value"
+    },
+    "effective_date": {
+      "page": 1,
+      "source_text": "Effective 2026-03-01 to 2027-03-01",
+      "value": "2026-03-01"
+    },
+    "extended_replacement_pct": {
+      "page": null,
+      "source_text": null,
+      "value": null
+    },
+    "insurer_name": {
+      "page": 1,
+      "source_text": "California FAIR Plan Association",
+      "value": "California FAIR Plan Association"
+    },
+    "liability_limit": {
+      "page": null,
+      "source_text": null,
+      "value": null
+    },
+    "loss_of_use_limit": {
+      "page": 1,
+      "source_text": "Coverage D - Fair rental value Not purchased",
+      "value": 0
+    },
+    "other_structures_limit": {
+      "page": 1,
+      "source_text": "Coverage B - Other structures Not purchased",
+      "value": 0
+    },
+    "premium_total": {
+      "page": 1,
+      "source_text": "Total annual premium $6,180",
+      "value": 6180
+    }
+  }
+}

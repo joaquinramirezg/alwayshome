@@ -8,16 +8,20 @@ authors = [
 ]
 requires-python = ">=3.14"
 dependencies = [
+    "anthropic>=2.6.0",
     "censusgeocode>=0.5.3",
     "duckdb>=2.0.0",
+    "fpdf2>=2.9.0",
     "geopandas>=1.2.0",
     "openpyxl>=3.1.5",
     "pandas>=3.1.1",
     "pdfplumber>=0.11.10",
     "pyarrow>=26.0.1",
+    "pydantic>=2.14.3",
     "pyogrio>=0.13.0",
     "requests>=2.34.2",
     "shapely>=2.2.0",
+    "streamlit>=1.67.0",
 ]
 
 [project.scripts]
@@ -26,3 +30,13 @@ msba-vibathon-2026 = "msba_vibathon_2026:main"
 [build-system]
 requires = ["uv_build>=0.12.10,<0.13.0"]
 build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.2.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src", "scripts"]
+filterwarnings = ["ignore::DeprecationWarning"]
