@@ -1,0 +1,15 @@
+# Raw downloads (reproducible via scripts/01_download.py)
+data/raw/
+
+# FEMA NRI national table (605 MB CSV): re-download from OpenFEMA
+data/manual/NRI_Table_CensusTracts/
+data/manual/NRI_Table_CensusTracts*.zip
+
+# Local caches and logs
+data/cache/
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.DS_Store

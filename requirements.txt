@@ -1,0 +1,10 @@
+pandas
+geopandas
+pyarrow
+shapely
+pyogrio
+requests
+openpyxl
+duckdb
+censusgeocode
+pdfplumber
