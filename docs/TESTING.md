@@ -62,7 +62,7 @@ Turn on **Developer panel** in the sidebar to see the exact `inputs`, the `area_
    - tab "Enter by hand": type the numbers yourself.
 4. **Plan:** set a budget and press **Show my plan**. The **Report** tab writes a plain-language plan you can download (**Rewrite with AI** needs an API key; otherwise it uses the template).
 
-Wildfire and house scores are placeholders until the model is plugged in; the app says so on screen.
+The wildfire exposure score is real (Atharva's tract index); the house damage score is still a placeholder, and the app says so on screen.
 
 ## 3. The AI policy reader (needs an API key)
 
@@ -131,8 +131,8 @@ Run `uv run pytest` before every push to `main`.
 
 The app calls `assess(inputs, area)` from `src/msba_vibathon_2026/assess_stub.py`. Input and output shapes are in `docs/inputs_and_contract.md`.
 
-1. Replace `wildfire_score()` and `house_impact()` (or the whole `assess()`) with the model, keeping the output keys.
-2. Set `STUB = False` so the "placeholder" warning disappears.
+1. Wildfire is done: `wildfire.py` reads Atharva's `tract_wildfire_features.parquet`. Rebuilding that file updates the app automatically.
+2. For the house model, replace `house_impact()` in `assess_stub.py`, keeping the output keys, then set `SOURCES["house"] = "real"` and `STUB = False` so the placeholder warning disappears.
 3. Run `uv run pytest`. `test_scenario_end_to_end` runs the model on every sample homeowner and `validate_output()` (in `src/msba_vibathon_2026/contract.py`) reports any shape problem, e.g. a probability above 1 or a fix missing a field.
 4. Open the app, turn on **Developer panel**, load each sample homeowner, and check the numbers look sensible.
 

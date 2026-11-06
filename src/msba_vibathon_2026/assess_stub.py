@@ -1,14 +1,16 @@
-"""Placeholder for the model's assess() (docs/inputs_and_contract.md).
+"""assess() for the app (contract: docs/inputs_and_contract.md).
 
-The real model (Atharva, David) replaces `wildfire_score` and `house_impact`.
-Everything here returns the contract's output shape so the app works end to end.
-Numbers marked "stub" or "assumption" are placeholders, not results.
+- Wildfire analysis: REAL, Atharva's tract exposure index (wildfire.py).
+- House analysis (`house_impact`): still a PLACEHOLDER until the house model replaces it.
+- Coverage gaps: rules in gaps.py. Fix costs and discounts: labelled assumptions below.
 """
 from __future__ import annotations
 
 from .gaps import coverage_gaps, rebuild_estimate
+from .wildfire import wildfire_analysis
 
-STUB = True
+STUB = True  # True while house_impact() is a placeholder
+SOURCES = {"wildfire": "real", "house": "placeholder"}
 
 # ---- labelled assumptions (cost ranges in USD, assumed premium discount as fraction)
 # Sources to replace these: contractor quotes, CDI Safer from Wildfires filings.
@@ -46,7 +48,6 @@ WHY = {
 _WEIGHTS = {"class_a_roof": 0.12, "ember_resistant_vents": 0.10, "enclosed_eaves": 0.08,
             "double_pane_or_shutters": 0.08, "ember_zone_5ft": 0.10, "noncombustible_6in_walls": 0.05,
             "clear_under_decks": 0.04, "outbuildings_30ft": 0.05, "defensible_space": 0.12}
-_P_FIRE = {"Very High": 0.02, "High": 0.01, "Moderate": 0.005, None: 0.002}  # stub annual probabilities
 
 
 def _rating(x: float, cuts=(0.3, 0.55, 0.75)) -> str:
@@ -63,15 +64,6 @@ def missing_measures(home: dict, done: list[str]) -> list[str]:
     return out
 
 
-def wildfire_score(area: dict) -> dict:
-    hz = area.get("hazard_class")
-    p = _P_FIRE.get(hz, _P_FIRE[None])
-    if area.get("fires_within_5km"):
-        recent = [f for f in area["fires_within_5km"] if (f.get("year") or 0) >= 2015]
-        p *= 1.5 if recent else 1.0
-    return {"p_fire_annual": round(p, 4), "rating": hz or "Outside mapped zones", "stub": True}
-
-
 def house_impact(missing: list[str]) -> float:
     return round(min(0.95, 0.15 + sum(_WEIGHTS[m] for m in missing)), 2)
 
@@ -84,7 +76,7 @@ def assess(inputs: dict, area: dict | None = None) -> dict:
     sqft = home.get("living_area_sqft")
     rebuild = rebuild_estimate(sqft) or (area.get("zip_home_value") or 0) * 0.6
 
-    wildfire = wildfire_score(area)
+    wildfire = wildfire_analysis(area)
     missing = missing_measures(home, inputs.get("measures_done", []))
     impact = house_impact(missing)
 
@@ -127,9 +119,13 @@ def assess(inputs: dict, area: dict | None = None) -> dict:
             "house_after_plan": {"impact": after_plan, "rating": _rating(after_plan)},
         },
         "caveats": [
-            "Wildfire and house scores are placeholders until the model is plugged in.",
+            "Wildfire exposure is a relative index for your census tract compared with other LA County tracts, "
+            "not a probability or an inspection of your home.",
+            "Expected-loss figures use FEMA's annualized wildfire frequency for your tract (National Risk Index).",
+            "House damage scores are placeholders until the house model is plugged in.",
             "Fix costs and discounts are assumptions; no public price list exists.",
             "CDI insurance data ends in 2023, before the January 2025 fires.",
         ],
         "stub": STUB,
+        "sources": {**SOURCES, "wildfire": "placeholder" if wildfire.get("stub") else "real"},
     }

@@ -19,6 +19,13 @@ def _money(x) -> str:
     return "n/a" if x is None else f"${x:,.0f}"
 
 
+def _wildfire_line(wf: dict) -> str:
+    if wf.get("score") is not None:
+        return (f"- Wildfire exposure of your area: **{wf['score']:.0f} out of 100** ({wf['rating']}), "
+                f"compared with other LA County neighborhoods.")
+    return f"- Wildfire exposure of your area: **{wf['rating']}** (based on the fire hazard zone only)."
+
+
 def template_report(address: str, result: dict) -> str:
     cur, fut = result["current"], result["future"]
     plan_ids = set(fut["plan_within_budget"])
@@ -28,7 +35,7 @@ def template_report(address: str, result: dict) -> str:
         f"# Your AlwaysON plan: {address}",
         "",
         "## Where you are today",
-        f"- Wildfire likelihood for your area: **{cur['wildfire']['p_fire_annual']:.1%} per year** ({cur['wildfire']['rating']}).",
+        _wildfire_line(cur["wildfire"]),
         f"- If a fire reaches your house, expected damage: **{cur['house']['impact']:.0%}** ({cur['house']['rating']}).",
     ]
     if cur["insurance_gap"]:

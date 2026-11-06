@@ -19,7 +19,7 @@ ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT / "src"))
 sys.path.insert(0, str(ROOT / "scripts"))
 
-from msba_vibathon_2026.assess_stub import MEASURES, STUB, assess  # noqa: E402
+from msba_vibathon_2026.assess_stub import MEASURES, SOURCES, assess  # noqa: E402
 from msba_vibathon_2026.contract import validate_inputs, validate_output  # noqa: E402
 from msba_vibathon_2026.policy_extract import FIELDS, ExtractionUnavailable, extract, merge_policies  # noqa: E402
 from msba_vibathon_2026.report import ai_report, template_report  # noqa: E402
@@ -192,7 +192,8 @@ with st.sidebar:
     st.divider()
     has_key = bool(os.environ.get("ANTHROPIC_API_KEY") or os.environ.get("ANTHROPIC_AUTH_TOKEN"))
     st.markdown(f"**Claude API key:** {'✅ set' if has_key else '❌ not set (cached samples and manual entry only)'}")
-    st.markdown(f"**Model:** {'⚠️ placeholder (assess_stub)' if STUB else '✅ team model'}")
+    badge = {"real": "✅ team model", "placeholder": "⚠️ placeholder"}
+    st.markdown(f"**Wildfire analysis:** {badge[SOURCES['wildfire']]}  \n**House analysis:** {badge[SOURCES['house']]}")
     dev = st.toggle("Developer panel", value=False)
 
 # ------------------------------------------------------------------ header
@@ -356,19 +357,38 @@ if res:
     cur, fut = res["current"], res["future"]
     if st.session_state.get("result_inputs") != inputs:
         st.info("Inputs changed since this plan was made. Press 'Show my plan' again to update it.")
-    if res.get("stub"):
-        st.warning("Prototype: wildfire and house scores are placeholders until the team's model is plugged in.")
+    src = res.get("sources", {})
+    if src.get("house") == "placeholder":
+        st.warning("Prototype: the house damage score is a placeholder until the house model is plugged in. "
+                   "The wildfire exposure score is real.")
+    if src.get("wildfire") == "placeholder":
+        st.warning("The address could not be matched to a census tract, so wildfire exposure uses the hazard zone only.")
 
     tab_plan, tab_report = st.tabs(["Plan", "Report"])
     with tab_plan:
         st.subheader("Where you are today")
         m1, m2, m3 = st.columns(3)
-        m1.metric("Wildfire likelihood (per year)", f"{cur['wildfire']['p_fire_annual']:.1%}", cur["wildfire"]["rating"],
-                  delta_color="off")
+        wf = cur["wildfire"]
+        m1.metric("Wildfire exposure of your area", f"{wf['score']:.0f} / 100" if wf.get("score") is not None else "n/a",
+                  wf["rating"], delta_color="off",
+                  help="Relative index for your census tract vs. other LA County tracts (not a probability). "
+                       "Combines very-high and high hazard area, past burned area and FEMA expected loss.")
         m2.metric("Damage if fire reaches the house", f"{cur['house']['impact']:.0%}", cur["house"]["rating"],
                   delta_color="off")
         m3.metric("After your plan", f"{fut['house_after_plan']['impact']:.0%}",
                   f"{fut['house_after_plan']['impact'] - cur['house']['impact']:+.0%}", delta_color="inverse")
+
+        comp = wf.get("components") or {}
+        if comp:
+            with st.expander(f"Why your area scores {wf['score']:.0f} / 100"):
+                c = st.columns(4)
+                c[0].metric("Tract in Very High zone", f"{comp['very_high_hazard_pct']:.0f}%")
+                c[1].metric("Tract in High zone", f"{comp['high_hazard_pct']:.0f}%")
+                c[2].metric("Tract area burned since 1950", f"{comp['burned_footprint_pct']:.0f}%")
+                c[3].metric("Last fire touching the tract", comp["last_fire_year"] or "none on record")
+                st.caption(f"FEMA estimates a wildfire frequency of {wf['p_fire_annual']:.2%} per year for this tract and "
+                           f"expected losses of {fmt_money(comp['fema_expected_annual_loss'])} per year across it. "
+                           f"Tract {wf.get('tract_geoid')}. {wf['method']}. Relative to LA County, not a probability or inspection.")
 
         st.markdown("**Coverage gaps**")
         if not cur["insurance_gap"]:

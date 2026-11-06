@@ -167,3 +167,13 @@ def test_demo_addresses_load_offline(address, no_key):
     select(at, "Or just a demo address", address)
     assert at.session_state["address"] == address
     assert any(m.label == "Fire hazard zone" for m in at.metric)
+
+
+def test_plan_shows_real_wildfire_score(no_key):
+    at = start()
+    fill_sample(at, "altadena_fair_only")
+    click(at, "Show my plan")
+    m = {x.label: x.value for x in at.metric}
+    assert m["Wildfire exposure of your area"] == "73 / 100"
+    assert m["Tract in Very High zone"] == "52%"
+    assert any("house damage score is a placeholder" in w.value for w in at.warning)

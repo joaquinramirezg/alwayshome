@@ -58,6 +58,8 @@ def validate_output(out: dict) -> list[str]:
         errs.append("current.wildfire.p_fire_annual must be a probability 0-1")
     if not isinstance(wf.get("rating"), str):
         errs.append("current.wildfire.rating must be text")
+    if wf.get("score") is not None and not (_num(wf["score"]) and 0 <= wf["score"] <= 100):
+        errs.append("current.wildfire.score must be 0-100 or null")
     if not _prob(house.get("impact")):
         errs.append("current.house.impact must be 0-1")
     if not isinstance(house.get("rating"), str):
