@@ -8,14 +8,12 @@ Works on macOS, Linux and Windows. Takes about 5 minutes the first time.
    - macOS: `brew install uv`
    - macOS / Linux without Homebrew: `curl -LsSf https://astral.sh/uv/install.sh | sh`
    - Windows: `powershell -c "irm https://astral.sh/uv/install.ps1 | iex"`
-2. Get the code and switch to the app branch:
+2. Get the code (everything is on `main`):
    ```
    git clone https://github.com/joaquinramirezg/msba-vibathon-2026.git
    cd msba-vibathon-2026
-   git fetch
-   git switch app-streamlit      # until it is merged into main
    ```
-   Already cloned? `git pull` instead.
+   Already cloned? `git switch main && git pull` instead.
 3. Install everything:
    ```
    uv sync
