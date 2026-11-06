@@ -79,4 +79,4 @@ def run_coverage_analysis(policy: PolicyInput, home: HomeInput, risk: RiskInput,
         warnings=warnings,
         premium_total=policy.premium_total,
         assumptions=_assumptions(config, home.zip, rent),
-    )
+    ).model_copy(deep=True)  # so a caller editing the result cannot change shared values

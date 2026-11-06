@@ -311,3 +311,19 @@ def test_numbers_come_from_config(monkeypatch):
     monkeypatch.setattr(gaps_module, "load_config", lambda: changed)
     found = names(run({"dwelling_limit": 450_000}, {"sq_ft": 1_800}))
     assert "underinsured" not in found and "possibly_underinsured" not in found
+
+
+# --------------------------------------------------------- Rule 9: final review
+def test_acv_evidence_includes_the_dwelling_limit():
+    gap = get(run({"dwelling_settlement": "actual_cash_value", "dwelling_limit": 450_000}), "actual_cash_value")
+    assert "$450,000" in gap.evidence
+
+
+def test_no_code_upgrade_evidence_includes_the_estimated_cost():
+    gap = get(run({"code_upgrade": False, "dwelling_limit": 450_000}), "no_code_upgrade")
+    assert "$112,500" in gap.evidence and "$225,000" in gap.evidence
+
+
+def test_no_contents_evidence_includes_the_estimated_contents():
+    gap = get(run({"contents_limit": 0}, {"contents_value_estimate": 100_000}), "no_contents")
+    assert "$0" in gap.evidence and "$100,000" in gap.evidence

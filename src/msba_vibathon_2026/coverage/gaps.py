@@ -83,7 +83,11 @@ def fair_no_dic(ctx: GapContext) -> Gap | None:
 def actual_cash_value(ctx: GapContext) -> Gap | None:
     if ctx.policy.dwelling_settlement != "actual_cash_value":
         return None
-    return Gap(gap="actual_cash_value", severity="high", evidence="Dwelling settlement is actual cash value.",
+    limit = ctx.policy.dwelling_limit
+    evidence = "Dwelling settlement is actual cash value."
+    if limit is not None:
+        evidence += f" The {_usd(limit)} dwelling limit may not be what you are paid."
+    return Gap(gap="actual_cash_value", severity="high", evidence=evidence,
                action="Ask about replacement cost coverage.", source_url=load_config().acv_warning.source_url)
 
 
@@ -104,7 +108,11 @@ def no_code_upgrade(ctx: GapContext) -> Gap | None:
     action = "Code upgrades after a fire can reach six figures."
     policy = ctx.policy
     if policy.code_upgrade is False:
-        return Gap(gap="no_code_upgrade", severity="high", evidence="No code upgrade coverage on this policy.",
+        evidence = "No code upgrade coverage on this policy."
+        cost = ctx.costs.items["code_upgrade"].cost
+        if cost.low is not None and cost.high is not None:
+            evidence += f" Estimated code upgrade cost: {_usd(cost.low)} to {_usd(cost.high)}."
+        return Gap(gap="no_code_upgrade", severity="high", evidence=evidence,
                    action=action, source_url=share.source_url)
     if policy.code_upgrade_amount is None or policy.dwelling_limit is None:
         return None
@@ -141,7 +149,11 @@ def no_living_expenses(ctx: GapContext) -> Gap | None:
 def no_contents(ctx: GapContext) -> Gap | None:
     if ctx.policy.contents_limit != 0:
         return None
-    return Gap(gap="no_contents", severity="high", evidence="Contents limit: $0.",
+    evidence = "Contents limit: $0."
+    value = ctx.home.contents_value_estimate
+    if value is not None:
+        evidence += f" Your estimated contents: {_usd(value)}."
+    return Gap(gap="no_contents", severity="high", evidence=evidence,
                action="Your belongings aren't covered.", source_url=None)
 
 

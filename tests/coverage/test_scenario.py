@@ -293,3 +293,63 @@ def test_case_5_everything_unknown_except_zip_and_sqft(monkeypatch):
     assert [g.gap for g in result.gaps].count("unknown_field") == 4
     assert any("code_upgrade, contents" in w for w in result.warnings)
     assert CoverageResult.model_validate_json(result.model_dump_json()) == result
+
+
+# --------------------------------------------------------- Rule 9: final review
+def test_returned_ranges_are_independent_of_later_calls(monkeypatch):
+    monkeypatch.setattr(scenario, "monthly_rent", lambda zip_code: None)
+    first = run_coverage_analysis(PolicyInput(), HomeInput(zip="00000"), RiskInput())
+    first.total_cost.low = 123.0
+    first.components[0].cost.low = 456.0
+    second = run_coverage_analysis(PolicyInput(), HomeInput(zip="00000"), RiskInput())
+    assert second.total_cost == UNKNOWN
+    assert second.components[0].cost == UNKNOWN
+
+
+def random_inputs(rng):
+    money = [None, 0, 1, 50_000, 450_000, 1_100_000, 5_000_000]
+    policy = PolicyInput(
+        document_type=rng.choice([None, "fair_plan", "dic", "homeowners", "dwelling_fire", "other"]),
+        has_dic=rng.choice([None, True, False]), dic_covers=rng.choice([[], ["theft"]]),
+        premium_total=rng.choice(money), dwelling_limit=rng.choice(money),
+        other_structures_limit=rng.choice(money), contents_limit=rng.choice(money),
+        loss_of_use_limit=rng.choice(money),
+        dwelling_settlement=rng.choice([None, "actual_cash_value", "replacement_cost", "unknown"]),
+        extended_replacement_pct=rng.choice([None, 0, 0.25, 1]), guaranteed_replacement=rng.choice([None, True, False]),
+        contents_settlement=rng.choice([None, "actual_cash_value", "replacement_cost", "unknown"]),
+        code_upgrade=rng.choice([None, True, False]), code_upgrade_amount=rng.choice(money),
+        debris_removal=rng.choice([None, True, False]), deductible_all_perils=rng.choice(money),
+        deductible_wildfire=rng.choice(money), last_coverage_update_year=rng.choice([None, 2000, 2026, 2030]),
+        nonrenewal_notice=rng.choice([None, True, False]),
+    )
+    home = HomeInput(
+        zip="91001", sq_ft=rng.choice([None, 0, 1, 1_800, 20_000]), stories=rng.choice([None, 1]),
+        year_built=rng.choice([None, 1958]), contents_value_estimate=rng.choice(money),
+        other_structures_estimate=rng.choice(money), renovated_since_update=rng.choice([None, True, False]),
+    )
+    return policy, home, rng.choice([None, 0.0, 0.5, 1.0]), rng.choice([None, 0.0, 1_500.0, 12_849.0])
+
+
+def test_any_mix_of_inputs_gives_a_consistent_result(monkeypatch):
+    import random
+
+    rng = random.Random(2026)
+    for _ in range(3_000):
+        policy, home, p_destroyed, rent = random_inputs(rng)
+        monkeypatch.setattr(scenario, "monthly_rent", lambda zip_code, rent=rent: rent)
+        result = run_coverage_analysis(policy, home, RiskInput(p_destroyed=p_destroyed), as_of_year=AS_OF)
+        assert CoverageResult.model_validate_json(result.model_dump_json()) == result
+        assert result.scope_note and result.assumptions
+        ranges = [r for c in result.components for r in (c.cost, c.payout, c.shortfall)]
+        ranges += [result.total_cost, result.total_payout, result.total_shortfall]
+        for r in ranges:
+            assert (r.low is None) == (r.high is None)
+            if r.low is not None:
+                assert 0 <= r.low <= r.high
+        for c in result.components:
+            if c.cost.low is None:
+                assert c.shortfall == UNKNOWN
+            else:
+                assert c.shortfall.high <= c.cost.high
+        if result.total_cost.low is not None:
+            assert result.total_payout.high <= result.total_cost.high
