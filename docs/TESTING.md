@@ -32,6 +32,23 @@ uv run streamlit run app.py
 
 It opens at http://localhost:8501. Stop it with Ctrl+C.
 
+### Fastest way to try everything: sample homeowners
+
+In the sidebar, pick a **Sample homeowner** and press **Load this homeowner**. It fills every field (address, home, insurance, budget). Then press **Show my plan**.
+
+| Sample homeowner | What it shows |
+|---|---|
+| Altadena, FAIR Plan only, older home | Every coverage gap, all 9 fixes, small budget |
+| Altadena, FAIR Plan + DIC, partly hardened | The DIC policy closes the liability and FAIR-only gaps |
+| Pacific Palisades, private HO-3, underinsured | Underinsured vs. rebuild cost, no extended replacement |
+| Wilshire, well covered, fully hardened | Control case: no fixes, no gaps |
+| Unknown to everything, no budget | Every fix listed, none in the plan |
+| Unknown to everything, large budget | Every fix fits the plan |
+
+The same cases, with their expected results, are in `data/samples/scenarios.json`; the tests check them.
+
+Turn on **Developer panel** in the sidebar to see the exact `inputs`, the `area_context` data, the `assess()` output, timings, and whether both sides of the model contract are valid.
+
 ### Demo walkthrough (what to click)
 
 1. **Location:** pick a demo address from the dropdown:
@@ -43,7 +60,7 @@ It opens at http://localhost:8501. Stop it with Ctrl+C.
 3. **Insurance:** either
    - tab "Upload policy": pick a sample policy (or upload a PDF) and press **Read policy**, then check the values in tab "Enter by hand", or
    - tab "Enter by hand": type the numbers yourself.
-4. **Plan:** set a budget and press **Show my plan**.
+4. **Plan:** set a budget and press **Show my plan**. The **Report** tab writes a plain-language plan you can download (**Rewrite with AI** needs an API key; otherwise it uses the template).
 
 Wildfire and house scores are placeholders until the model is plugged in; the app says so on screen.
 
@@ -65,7 +82,19 @@ Reading a policy PDF calls the Claude API. Without a key, **Read policy** shows 
 
 Without `--refresh` the script only scores what is already cached (or calls the API for anything missing, if a key is set).
 
-The sample PDFs and their answer key are in `data/samples/policies/`. To change or add samples, edit `scripts/make_sample_policies.py`, then:
+The sample PDFs and their answer key are in `data/samples/policies/` (all fictional, marked SAMPLE):
+
+| PDF | What it tests |
+|---|---|
+| `fair_plan_altadena.pdf` | FAIR Plan page: actual cash value, coverages not purchased |
+| `dic_altadena.pdf` | Supplemental DIC policy, merged with the FAIR Plan |
+| `fair_plan_scanned.pdf` | Scanned image, no text layer: quotes can't be auto-checked |
+| `homeowners_palisades_underinsured.pdf` | Private HO-3, % wildfire deductible, discount line |
+| `homeowners_two_page.pdf` | Coverage on page 2, 50% extended replacement, ordinance not included |
+| `homeowners_well_covered.pdf` | Strong private policy |
+| `nonrenewal_letter.pdf` | Not a policy: everything should come back empty |
+
+Every PDF also contains fake names and policy numbers, to check that they are never extracted. To change or add samples, edit `scripts/make_sample_policies.py`, then:
 ```
 uv run python scripts/make_sample_policies.py
 uv run python scripts/eval_policy_extraction.py --refresh
@@ -73,13 +102,29 @@ uv run python scripts/eval_policy_extraction.py --refresh
 
 ## 4. Automated checks
 
+Run everything:
+```
+uv run pytest
+```
+About 85 tests, a few seconds, **no API key needed**. Claude is replaced by a fake that returns the answer key, so the whole AI path (quote checks, flags, caching, merging, fallbacks) is still tested. Expected: `N passed`.
+
+| Test file | Covers |
+|---|---|
+| `tests/test_policy_extract.py` | Every sample PDF, quote verification, invented quotes, wrong page numbers, implausible values, scanned PDFs, no key, API errors, cache, FAIR + DIC merge, no personal data in the schema |
+| `tests/test_plan.py` | Each coverage gap rule, every sample homeowner end to end against its expected results, budget limits, the model contract checker, the report and its AI fallback |
+| `tests/test_app.py` | The real Streamlit UI: loading each homeowner, reading each sample policy, form pre-fill, fallbacks, demo addresses, stale-plan warning |
+
+Run one file or one test: `uv run pytest tests/test_plan.py` or `uv run pytest -k palisades`.
+
+Other checks:
+
 | Command | What it checks | Needs |
 |---|---|---|
 | `uv run python scripts/smoke_test.py` | Clicks through the whole app without a browser: all demo addresses, all sample policies, the plan screen. Fails on any error. | nothing |
 | `uv run python scripts/eval_policy_extraction.py` | Policy reader accuracy against the answer key | API key, or cached results |
 | `uv run python scripts/03_validate.py` | Data checks; rewrites `docs/validation_report.md` | processed data (in the repo) |
 
-Run the smoke test before every push to `main`. Expected last line: `All checks passed.`
+Run `uv run pytest` before every push to `main`.
 
 ## 5. For the model team: plugging in `assess()`
 
@@ -87,7 +132,10 @@ The app calls `assess(inputs, area)` from `src/msba_vibathon_2026/assess_stub.py
 
 1. Replace `wildfire_score()` and `house_impact()` (or the whole `assess()`) with the model, keeping the output keys.
 2. Set `STUB = False` so the "placeholder" warning disappears.
-3. Run `uv run python scripts/smoke_test.py`, then open the app and check the numbers look sensible for the three demo addresses.
+3. Run `uv run pytest`. `test_scenario_end_to_end` runs the model on every sample homeowner and `validate_output()` (in `src/msba_vibathon_2026/contract.py`) reports any shape problem, e.g. a probability above 1 or a fix missing a field.
+4. Open the app, turn on **Developer panel**, load each sample homeowner, and check the numbers look sensible.
+
+If your model changes which fixes are recommended, update the `fixes` lists in `data/samples/scenarios.json`.
 
 ## 6. Troubleshooting
 

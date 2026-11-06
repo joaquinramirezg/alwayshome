@@ -1,12 +1,15 @@
 """AlwaysON - Streamlit prototype.
 
 Run: uv run streamlit run app.py
-Optional: export ANTHROPIC_API_KEY=... to read new policy PDFs (sample PDFs are cached).
+Optional: export ANTHROPIC_API_KEY=... to read new policy PDFs and rewrite the report with AI.
+Without a key everything still works: cached sample policies, manual entry, template report.
 """
 from __future__ import annotations
 
 import json
+import os
 import sys
+import time
 from pathlib import Path
 
 import pandas as pd
@@ -16,11 +19,14 @@ ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT / "src"))
 sys.path.insert(0, str(ROOT / "scripts"))
 
-from msba_vibathon_2026.assess_stub import MEASURES, assess  # noqa: E402
+from msba_vibathon_2026.assess_stub import MEASURES, STUB, assess  # noqa: E402
+from msba_vibathon_2026.contract import validate_inputs, validate_output  # noqa: E402
 from msba_vibathon_2026.policy_extract import FIELDS, ExtractionUnavailable, extract, merge_policies  # noqa: E402
+from msba_vibathon_2026.report import ai_report, template_report  # noqa: E402
 
 AREA_CACHE = ROOT / "data" / "demo" / "area_cache.json"
 SAMPLES = ROOT / "data" / "samples" / "policies"
+SCENARIOS = json.loads((ROOT / "data" / "samples" / "scenarios.json").read_text())
 DEMO_ADDRESSES = [
     "1200 Chautauqua Blvd, Pacific Palisades, CA 90272",
     "1000 E Mariposa St, Altadena, CA 91001",
@@ -29,12 +35,13 @@ DEMO_ADDRESSES = [
 SAMPLE_SETS = {
     "FAIR Plan + DIC (Altadena)": ["fair_plan_altadena.pdf", "dic_altadena.pdf"],
     "FAIR Plan only (Altadena)": ["fair_plan_altadena.pdf"],
+    "FAIR Plan, scanned copy (no text layer)": ["fair_plan_scanned.pdf"],
     "Private HO-3, underinsured (Palisades)": ["homeowners_palisades_underinsured.pdf"],
+    "Private HO-3, two pages (Altadena)": ["homeowners_two_page.pdf"],
     "Private HO-3, well covered (Wilshire)": ["homeowners_well_covered.pdf"],
+    "Not a policy: non-renewal letter": ["nonrenewal_letter.pdf"],
 }
-
-# DINS answer options (docs/inputs_and_contract.md)
-HOME_QUESTIONS = {
+HOME_QUESTIONS = {  # DINS answer options (docs/inputs_and_contract.md)
     "ROOFCONSTRUCTION": ("Roof material", ["Asphalt", "Tile", "Metal", "Concrete", "Wood", "Other"]),
     "EAVES": ("Eaves", ["Enclosed", "Unenclosed", "No Eaves"]),
     "VENTSCREEN": ("Vent screens", ['Mesh Screen <= 1/8"', 'Mesh Screen > 1/8"', "Unscreened", "No Vents"]),
@@ -50,11 +57,77 @@ EXTRA_MEASURES = {
     "noncombustible_6in_walls": "Bottom 6 inches of walls are noncombustible",
     "clear_under_decks": "Nothing stored or growing under decks",
 }
+INS_TYPES = ["FAIR Plan only", "FAIR Plan + DIC policy", "Private homeowners"]
+SETTLEMENTS = ["replacement_cost", "actual_cash_value", "unknown"]
+DEFAULTS = {
+    "address": DEMO_ADDRESSES[0],
+    **{f: "Unknown" for f in HOME_QUESTIONS},
+    "year_built": 1965, "living_area_sqft": 1800, "stories": 1,
+    **{f"done_{k}": False for k in EXTRA_MEASURES},
+    "ins_type": INS_TYPES[0], "dwelling_limit": 650_000, "dwelling_settlement": "unknown",
+    "extended_replacement_pct": 0, "premium_total": 6_000, "liability_limit": 0, "loss_of_use_limit": 0,
+    "code_upgrade": False, "debris_removal": False, "budget": 10_000,
+}
 
 st.set_page_config(page_title="AlwaysON", page_icon="🔥", layout="wide")
+for k, v in DEFAULTS.items():
+    st.session_state.setdefault(k, v)
 
 
-# ------------------------------------------------------------------ data helpers
+# ------------------------------------------------------------------ state helpers
+def load_scenario(sid: str) -> None:
+    s = SCENARIOS[sid]
+    st.session_state["address"] = s["address"]
+    for k, v in s["home"].items():
+        st.session_state[k] = v
+    for k in EXTRA_MEASURES:
+        st.session_state[f"done_{k}"] = k in s["measures_done"]
+    ins = s["insurance"]
+    st.session_state["ins_type"] = ins["type"]
+    for k in ("dwelling_limit", "dwelling_settlement", "extended_replacement_pct", "premium_total",
+              "liability_limit", "loss_of_use_limit", "code_upgrade", "debris_removal"):
+        st.session_state[k] = ins[k]
+    st.session_state["budget"] = s["budget"]
+    for k in ("result", "extractions", "report"):
+        st.session_state.pop(k, None)
+
+
+def apply_policy(merged: dict) -> None:
+    """Pre-fill the insurance form from extracted values (the user then confirms them)."""
+    docs = merged.get("documents") or []
+    if "fair_plan" in docs:
+        st.session_state["ins_type"] = INS_TYPES[1] if merged.get("has_dic") else INS_TYPES[0]
+    elif {"homeowners", "dwelling_fire"} & set(docs):
+        st.session_state["ins_type"] = INS_TYPES[2]
+    for k in ("dwelling_limit", "extended_replacement_pct", "premium_total", "liability_limit", "loss_of_use_limit"):
+        if merged.get(k) is not None:
+            st.session_state[k] = int(merged[k])
+    if merged.get("dwelling_settlement") in SETTLEMENTS:
+        st.session_state["dwelling_settlement"] = merged["dwelling_settlement"]
+    for k in ("code_upgrade", "debris_removal"):
+        v = merged.get(k)
+        if v is not None:
+            st.session_state[k] = bool(v.get("covered")) if isinstance(v, dict) else bool(v)
+
+
+def build_inputs() -> dict:
+    ss = st.session_state
+    return {
+        "address": ss["address"],
+        "home": {**{f: ss[f] for f in HOME_QUESTIONS}, "year_built": ss["year_built"],
+                 "living_area_sqft": ss["living_area_sqft"], "stories": ss["stories"]},
+        "measures_done": [k for k in EXTRA_MEASURES if ss[f"done_{k}"]],
+        "insurance": {
+            "documents": {INS_TYPES[0]: ["fair_plan"], INS_TYPES[1]: ["fair_plan", "dic"],
+                          INS_TYPES[2]: ["homeowners"]}[ss["ins_type"]],
+            "has_dic": ss["ins_type"] == INS_TYPES[1],
+            **{k: ss[k] for k in ("dwelling_limit", "dwelling_settlement", "extended_replacement_pct", "premium_total",
+                                  "liability_limit", "loss_of_use_limit", "code_upgrade", "debris_removal")},
+        },
+        "budget": ss["budget"],
+    }
+
+
 def _key(a: str) -> str:
     return " ".join(a.lower().split())
 
@@ -64,7 +137,7 @@ def load_area(address: str) -> dict:
     cache = json.loads(AREA_CACHE.read_text()) if AREA_CACHE.exists() else {}
     if _key(address) in cache:
         return cache[_key(address)]
-    from utils import area_context  # David's helper, needs network for geocoding
+    from utils import area_context  # David's helper; needs network for geocoding
 
     return json.loads(json.dumps(area_context(address), default=str))
 
@@ -73,6 +146,18 @@ def fmt_money(x) -> str:
     return "n/a" if x is None else f"${x:,.0f}"
 
 
+# ------------------------------------------------------------------ sidebar
+with st.sidebar:
+    st.header("Test controls")
+    sid = st.selectbox("Sample homeowner", list(SCENARIOS), format_func=lambda k: SCENARIOS[k]["title"])
+    st.caption(SCENARIOS[sid]["description"])
+    st.button("Load this homeowner", on_click=load_scenario, args=(sid,), width="stretch")
+    st.divider()
+    has_key = bool(os.environ.get("ANTHROPIC_API_KEY") or os.environ.get("ANTHROPIC_AUTH_TOKEN"))
+    st.markdown(f"**Claude API key:** {'✅ set' if has_key else '❌ not set (cached samples and manual entry only)'}")
+    st.markdown(f"**Model:** {'⚠️ placeholder (assess_stub)' if STUB else '✅ team model'}")
+    dev = st.toggle("Developer panel", value=False)
+
 # ------------------------------------------------------------------ header
 st.title("AlwaysON")
 st.caption("Find the fire-safety fixes that move your home closest to affordable private insurance.")
@@ -80,21 +165,21 @@ st.caption("Find the fire-safety fixes that move your home closest to affordable
 # ------------------------------------------------------------------ 1. address
 st.header("1. Your home's location")
 c1, c2 = st.columns([3, 2])
-with c1:
-    address = st.text_input("Address", value=st.session_state.get("address", DEMO_ADDRESSES[0]))
-with c2:
-    demo = st.selectbox("Or pick a demo address", ["-"] + DEMO_ADDRESSES)
-    if demo != "-":
-        address = demo
-st.session_state["address"] = address
+c1.text_input("Address", key="address")
+c2.selectbox("Or pick a demo address", ["-"] + DEMO_ADDRESSES, key="demo_pick",
+             on_change=lambda: st.session_state.update(address=st.session_state["demo_pick"])
+             if st.session_state["demo_pick"] != "-" else None)
 
 area: dict = {}
+t0 = time.time()
 try:
     with st.spinner("Looking up hazard zone, fire history and insurance market..."):
-        area = load_area(address)
+        area = load_area(st.session_state["address"])
 except Exception as e:  # geocoder down or no match: the rest of the app still works
     st.warning(f"Could not look up this address ({e}). Choose the hazard zone by hand.")
-    area = {"hazard_class": st.selectbox("Fire hazard zone", ["Very High", "High", "Moderate", None])}
+    area = {"hazard_class": st.selectbox("Fire hazard zone", ["Very High", "High", "Moderate", None],
+                                         format_func=lambda z: z or "Outside mapped zones")}
+area_seconds = time.time() - t0
 
 if area.get("geocode"):
     g = area["geocode"]
@@ -108,36 +193,48 @@ if area.get("geocode"):
     if not area.get("hazard_class"):
         st.info("No mapped hazard zone does not mean no risk: most homes destroyed in the 2025 Eaton Fire were outside any zone.")
     trend = pd.DataFrame(area.get("zip_insurance_trend") or [])
-    if not trend.empty:
-        with st.expander("Insurance market in this ZIP (CDI, 2015 to 2023)"):
+    with st.expander("Insurance market and fire history"):
+        if not trend.empty:
             st.line_chart(trend.set_index("year")["nonrenewal_rate"], y_label="Non-renewal rate")
-            st.caption("Share of voluntary-market policies not renewed. Data ends in 2023, before the 2025 fires.")
+            st.caption("Share of voluntary-market policies not renewed in this ZIP (CDI). Data ends in 2023, before the 2025 fires.")
+        fires = pd.DataFrame(area.get("fires_within_5km") or [])
+        if not fires.empty:
+            st.dataframe(fires.head(10), hide_index=True, width="stretch")
+        wrc = area.get("wrc_community")
+        if wrc:
+            st.caption(f"Wildfire Risk to Communities ({wrc['community']}): risk to homes higher than "
+                       f"{wrc['risk_to_homes_pctile_state']:.0%} of California communities.")
 
 # ------------------------------------------------------------------ 2. home
 st.header("2. Your home")
-home: dict = {}
 cols = st.columns(4)
 for i, (field, (label, options)) in enumerate(HOME_QUESTIONS.items()):
-    with cols[i % 4]:
-        home[field] = st.selectbox(label, options + ["Unknown"], key=field)
+    cols[i % 4].selectbox(label, options + ["Unknown"], key=field)
 c1, c2, c3 = st.columns(3)
-home["year_built"] = c1.number_input("Year built", 1900, 2026, 1965)
-home["living_area_sqft"] = c2.number_input("Living area (sq ft)", 400, 15000, 1800, step=100)
-home["stories"] = c3.number_input("Stories", 1, 4, 1)
-done = [k for k, label in EXTRA_MEASURES.items() if st.checkbox(label, key=f"done_{k}")]
+c1.number_input("Year built", 1900, 2026, key="year_built")
+c2.number_input("Living area (sq ft)", 400, 15000, step=100, key="living_area_sqft")
+c3.number_input("Stories", 1, 4, key="stories")
+for k, label in EXTRA_MEASURES.items():
+    st.checkbox(label, key=f"done_{k}")
 
 # ------------------------------------------------------------------ 3. insurance
 st.header("3. Your insurance")
-tab_pdf, tab_manual = st.tabs(["Upload policy (AI reads it)", "Enter by hand"])
+tab_pdf, tab_manual = st.tabs(["Upload policy (AI reads it)", "Confirm or enter by hand"])
 
 with tab_pdf:
-    st.write("Upload your declarations page (FAIR Plan, and your supplemental DIC policy if you have one). "
+    st.write("Upload your declarations page (FAIR Plan, plus your supplemental DIC policy if you have one). "
              "The AI copies each value with the exact line it came from; you confirm everything. Files are not stored.")
     uploads = st.file_uploader("Declarations page PDFs", type="pdf", accept_multiple_files=True)
-    sample = st.selectbox("Or use a sample policy", ["-"] + list(SAMPLE_SETS))
+    sample = st.selectbox("Or use a sample policy", ["-"] + list(SAMPLE_SETS), key="sample_policy")
     files = [(u.name, u.getvalue()) for u in uploads or []]
     if not files and sample != "-":
         files = [(n, (SAMPLES / n).read_bytes()) for n in SAMPLE_SETS[sample]]
+        with st.expander("Preview the sample PDF text"):
+            from msba_vibathon_2026.policy_extract import page_texts
+            for n, data in files:
+                pages = page_texts(data)
+                st.markdown(f"**{n}**: {len(pages)} page(s)")
+                st.text("\n---\n".join(pages) if any(p.strip() for p in pages) else "(no text layer: scanned image)")
 
     if files and st.button("Read policy", type="primary"):
         results, errors = [], []
@@ -147,15 +244,17 @@ with tab_pdf:
                     results.append((name, extract(data)))
             except ExtractionUnavailable as e:
                 errors.append(f"{name}: {e}")
-        for err in errors:
-            st.error(err + " Use 'Enter by hand' instead.")
+        st.session_state["extraction_errors"] = errors
+        st.session_state["extractions"] = results
         if results:
-            st.session_state["extractions"] = results
-            merged = merge_policies([r for _, r in results])
-            st.session_state["prefill"] = merged
+            apply_policy(merge_policies([r for _, r in results]))
 
+    for err in st.session_state.get("extraction_errors", []):
+        st.error(err + " Use 'Confirm or enter by hand' instead.")
     for name, res in st.session_state.get("extractions", []):
         st.subheader(f"{name}  ·  {res['fields']['document_type']['value']}")
+        if not res["text_layer"]:
+            st.warning("Scanned PDF: quotes can't be checked automatically. Compare each value with the document.")
         rows = []
         for f, (_, label, prio) in FIELDS.items():
             v = res["fields"][f]
@@ -173,88 +272,116 @@ with tab_pdf:
             })
         st.dataframe(pd.DataFrame(rows), hide_index=True, width="stretch")
         st.caption(f"Source: {'cached sample result' if res['source'] == 'cache' else 'Claude (live)'}. "
-                   "Values are pre-filled in 'Enter by hand': review and correct them there.")
+                   "Values are pre-filled in the next tab: review and correct them there.")
 
 with tab_manual:
-    p = st.session_state.get("prefill", {})
-    docs = p.get("documents") or []
-    default_type = 1 if "fair_plan" in docs and p.get("has_dic") else 0 if "fair_plan" in docs else 2 if docs else 0
-    ins_type = st.radio("Current coverage", ["FAIR Plan only", "FAIR Plan + DIC policy", "Private homeowners"],
-                        index=default_type, horizontal=True)
+    if st.session_state.get("extractions"):
+        st.info("Pre-filled from your policy. Check every value before continuing.")
+    st.radio("Current coverage", INS_TYPES, horizontal=True, key="ins_type")
     c1, c2, c3 = st.columns(3)
-    dwelling = c1.number_input("Dwelling limit ($)", 0, 10_000_000, int(p.get("dwelling_limit") or 650_000), step=10_000)
-    settlement = c2.selectbox("How the dwelling is paid", ["replacement_cost", "actual_cash_value", "unknown"],
-                              index=["replacement_cost", "actual_cash_value", "unknown"].index(
-                                  p.get("dwelling_settlement") or "unknown"))
-    ext = c3.number_input("Extended replacement (%)", 0, 100, int(p.get("extended_replacement_pct") or 0))
+    c1.number_input("Dwelling limit ($)", 0, 10_000_000, step=10_000, key="dwelling_limit")
+    c2.selectbox("How the dwelling is paid", SETTLEMENTS, key="dwelling_settlement",
+                 format_func=lambda s: {"replacement_cost": "Replacement cost", "actual_cash_value": "Actual cash value",
+                                        "unknown": "Not sure"}[s])
+    c3.number_input("Extended replacement (%)", 0, 100, key="extended_replacement_pct")
     c1, c2, c3 = st.columns(3)
-    premium = c1.number_input("Total annual premium ($)", 0, 100_000, int(p.get("premium_total") or 6_000), step=100)
-    liability = c2.number_input("Personal liability ($)", 0, 5_000_000, int(p.get("liability_limit") or 0), step=50_000)
-    lou = c3.number_input("Loss of use ($)", 0, 2_000_000, int(p.get("loss_of_use_limit") or 0), step=10_000)
-
-    def _covered(x):
-        return bool(x.get("covered")) if isinstance(x, dict) else bool(x)
-
+    c1.number_input("Total annual premium ($)", 0, 100_000, step=100, key="premium_total")
+    c2.number_input("Personal liability ($)", 0, 5_000_000, step=50_000, key="liability_limit")
+    c3.number_input("Loss of use ($)", 0, 2_000_000, step=10_000, key="loss_of_use_limit")
     c1, c2 = st.columns(2)
-    code = c1.checkbox("Building code upgrade coverage", value=_covered(p.get("code_upgrade")))
-    debris = c2.checkbox("Debris removal coverage", value=_covered(p.get("debris_removal")))
+    c1.checkbox("Building code upgrade coverage", key="code_upgrade")
+    c2.checkbox("Debris removal coverage", key="debris_removal")
 
-insurance = {
-    "documents": {"FAIR Plan only": ["fair_plan"], "FAIR Plan + DIC policy": ["fair_plan", "dic"],
-                  "Private homeowners": ["homeowners"]}[ins_type],
-    "has_dic": ins_type == "FAIR Plan + DIC policy",
-    "dwelling_limit": dwelling, "dwelling_settlement": settlement, "extended_replacement_pct": ext,
-    "premium_total": premium, "liability_limit": liability,
-    "loss_of_use_limit": lou, "code_upgrade": code, "debris_removal": debris,
-}
-
-# ------------------------------------------------------------------ 4. budget + results
+# ------------------------------------------------------------------ 4. plan
 st.header("4. Your plan")
-budget = st.slider("Budget for fire-safety work ($)", 0, 60_000, 10_000, step=1_000)
+st.slider("Budget for fire-safety work ($)", 0, 60_000, step=1_000, key="budget")
+inputs = build_inputs()
 
 if st.button("Show my plan", type="primary"):
-    st.session_state["result"] = assess(
-        {"address": address, "home": home, "measures_done": done, "insurance": insurance, "budget": budget}, area)
+    t0 = time.time()
+    st.session_state["result"] = assess(inputs, area)
+    st.session_state["assess_seconds"] = time.time() - t0
+    st.session_state["result_inputs"] = inputs
+    st.session_state.pop("report", None)
 
 res = st.session_state.get("result")
 if res:
     cur, fut = res["current"], res["future"]
+    if st.session_state.get("result_inputs") != inputs:
+        st.info("Inputs changed since this plan was made. Press 'Show my plan' again to update it.")
     if res.get("stub"):
         st.warning("Prototype: wildfire and house scores are placeholders until the team's model is plugged in.")
 
-    st.subheader("Where you are today")
-    m1, m2, m3 = st.columns(3)
-    m1.metric("Wildfire likelihood (per year)", f"{cur['wildfire']['p_fire_annual']:.1%}", cur["wildfire"]["rating"])
-    m2.metric("Damage if fire reaches the house", f"{cur['house']['impact']:.0%}", cur["house"]["rating"], delta_color="off")
-    m3.metric("After your plan", f"{fut['house_after_plan']['impact']:.0%}",
-              f"{fut['house_after_plan']['impact'] - cur['house']['impact']:+.0%}", delta_color="inverse")
+    tab_plan, tab_report = st.tabs(["Plan", "Report"])
+    with tab_plan:
+        st.subheader("Where you are today")
+        m1, m2, m3 = st.columns(3)
+        m1.metric("Wildfire likelihood (per year)", f"{cur['wildfire']['p_fire_annual']:.1%}", cur["wildfire"]["rating"],
+                  delta_color="off")
+        m2.metric("Damage if fire reaches the house", f"{cur['house']['impact']:.0%}", cur["house"]["rating"],
+                  delta_color="off")
+        m3.metric("After your plan", f"{fut['house_after_plan']['impact']:.0%}",
+                  f"{fut['house_after_plan']['impact'] - cur['house']['impact']:+.0%}", delta_color="inverse")
 
-    st.markdown("**Coverage gaps**")
-    if not cur["insurance_gap"]:
-        st.success("No major coverage gaps found.")
-    for gp in cur["insurance_gap"]:
-        icon = {"high": "🔴", "medium": "🟠", "low": "🟡"}[gp["severity"]]
-        st.markdown(f"{icon} **{gp['gap']}**: {gp['why']}")
+        st.markdown("**Coverage gaps**")
+        if not cur["insurance_gap"]:
+            st.success("No major coverage gaps found.")
+        for gp in cur["insurance_gap"]:
+            icon = {"high": "🔴", "medium": "🟠", "low": "🟡"}[gp["severity"]]
+            st.markdown(f"{icon} **{gp['gap']}**: {gp['why']}")
 
-    st.subheader("Recommended fixes, best value first")
-    if fut["fixes"]:
-        df = pd.DataFrame([{
-            "In plan": "✅" if f["within_budget"] else "",
-            "Fix": f["name"],
-            "Cost (assumed)": f"${f['cost_low']:,} to ${f['cost_high']:,}",
-            "Yearly benefit (est.)": fmt_money(f["est_annual_benefit"]),
-            "Payback (years)": f["payback_years"],
-            "Damage after this fix": f"{f['impact_after']:.0%}",
-            "Why": f["why"],
-        } for f in fut["fixes"]])
-        st.dataframe(df, hide_index=True, width="stretch")
-        st.caption(f"Plan within budget: {len(fut['plan_within_budget'])} fixes from {fmt_money(fut['plan_cost_low'])}. "
-                   "Yearly benefit = assumed premium discount + avoided expected loss.")
-    else:
-        st.success("Your home already meets every measure we check.")
+        st.subheader("Recommended fixes, best value first")
+        if fut["fixes"]:
+            st.dataframe(pd.DataFrame([{
+                "In plan": "✅" if f["within_budget"] else "",
+                "Fix": f["name"],
+                "Cost (assumed)": f"${f['cost_low']:,} to ${f['cost_high']:,}",
+                "Yearly benefit (est.)": fmt_money(f["est_annual_benefit"]),
+                "Payback (years)": f["payback_years"],
+                "Damage after this fix": f"{f['impact_after']:.0%}",
+                "Why": f["why"],
+            } for f in fut["fixes"]]), hide_index=True, width="stretch")
+            st.caption(f"Plan within budget: {len(fut['plan_within_budget'])} fixes from {fmt_money(fut['plan_cost_low'])}. "
+                       "Yearly benefit = assumed premium discount + avoided expected loss.")
+        else:
+            st.success("Your home already meets every measure we check.")
 
-    with st.expander("Assumptions and limits"):
-        for c in res["caveats"]:
-            st.markdown(f"- {c}")
-        st.markdown("- Cost ranges and discounts per fix: " + ", ".join(
-            f"{v[0]} ${v[1]:,}-${v[2]:,} ({v[3]:.0%})" for v in MEASURES.values()))
+        with st.expander("Assumptions and limits"):
+            for c in res["caveats"]:
+                st.markdown(f"- {c}")
+            st.markdown("- Cost ranges and assumed discounts per fix: " + "; ".join(
+                f"{v[0]} ${v[1]:,} to ${v[2]:,} ({v[3]:.0%})" for v in MEASURES.values()))
+
+    with tab_report:
+        c1, c2 = st.columns(2)
+        if c1.button("Write report"):
+            st.session_state["report"] = (template_report(inputs["address"], res), "template")
+        if c2.button("Rewrite with AI", disabled=not has_key, help=None if has_key else "Needs ANTHROPIC_API_KEY"):
+            with st.spinner("Rewriting..."):
+                st.session_state["report"] = ai_report(inputs["address"], res)
+        if "report" in st.session_state:
+            text, source = st.session_state["report"]
+            st.caption("Written by Claude from the plan's numbers" if source == "ai" else "Template report")
+            st.markdown(text)
+            st.download_button("Download report (.md)", text, file_name="alwayson_plan.md")
+
+# ------------------------------------------------------------------ developer panel
+if dev:
+    st.divider()
+    st.header("Developer panel")
+    in_errs = validate_inputs(inputs)
+    st.markdown(f"**Inputs contract:** {'✅ valid' if not in_errs else '❌ ' + '; '.join(in_errs)}")
+    if res:
+        out_errs = validate_output(res)
+        st.markdown(f"**Output contract:** {'✅ valid' if not out_errs else '❌ ' + '; '.join(out_errs)}")
+        st.caption(f"assess() took {st.session_state.get('assess_seconds', 0):.2f}s; area lookup {area_seconds:.2f}s")
+    c1, c2, c3 = st.columns(3)
+    with c1:
+        st.markdown("**inputs**")
+        st.json(inputs, expanded=False)
+    with c2:
+        st.markdown("**area_context**")
+        st.json(area, expanded=False)
+    with c3:
+        st.markdown("**assess() output**")
+        st.json(res or {}, expanded=False)

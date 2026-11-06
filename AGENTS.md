@@ -40,10 +40,15 @@ docs/                    brief, data dictionary, validation report
 src/msba_vibathon_2026/  app logic:
   policy_extract.py      policy PDF -> fields (Claude + pdfplumber quote check), spec in docs/policy_extraction_spec.md
   gaps.py                coverage gap rules
+  contract.py            validate_inputs/validate_output for the model contract
+  report.py              plain-language plan (template, optional AI rewrite)
+  scenarios.py           sample homeowners -> assess() inputs
   assess_stub.py         placeholder assess() until the model replaces it (contract in docs/inputs_and_contract.md)
 app.py                   Streamlit app
 data/demo/               cached lookups and extractions so the demo runs offline
 data/samples/policies/   synthetic declarations pages + answer_key.json
+data/samples/scenarios.json  sample homeowners with expected results
+tests/                   pytest suite (fake Claude, no key needed)
 ```
 
 ## Running
@@ -58,7 +63,7 @@ uv run python scripts/03_validate.py     # data checks
 
 Reading new policy PDFs needs `ANTHROPIC_API_KEY` in the environment. Without it, only the cached sample PDFs work and the manual form is the fallback.
 
-Before pushing to `main`, run `uv run python scripts/smoke_test.py` (expects `All checks passed.`).
+Before pushing to `main`, run `uv run pytest` (no API key needed).
 
 ## Git
 
