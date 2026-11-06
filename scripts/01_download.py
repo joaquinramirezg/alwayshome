@@ -35,6 +35,8 @@ NRI_VERSION = "v1.20, December 2025"
 ZILLOW_PAGE = "https://www.zillow.com/research/data/"
 ZILLOW_CSV = ("https://files.zillowstatic.com/research/public_csvs/zhvi/"
               "Zip_zhvi_uc_sfrcondo_tier_0.33_0.67_sm_sa_month.csv")
+ZILLOW_RENT_CSV = "https://files.zillowstatic.com/research/public_csvs/zori/Zip_zori_uc_sfrcondomfr_sm_month.csv"
+ZILLOW_RENT_DIR = "zillow_rent"  # separate from zillow/: 02_process reads the one CSV in that folder
 
 ACS_YEAR = 2024
 ACS_BASE = (f"https://www2.census.gov/programs-surveys/acs/summary_file/{ACS_YEAR}/"
@@ -117,6 +119,14 @@ def zillow():
     record("zillow", source_page=ZILLOW_PAGE)
 
 
+def zillow_rent():
+    path = download(ZILLOW_RENT_CSV, RAW / ZILLOW_RENT_DIR / ZILLOW_RENT_CSV.rsplit("/", 1)[1])
+    add_file("zillow_rent", ZILLOW_RENT_CSV, path,
+             note=f"Zillow Observed Rent Index by ZIP. {ZILLOW_PAGE} refuses automated clients (HTTP 403). "
+                  "The CSV is the file Zillow publishes on its public CDN.")
+    record("zillow_rent", source_page=ZILLOW_PAGE)
+
+
 def census():
     for table in ("b19013", "b25077", "b25003"):
         url = f"{ACS_BASE}{table}.dat"
@@ -139,7 +149,7 @@ def main() -> int:
     boundaries()
     bbox = la_bbox()
     steps = [("cdi", cdi), ("fhsz", lambda: fhsz(bbox)), ("perimeters", lambda: perimeters(bbox)),
-             ("wrc", wrc), ("nri", nri), ("zillow", zillow), ("census", census), ("dins", dins)]
+             ("wrc", wrc), ("nri", nri), ("zillow", zillow), ("zillow_rent", zillow_rent), ("census", census), ("dins", dins)]
     for name, step in steps:
         print(f"[{name}]")
         try:

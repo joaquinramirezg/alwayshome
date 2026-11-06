@@ -33,6 +33,7 @@ DATASETS = [  # file, manifest key, key columns
     ("nri_tracts", "nri", ["tract_geoid"]),
     ("zip_home_values", "zillow", ["zip", "date"]),
     ("zip_home_values_latest", "zillow", ["zip"]),
+    ("zip_rent_latest", "zillow_rent", ["zip"]),
     ("zcta_census", "census", ["zcta"]),
     ("dins_2025_la", "dins", ["GLOBALID", "DAMAGE", "destroyed"]),
     ("zip_tract_crosswalk", "hud", ["zip", "tract_geoid"]),
@@ -42,10 +43,11 @@ DATASETS = [  # file, manifest key, key columns
 DUPLICATE_KEYS = {
     "zip_insurance": ["zip", "year"], "zip_fair_plan": ["zip"], "wrc_communities": ["geoid"],
     "nri_tracts": ["tract_geoid"], "zip_home_values": ["zip", "date"], "zip_home_values_latest": ["zip"],
-    "zcta_census": ["zcta"], "dins_2025_la": ["GLOBALID"], "zip_tract_crosswalk": ["zip", "tract_geoid"],
+    "zip_rent_latest": ["zip"], "zcta_census": ["zcta"], "dins_2025_la": ["GLOBALID"], "zip_tract_crosswalk": ["zip", "tract_geoid"],
     "tract_zip_crosswalk": ["tract_geoid", "zip"], "zip_zcta": ["zip"],
 }
 ZIP_COLUMNS = {"zip_insurance": "zip", "zip_fair_plan": "zip", "zip_home_values": "zip", "zip_home_values_latest": "zip",
+               "zip_rent_latest": "zip",
                "zip_tract_crosswalk": "zip", "tract_zip_crosswalk": "zip", "zip_zcta": "zip", "zcta_census": "zcta"}
 TRACT_COLUMNS = {"zip_tract_crosswalk": "tract_geoid", "tract_zip_crosswalk": "tract_geoid", "nri_tracts": "tract_geoid"}
 GEO_TABLES = ["hazard_zones", "fire_perimeters", "dins_2025_la"]
@@ -181,12 +183,13 @@ def coverage(tables: dict) -> None:
         "CDI policies": set(tables["zip_insurance"]["zip"]) if tables.get("zip_insurance") is not None else set(),
         "CDI FAIR Plan": set(tables["zip_fair_plan"]["zip"]) if tables.get("zip_fair_plan") is not None else set(),
         "Zillow": set(tables["zip_home_values_latest"]["zip"]) if tables.get("zip_home_values_latest") is not None else set(),
+        "Zillow rent": set(tables["zip_rent_latest"]["zip"]) if tables.get("zip_rent_latest") is not None else set(),
         "Census ZCTA": set(tables["zcta_census"]["zcta"]) if tables.get("zcta_census") is not None else set(),
         "HUD crosswalk": set(tables["zip_tract_crosswalk"]["zip"]) if tables.get("zip_tract_crosswalk") is not None else set(),
     }
     xw = tables["zip_tract_crosswalk"]
     residential = set(xw.groupby("zip")["res_ratio"].sum().loc[lambda s: s > 0].index)
-    universe = set().union(*sets.values()) - (sets["Census ZCTA"] - sets["HUD crosswalk"] - sets["CDI policies"] - sets["Zillow"] - sets["CDI FAIR Plan"])
+    universe = set().union(*sets.values()) - (sets["Census ZCTA"] - sets["HUD crosswalk"] - sets["CDI policies"] - sets["Zillow"] - sets["Zillow rent"] - sets["CDI FAIR Plan"])
     out(f"LA ZIP universe: {len(universe)} ZIPs in any ZIP table, {len(residential)} of them with residential addresses in LA County.\n")
     rows = [{"table": k, "ZIPs in universe": len(v & universe), "missing, all": len(universe - v),
              "missing, residential in LA": len(residential - v)} for k, v in sets.items()]
