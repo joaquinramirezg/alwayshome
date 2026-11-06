@@ -2,8 +2,7 @@
 
 Follows docs/policy_extraction_spec.md. Approach:
 
-1. An LLM reads the PDF natively (text layer and page images), so scanned pages work too.
-   Provider-agnostic: Claude, OpenAI or Gemini via llm.py (LLM_PROVIDER / LLM_MODEL).
+1. Claude reads the PDF natively (text layer and page images), so scanned pages work too.
 2. Structured outputs (`output_config.format` with a JSON schema) force valid JSON:
    every field is {value, source_text, page}, null when the page doesn't show it.
 3. pdfplumber reads the PDF's text layer locally, and each `source_text` quote is
@@ -21,13 +20,13 @@ import copy
 import hashlib
 import io
 import json
+import os
 import re
 from pathlib import Path
 
-from .llm import LLMUnavailable, extract_json
-
 ROOT = Path(__file__).resolve().parents[2]
 DEMO_CACHE = ROOT / "data" / "demo" / "policy_extractions.json"
+MODEL = "claude-opus-5-5"
 
 
 class ExtractionUnavailable(RuntimeError):
@@ -173,9 +172,38 @@ def _load_cache() -> dict:
     return json.loads(DEMO_CACHE.read_text()) if DEMO_CACHE.exists() else {}
 
 
+def _call_claude(pdf_bytes: bytes) -> dict:
+    import base64
+
+    import anthropic
+
+    client = anthropic.Anthropic()
+    response = client.messages.create(
+        model=MODEL,
+        max_tokens=16000,
+        system=SYSTEM,
+        output_config={"effort": "low", "format": {"type": "json_schema", "schema": SCHEMA}},
+        messages=[{
+            "role": "user",
+            "content": [
+                {"type": "document", "source": {
+                    "type": "base64", "media_type": "application/pdf",
+                    "data": base64.standard_b64encode(pdf_bytes).decode()}},
+                {"type": "text", "text": "Extract the fields from this declarations page."},
+            ],
+        }],
+    )
+    if response.stop_reason == "refusal":
+        raise ExtractionUnavailable("The model declined to read this document.")
+    if response.stop_reason == "max_tokens":
+        raise ExtractionUnavailable("The response was cut off.")
+    text = next(b.text for b in response.content if b.type == "text")
+    return json.loads(text)
+
+
 # ---------------------------------------------------------------- public API
 def extract(pdf_bytes: bytes, *, write_cache: bool = False) -> dict:
-    """Return {"fields": {...}, "source": "cache" | "<provider>/<model>", "text_layer": bool}.
+    """Return {"fields": {...}, "source": "cache" | "claude", "text_layer": bool}.
 
     Each field: value, source_text, page, verified (True/False/None), optional flag.
     Raises ExtractionUnavailable when there is no cached result and the API can't be used.
@@ -185,10 +213,15 @@ def extract(pdf_bytes: bytes, *, write_cache: bool = False) -> dict:
     if digest in cache:
         raw, source = copy.deepcopy(cache[digest]), "cache"
     else:
+        if not os.environ.get("ANTHROPIC_API_KEY") and not os.environ.get("ANTHROPIC_AUTH_TOKEN"):
+            raise ExtractionUnavailable("No ANTHROPIC_API_KEY set and this PDF is not one of the cached samples.")
         try:
-            raw, source = extract_json(pdf_bytes, SYSTEM, "Extract the fields from this declarations page.", SCHEMA)
-        except LLMUnavailable as e:
-            raise ExtractionUnavailable(str(e)) from e
+            raw = _call_claude(pdf_bytes)
+        except ExtractionUnavailable:
+            raise
+        except Exception as e:  # network, auth, rate limit: the app falls back to manual entry
+            raise ExtractionUnavailable(f"AI extraction failed: {e}") from e
+        source = "claude"
         if write_cache:
             cache[digest] = raw
             DEMO_CACHE.parent.mkdir(parents=True, exist_ok=True)

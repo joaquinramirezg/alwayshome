@@ -7,4 +7,4 @@ uv sync
 uv run streamlit run app.py
 ```
 
-Optional: set `ANTHROPIC_API_KEY`, `OPENAI_API_KEY` or `GEMINI_API_KEY` to let the app read new policy PDFs (details in `src/msba_vibathon_2026/llm.py`). See `AGENTS.md` and `docs/` for everything else.
+Optional: `export ANTHROPIC_API_KEY=...` to let the app read new policy PDFs. See `AGENTS.md` and `docs/` for everything else.
