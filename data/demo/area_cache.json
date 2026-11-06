@@ -1,0 +1,495 @@
+{
+ "1200 chautauqua blvd, pacific palisades, ca 90272": {
+  "address": "1200 Chautauqua Blvd, Pacific Palisades, CA 90272",
+  "geocode": {
+   "lat": 34.051594510872,
+   "lon": -118.517990238493,
+   "matched_address": "1200 CHAUTAUQUA BLVD, PACIFIC PALISADES, CA, 90272",
+   "zip": "90272",
+   "tract_geoid": "06037262501",
+   "county_fips": "06037",
+   "place": "Los Angeles",
+   "place_geoid": "0644000"
+  },
+  "missing_tables": [],
+  "hazard_class": "Very High",
+  "hazard_responsibility_area": "LRA",
+  "fires_within_5km": [
+   {
+    "fire_name": "PALISADES",
+    "year": 2025,
+    "distance_km": 0.0
+   },
+   {
+    "fire_name": "PALISADES 2",
+    "year": 2019,
+    "distance_km": 3.13
+   },
+   {
+    "fire_name": "GETTY",
+    "year": 2019,
+    "distance_km": 3.97
+   },
+   {
+    "fire_name": "TEMESCAL",
+    "year": 2015,
+    "distance_km": 2.1
+   },
+   {
+    "fire_name": "OAKMONT",
+    "year": 2015,
+    "distance_km": 2.98
+   },
+   {
+    "fire_name": "PALISADES",
+    "year": 2014,
+    "distance_km": 2.29
+   },
+   {
+    "fire_name": "RUSTIC",
+    "year": 2012,
+    "distance_km": 2.11
+   },
+   {
+    "fire_name": null,
+    "year": 1989,
+    "distance_km": 3.69
+   },
+   {
+    "fire_name": null,
+    "year": 1980,
+    "distance_km": 2.5
+   },
+   {
+    "fire_name": "MANDEVILLE/LA CITY",
+    "year": 1978,
+    "distance_km": 0.2
+   },
+   {
+    "fire_name": null,
+    "year": 1975,
+    "distance_km": 0.18
+   },
+   {
+    "fire_name": "TRIPPET",
+    "year": 1973,
+    "distance_km": 3.63
+   },
+   {
+    "fire_name": "BEL AIR",
+    "year": 1961,
+    "distance_km": 3.15
+   },
+   {
+    "fire_name": null,
+    "year": 1961,
+    "distance_km": 3.17
+   }
+  ],
+  "zip_insurance_trend": [
+   {
+    "year": 2015,
+    "new": 775,
+    "renewed": 6565,
+    "nonrenewed_total": 782,
+    "nonrenewal_rate": 0.0962817040137897
+   },
+   {
+    "year": 2016,
+    "new": 790,
+    "renewed": 6562,
+    "nonrenewed_total": 789,
+    "nonrenewal_rate": 0.09691684068296279
+   },
+   {
+    "year": 2017,
+    "new": 679,
+    "renewed": 6659,
+    "nonrenewed_total": 662,
+    "nonrenewal_rate": 0.08275
+   },
+   {
+    "year": 2018,
+    "new": 636,
+    "renewed": 6678,
+    "nonrenewed_total": 637,
+    "nonrenewal_rate": 0.08011570871588479
+   },
+   {
+    "year": 2019,
+    "new": 748,
+    "renewed": 6473,
+    "nonrenewed_total": 777,
+    "nonrenewal_rate": 0.09714928732183045
+   },
+   {
+    "year": 2020,
+    "new": 609,
+    "renewed": 6172,
+    "nonrenewed_total": 560,
+    "nonrenewal_rate": 0.07628388502928757
+   },
+   {
+    "year": 2021,
+    "new": 961,
+    "renewed": 5765,
+    "nonrenewed_total": 950,
+    "nonrenewal_rate": 0.12376237623762376
+   },
+   {
+    "year": 2022,
+    "new": 727,
+    "renewed": 5852,
+    "nonrenewed_total": 731,
+    "nonrenewal_rate": 0.1
+   },
+   {
+    "year": 2023,
+    "new": 408,
+    "renewed": 5907,
+    "nonrenewed_total": 571,
+    "nonrenewal_rate": 0.08292187046180656
+   }
+  ],
+  "fair_plan_share": 0.08,
+  "fair_plan_data_year": 2022,
+  "tract_wildfire_eal": 550056.2652350732,
+  "zip_home_value": 2850078.8137227073,
+  "zip_home_value_5yr_change": -0.03376704544618825,
+  "zcta_median_income": 189713,
+  "wrc_community": {
+   "community": "Los Angeles",
+   "risk_to_homes_pctile_state": 0.823,
+   "risk_to_homes_pctile_national": 0.978,
+   "wildfire_likelihood_pctile_state": 0.785,
+   "wildfire_likelihood_pctile_national": 0.963
+  }
+ },
+ "1000 e mariposa st, altadena, ca 91001": {
+  "address": "1000 E Mariposa St, Altadena, CA 91001",
+  "geocode": {
+   "lat": 34.188471595402,
+   "lon": -118.129633085798,
+   "matched_address": "1000 E MARIPOSA ST, ALTADENA, CA, 91001",
+   "zip": "91001",
+   "tract_geoid": "06037460101",
+   "county_fips": "06037",
+   "place": "Altadena",
+   "place_geoid": "0601290"
+  },
+  "missing_tables": [],
+  "hazard_class": null,
+  "hazard_responsibility_area": null,
+  "fires_within_5km": [
+   {
+    "fire_name": "EATON",
+    "year": 2025,
+    "distance_km": 0.0
+   },
+   {
+    "fire_name": "LOWE",
+    "year": 2019,
+    "distance_km": 3.15
+   },
+   {
+    "fire_name": "COYOTE",
+    "year": 2017,
+    "distance_km": 3.09
+   },
+   {
+    "fire_name": "STATION",
+    "year": 2009,
+    "distance_km": 2.81
+   },
+   {
+    "fire_name": "LOWE",
+    "year": 2007,
+    "distance_km": 2.36
+   },
+   {
+    "fire_name": "KINNELOA",
+    "year": 1995,
+    "distance_km": 3.81
+   },
+   {
+    "fire_name": "KINNELOA",
+    "year": 1993,
+    "distance_km": 1.11
+   },
+   {
+    "fire_name": "GLEN ALLEN",
+    "year": 1993,
+    "distance_km": 1.67
+   },
+   {
+    "fire_name": "VINEHILL",
+    "year": 1992,
+    "distance_km": 2.15
+   },
+   {
+    "fire_name": "PINECREST/USFS",
+    "year": 1979,
+    "distance_km": 1.43
+   },
+   {
+    "fire_name": null,
+    "year": 1979,
+    "distance_km": 1.78
+   },
+   {
+    "fire_name": "MOUNTAIN TRAIL",
+    "year": 1978,
+    "distance_km": 4.76
+   },
+   {
+    "fire_name": null,
+    "year": 1977,
+    "distance_km": 3.02
+   },
+   {
+    "fire_name": null,
+    "year": 1976,
+    "distance_km": 3.24
+   },
+   {
+    "fire_name": null,
+    "year": 1968,
+    "distance_km": 1.7
+   },
+   {
+    "fire_name": null,
+    "year": 1968,
+    "distance_km": 2.78
+   },
+   {
+    "fire_name": null,
+    "year": 1968,
+    "distance_km": 2.99
+   },
+   {
+    "fire_name": null,
+    "year": 1962,
+    "distance_km": 2.06
+   },
+   {
+    "fire_name": null,
+    "year": 1961,
+    "distance_km": 4.75
+   },
+   {
+    "fire_name": null,
+    "year": 1960,
+    "distance_km": 1.78
+   },
+   {
+    "fire_name": null,
+    "year": 1960,
+    "distance_km": 3.02
+   },
+   {
+    "fire_name": null,
+    "year": 1960,
+    "distance_km": 3.95
+   },
+   {
+    "fire_name": "WOODWARDIA",
+    "year": 1959,
+    "distance_km": 4.02
+   }
+  ],
+  "zip_insurance_trend": [
+   {
+    "year": 2015,
+    "new": 1107,
+    "renewed": 9991,
+    "nonrenewed_total": 1007,
+    "nonrenewal_rate": 0.08318876497315159
+   },
+   {
+    "year": 2016,
+    "new": 1106,
+    "renewed": 10080,
+    "nonrenewed_total": 1049,
+    "nonrenewal_rate": 0.08573763792398856
+   },
+   {
+    "year": 2017,
+    "new": 1047,
+    "renewed": 10126,
+    "nonrenewed_total": 929,
+    "nonrenewal_rate": 0.07676417121137002
+   },
+   {
+    "year": 2018,
+    "new": 1150,
+    "renewed": 10135,
+    "nonrenewed_total": 1111,
+    "nonrenewal_rate": 0.08962568570506615
+   },
+   {
+    "year": 2019,
+    "new": 1237,
+    "renewed": 10089,
+    "nonrenewed_total": 1094,
+    "nonrenewal_rate": 0.08808373590982287
+   },
+   {
+    "year": 2020,
+    "new": 1008,
+    "renewed": 10083,
+    "nonrenewed_total": 864,
+    "nonrenewal_rate": 0.07227101631116688
+   },
+   {
+    "year": 2021,
+    "new": 1021,
+    "renewed": 10124,
+    "nonrenewed_total": 1015,
+    "nonrenewal_rate": 0.0834703947368421
+   },
+   {
+    "year": 2022,
+    "new": 1080,
+    "renewed": 10004,
+    "nonrenewed_total": 1078,
+    "nonrenewal_rate": 0.0886367373787206
+   },
+   {
+    "year": 2023,
+    "new": 736,
+    "renewed": 10036,
+    "nonrenewed_total": 874,
+    "nonrenewal_rate": 0.07504722651554181
+   }
+  ],
+  "fair_plan_share": 0.059,
+  "fair_plan_data_year": 2022,
+  "tract_wildfire_eal": 2701245.302431075,
+  "zip_home_value": 1126420.156415316,
+  "zip_home_value_5yr_change": 0.021469436218161775,
+  "zcta_median_income": 134903,
+  "wrc_community": {
+   "community": "Altadena",
+   "risk_to_homes_pctile_state": 0.95,
+   "risk_to_homes_pctile_national": 0.996,
+   "wildfire_likelihood_pctile_state": 0.924,
+   "wildfire_likelihood_pctile_national": 0.992
+  }
+ },
+ "3200 wilshire blvd, los angeles, ca 90010": {
+  "address": "3200 Wilshire Blvd, Los Angeles, CA 90010",
+  "geocode": {
+   "lat": 34.061735315295,
+   "lon": -118.291706731215,
+   "matched_address": "3200 WILSHIRE BLVD, LOS ANGELES, CA, 90010",
+   "zip": "90010",
+   "tract_geoid": "06037212303",
+   "county_fips": "06037",
+   "place": "Los Angeles",
+   "place_geoid": "0644000"
+  },
+  "missing_tables": [],
+  "hazard_class": null,
+  "hazard_responsibility_area": null,
+  "fires_within_5km": [
+   {
+    "fire_name": null,
+    "year": 1981,
+    "distance_km": 4.17
+   },
+   {
+    "fire_name": null,
+    "year": 1974,
+    "distance_km": 4.61
+   },
+   {
+    "fire_name": null,
+    "year": 1963,
+    "distance_km": 3.82
+   },
+   {
+    "fire_name": null,
+    "year": 1957,
+    "distance_km": 4.53
+   }
+  ],
+  "zip_insurance_trend": [
+   {
+    "year": 2015,
+    "new": 4,
+    "renewed": 44,
+    "nonrenewed_total": 8,
+    "nonrenewal_rate": 0.14285714285714285
+   },
+   {
+    "year": 2016,
+    "new": 7,
+    "renewed": 33,
+    "nonrenewed_total": 12,
+    "nonrenewal_rate": 0.23076923076923078
+   },
+   {
+    "year": 2017,
+    "new": 10,
+    "renewed": 30,
+    "nonrenewed_total": 8,
+    "nonrenewal_rate": 0.16666666666666666
+   },
+   {
+    "year": 2018,
+    "new": 3,
+    "renewed": 29,
+    "nonrenewed_total": 10,
+    "nonrenewal_rate": 0.23809523809523808
+   },
+   {
+    "year": 2019,
+    "new": 5,
+    "renewed": 26,
+    "nonrenewed_total": 5,
+    "nonrenewal_rate": 0.1388888888888889
+   },
+   {
+    "year": 2020,
+    "new": 16,
+    "renewed": 50,
+    "nonrenewed_total": 8,
+    "nonrenewal_rate": 0.10810810810810811
+   },
+   {
+    "year": 2021,
+    "new": 5,
+    "renewed": 46,
+    "nonrenewed_total": 19,
+    "nonrenewal_rate": 0.2714285714285714
+   },
+   {
+    "year": 2022,
+    "new": 5,
+    "renewed": 36,
+    "nonrenewed_total": 19,
+    "nonrenewal_rate": 0.31666666666666665
+   },
+   {
+    "year": 2023,
+    "new": 3,
+    "renewed": 36,
+    "nonrenewed_total": 5,
+    "nonrenewal_rate": 0.11363636363636363
+   }
+  ],
+  "fair_plan_share": 0.014,
+  "fair_plan_data_year": 2022,
+  "tract_wildfire_eal": 0.0,
+  "zip_home_value": 933297.0922288488,
+  "zip_home_value_5yr_change": -0.06063096261319123,
+  "zcta_median_income": 101455,
+  "wrc_community": {
+   "community": "Los Angeles",
+   "risk_to_homes_pctile_state": 0.823,
+   "risk_to_homes_pctile_national": 0.978,
+   "wildfire_likelihood_pctile_state": 0.785,
+   "wildfire_likelihood_pctile_national": 0.963
+  }
+ }
+}

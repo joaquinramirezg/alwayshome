@@ -36,7 +36,13 @@ scripts/utils.py         geocode(address) and area_context(address) helpers
 data/processed/          tables the app reads (parquet, GeoParquet, CSV)
 data/manual/             hand-downloaded inputs (HUD crosswalks)
 docs/                    brief, data dictionary, validation report
-src/msba_vibathon_2026/  package (app logic goes here)
+src/msba_vibathon_2026/  app logic:
+  policy_extract.py      policy PDF -> fields (Claude + pdfplumber quote check), spec in docs/policy_extraction_spec.md
+  gaps.py                coverage gap rules
+  assess_stub.py         placeholder assess() until the model replaces it (contract in docs/inputs_and_contract.md)
+app.py                   Streamlit app
+data/demo/               cached lookups and extractions so the demo runs offline
+data/samples/policies/   synthetic declarations pages + answer_key.json
 ```
 
 ## Running
@@ -45,8 +51,11 @@ Python 3.14 with `uv`:
 
 ```
 uv sync
-uv run python scripts/03_validate.py
+uv run streamlit run app.py              # the app
+uv run python scripts/03_validate.py     # data checks
 ```
+
+Reading new policy PDFs needs `ANTHROPIC_API_KEY` in the environment. Without it, only the cached sample PDFs work and the manual form is the fallback.
 
 ## Git
 
