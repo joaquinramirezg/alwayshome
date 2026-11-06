@@ -191,3 +191,105 @@ def test_runs_against_the_real_rent_table():
 def test_unknown_zip_in_the_real_rent_table_does_not_crash():
     result = run_coverage_analysis(FAIR_POLICY, HomeInput(zip="00000", sq_ft=1_800), RiskInput())
     assert result.components[4].cost == UNKNOWN
+
+
+# ------------------------------------------------- Step 8: hand-calculated cases
+CASE_1_POLICY = dict(document_type="fair_plan", has_dic=False, dwelling_limit=450_000,
+                     dwelling_settlement="actual_cash_value", code_upgrade=False, debris_removal=False,
+                     contents_limit=0, deductible_all_perils=1_000, last_coverage_update_year=2017)
+CASE_1_HOME = dict(zip="91001", sq_ft=1_800, contents_value_estimate=100_000)
+CASE_2_POLICY = dict(document_type="homeowners", dwelling_limit=1_100_000, dwelling_settlement="replacement_cost",
+                     extended_replacement_pct=0.50, code_upgrade=True, code_upgrade_amount=275_000,
+                     debris_removal=True, other_structures_limit=110_000, contents_limit=550_000,
+                     loss_of_use_limit=330_000, deductible_all_perils=2_500, last_coverage_update_year=2025)
+CASE_2_HOME = dict(zip="90272", sq_ft=2_000, contents_value_estimate=300_000)
+
+
+def run_case(monkeypatch, policy: dict, home: dict, rent: float):
+    monkeypatch.setattr(scenario, "monthly_rent", lambda zip_code: rent)
+    return run_coverage_analysis(PolicyInput(**policy), HomeInput(**home), RiskInput(), as_of_year=AS_OF)
+
+
+def table(result) -> dict:
+    """component: (cost low, cost high, payout low, payout high, shortfall low, shortfall high)"""
+    return {c.name: (c.cost.low, c.cost.high, c.payout.low, c.payout.high, c.shortfall.low, c.shortfall.high)
+            for c in result.components}
+
+
+def test_case_1_fair_plan_only_underinsured(monkeypatch):
+    result = run_case(monkeypatch, CASE_1_POLICY, CASE_1_HOME, 4_000)
+    assert table(result) == {
+        "rebuild": (540_000, 900_000, 450_000, 450_000, 90_000, 450_000),
+        "code_upgrade": (112_500, 225_000, 0, 0, 112_500, 225_000),
+        "other_structures": (54_000, 90_000, 45_000, 45_000, 9_000, 45_000),
+        "contents": (100_000, 100_000, 0, 0, 100_000, 100_000),
+        "living_expenses": (96_000, 144_000, 0, 0, 96_000, 144_000),
+    }
+    assert result.total_shortfall == Range(low=408_500, high=965_000)
+    assert sorted(g.gap for g in result.gaps) == sorted([
+        "underinsured", "stale_coverage", "fair_no_dic", "actual_cash_value", "low_extended_replacement",
+        "no_code_upgrade", "no_debris_removal", "no_living_expenses", "no_contents",
+    ])
+    assert "$250/sq ft" in next(g for g in result.gaps if g.gap == "underinsured").evidence
+    config = load_config()
+    assert config.acv_warning.text in result.warnings
+    assert config.debris_removal_note.text in result.warnings
+
+
+def test_case_2_private_policy_well_covered(monkeypatch):
+    result = run_case(monkeypatch, CASE_2_POLICY, CASE_2_HOME, 5_000)
+    assert table(result) == {
+        "rebuild": (600_000, 1_000_000, 600_000, 1_000_000, 0, 0),
+        "code_upgrade": (275_000, 550_000, 275_000, 275_000, 0, 275_000),
+        "other_structures": (60_000, 100_000, 110_000, 110_000, 0, 0),
+        "contents": (300_000, 300_000, 550_000, 550_000, 0, 0),
+        "living_expenses": (120_000, 180_000, 330_000, 330_000, 0, 0),
+    }
+    assert result.total_shortfall == Range(low=2_500, high=277_500)
+    assert not [g for g in result.gaps if g.severity == "high"]
+
+
+def test_case_3_high_value_home_on_the_fair_plan(monkeypatch):
+    result = run_case(monkeypatch, CASE_1_POLICY, dict(CASE_1_HOME, sq_ft=5_500, contents_value_estimate=600_000), 4_000)
+    assert table(result) == {
+        "rebuild": (1_650_000, 2_750_000, 450_000, 450_000, 1_200_000, 2_300_000),
+        "code_upgrade": (112_500, 225_000, 0, 0, 112_500, 225_000),
+        "other_structures": (165_000, 275_000, 45_000, 45_000, 120_000, 230_000),
+        "contents": (600_000, 600_000, 0, 0, 600_000, 600_000),
+        "living_expenses": (96_000, 144_000, 0, 0, 96_000, 144_000),
+    }
+    assert result.total_shortfall == Range(low=2_129_500, high=3_500_000)
+    assert "above_fair_cap" in [g.gap for g in result.gaps]
+
+
+def test_case_4_acv_with_unknown_add_ons(monkeypatch):
+    policy = dict(CASE_2_POLICY, dwelling_settlement="actual_cash_value", code_upgrade=None,
+                  code_upgrade_amount=None, loss_of_use_limit=None)
+    result = run_case(monkeypatch, policy, CASE_2_HOME, 5_000)
+    assert load_config().acv_warning.text in result.warnings
+    unknown = [g for g in result.gaps if g.gap == "unknown_field"]
+    assert len(unknown) == 2
+    assert all(g.severity == "info" for g in unknown)
+    assert any("code_upgrade" in g.evidence for g in unknown)
+    assert any("loss_of_use_limit" in g.evidence for g in unknown)
+    components = {c.name: c for c in result.components}
+    assert components["code_upgrade"].shortfall == Range(low=0, high=550_000)
+    assert components["living_expenses"].shortfall == Range(low=0, high=180_000)
+    assert result.total_shortfall == Range(low=2_500, high=732_500)
+
+
+def test_case_5_everything_unknown_except_zip_and_sqft(monkeypatch):
+    result = run_case(monkeypatch, {}, dict(zip="91001", sq_ft=1_800), 4_000)
+    assert result.scope_note == "Total-loss scenario only. Partial damage not modeled."
+    assert table(result) == {
+        "rebuild": (540_000, 900_000, 0, 900_000, 0, 900_000),
+        "code_upgrade": (None, None, None, None, None, None),
+        "other_structures": (54_000, 90_000, 0, 90_000, 0, 90_000),
+        "contents": (None, None, None, None, None, None),
+        "living_expenses": (96_000, 144_000, 0, 144_000, 0, 144_000),
+    }
+    assert result.total_shortfall == Range(low=0, high=1_134_000)
+    assert result.deductible is None
+    assert [g.gap for g in result.gaps].count("unknown_field") == 4
+    assert any("code_upgrade, contents" in w for w in result.warnings)
+    assert CoverageResult.model_validate_json(result.model_dump_json()) == result
