@@ -128,3 +128,9 @@ def test_range_with_low_above_high_is_rejected():
     data["rebuild_cost_per_sqft"] |= {"low": 600, "high": 500}
     with pytest.raises(ValidationError):
         Config.model_validate(data)
+
+
+def test_sb_495_note_says_the_inventory_is_deferred_not_waived():
+    note = load_config().contents_no_inventory_rule.note
+    assert "without a detailed inventory for at least 100 days" in note
+    assert "without an itemized inventory" not in note

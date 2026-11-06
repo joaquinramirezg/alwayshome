@@ -50,7 +50,7 @@ contents_no_inventory_rule:
   cap: 350000
   effective: "2026-01"
   source_url: https://www.insurance.ca.gov/0400-news/0100-press-releases/2025/release067-2025.cfm
-  note: "SB 495: insurers pay 60% of contents limit, up to $350,000, without an itemized inventory after a declared-emergency total loss. Informational only."
+  note: "SB 495: insurers pay 60% of contents limit, up to $350,000, without a detailed inventory for at least 100 days after a declared-emergency total loss. Informational only."
 
 debris_removal_note:
   text: "In the LA County government cleanup program, the county recovers the policy's debris-removal amount from the insurer, and owners were not supposed to pay out of pocket or be liable beyond that coverage. Not included in the dollar shortfall."

@@ -111,7 +111,7 @@ Nothing calls this module yet. The caller has to convert these, based on `origin
 ## Open issues from the source check
 
 - **FAIR Plan Coverage B (decided: range).** The United Policyholders PDF says that with no Coverage B on the declarations, "you can use up to 10% of the Coverage A limit" (slide 25). Slide 26 says other structures cover can be within or on top of the dwelling limit, depending on what was sold. Since the source doesn't settle it, the module widens the range. This deliberately departs from `docs/coverage_gap_build_plan.md`: Case 1 is now $408,500 to $1,010,000 (the plan says $965,000 high). Case 3, which has no total in the plan, is now $2,129,500 to $3,545,000.
-- **SB 495 wording.** The config note says insurers pay "without an itemized inventory". CDI says no detailed inventory is needed "for at least 100 days", so it's deferred, not waived. The note appears in the contents component's notes.
+- **SB 495 wording (decided: reworded).** CDI says no detailed inventory is needed "for at least 100 days", so it's deferred, not waived. The config note now says this, which departs from the wording in `docs/coverage_gap_build_plan.md`.
 
 ## Limits
 
