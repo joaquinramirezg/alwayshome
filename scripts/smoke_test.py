@@ -29,9 +29,9 @@ def main() -> None:
     at = AppTest.from_file(APP, default_timeout=180).run()
     check(at, "app loads")
 
-    addresses = [o for o in at.selectbox[0].options if o != "-"]
-    for a in addresses:
-        at.selectbox[0].set_value(a).run()
+    demo = next(s for s in at.selectbox if s.label == "Or just a demo address")
+    for a in [o for o in demo.options if o != "-"]:
+        next(s for s in at.selectbox if s.label == "Or just a demo address").set_value(a).run()
         zone = next(m.value for m in at.metric if m.label == "Fire hazard zone")
         check(at, f"address: {a} (zone: {zone})")
 
@@ -43,6 +43,8 @@ def main() -> None:
         check(at, f"policy: {name} -> {outcome}")
         sample_box = next(s for s in at.selectbox if s.label == "Or use a sample policy")
 
+    button(at, "Fill form").click().run()  # first sample homeowner
+    check(at, "fill form with a sample homeowner")
     button(at, "Show my plan").click().run()
     check(at, "plan screen")
     print("metrics:", {m.label: m.value for m in at.metric if m.label in (

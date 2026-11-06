@@ -34,7 +34,9 @@ It opens at http://localhost:8501. Stop it with Ctrl+C.
 
 ### Fastest way to try everything: sample homeowners
 
-In the sidebar, pick a **Sample homeowner** and press **Load this homeowner**. It fills every field (address, home, insurance, budget). Then press **Show my plan**.
+The app starts **empty**, like a real homeowner's first visit: type the address, answer the home questions, enter or upload the insurance, then press **Show my plan** (it lists anything still missing).
+
+To skip typing, use **Demo shortcuts** in the sidebar: pick a **Sample homeowner** and press **Fill form**. It fills the same fields a user would (address, home, insurance, budget), so the demo looks like real input. **Clear all** empties the form again.
 
 | Sample homeowner | What it shows |
 |---|---|
@@ -51,7 +53,7 @@ Turn on **Developer panel** in the sidebar to see the exact `inputs`, the `area_
 
 ### Demo walkthrough (what to click)
 
-1. **Location:** pick a demo address from the dropdown:
+1. **Location:** type an address and press Enter (or pick one under "Or just a demo address" in the sidebar):
    - Pacific Palisades: Very High hazard zone
    - Altadena: outside any mapped zone, yet burned in January 2025 ("no zone does not mean no risk")
    - Wilshire: low risk

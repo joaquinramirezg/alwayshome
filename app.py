@@ -59,15 +59,17 @@ EXTRA_MEASURES = {
 }
 INS_TYPES = ["FAIR Plan only", "FAIR Plan + DIC policy", "Private homeowners"]
 SETTLEMENTS = ["replacement_cost", "actual_cash_value", "unknown"]
+# The app starts empty: the homeowner fills in everything (or loads a sample from the sidebar).
 DEFAULTS = {
-    "address": DEMO_ADDRESSES[0],
-    **{f: "Unknown" for f in HOME_QUESTIONS},
-    "year_built": 1965, "living_area_sqft": 1800, "stories": 1,
+    "address": "",
+    **{f: None for f in HOME_QUESTIONS},
+    "year_built": None, "living_area_sqft": None, "stories": None,
     **{f"done_{k}": False for k in EXTRA_MEASURES},
-    "ins_type": INS_TYPES[0], "dwelling_limit": 650_000, "dwelling_settlement": "unknown",
-    "extended_replacement_pct": 0, "premium_total": 6_000, "liability_limit": 0, "loss_of_use_limit": 0,
+    "ins_type": None, "dwelling_limit": None, "dwelling_settlement": None,
+    "extended_replacement_pct": None, "premium_total": None, "liability_limit": None, "loss_of_use_limit": None,
     "code_upgrade": False, "debris_removal": False, "budget": 10_000,
 }
+TRANSIENT = ("result", "result_inputs", "extractions", "extraction_errors", "report")
 
 st.set_page_config(page_title="AlwaysON", page_icon="🔥", layout="wide")
 for k, v in DEFAULTS.items():
@@ -88,8 +90,36 @@ def load_scenario(sid: str) -> None:
               "liability_limit", "loss_of_use_limit", "code_upgrade", "debris_removal"):
         st.session_state[k] = ins[k]
     st.session_state["budget"] = s["budget"]
-    for k in ("result", "extractions", "report"):
+    for k in TRANSIENT:
         st.session_state.pop(k, None)
+
+
+def clear_all() -> None:
+    for k, v in DEFAULTS.items():
+        st.session_state[k] = v
+    for k in TRANSIENT + ("sample_policy",):
+        st.session_state.pop(k, None)
+
+
+def missing_fields(area: dict) -> list[str]:
+    """What the homeowner still has to fill in before a plan can be made."""
+    ss, miss = st.session_state, []
+    if not ss["address"].strip():
+        miss.append("your address")
+    elif not area:
+        miss.append("a valid address (or the fire hazard zone)")
+    miss += [label for f, (label, _) in HOME_QUESTIONS.items() if ss[f] is None]
+    if not ss["living_area_sqft"]:
+        miss.append("living area")
+    if ss["ins_type"] is None:
+        miss.append("current coverage")
+    if not ss["dwelling_limit"]:
+        miss.append("dwelling limit")
+    if ss["dwelling_settlement"] is None:
+        miss.append("how the dwelling is paid")
+    if not ss["premium_total"]:
+        miss.append("annual premium")
+    return miss
 
 
 def apply_policy(merged: dict) -> None:
@@ -112,6 +142,7 @@ def apply_policy(merged: dict) -> None:
 
 def build_inputs() -> dict:
     ss = st.session_state
+    zero = lambda k: ss[k] or 0  # optional amounts left empty mean "not on my policy"  # noqa: E731
     return {
         "address": ss["address"],
         "home": {**{f: ss[f] for f in HOME_QUESTIONS}, "year_built": ss["year_built"],
@@ -119,10 +150,10 @@ def build_inputs() -> dict:
         "measures_done": [k for k in EXTRA_MEASURES if ss[f"done_{k}"]],
         "insurance": {
             "documents": {INS_TYPES[0]: ["fair_plan"], INS_TYPES[1]: ["fair_plan", "dic"],
-                          INS_TYPES[2]: ["homeowners"]}[ss["ins_type"]],
+                          INS_TYPES[2]: ["homeowners"], None: []}[ss["ins_type"]],
             "has_dic": ss["ins_type"] == INS_TYPES[1],
-            **{k: ss[k] for k in ("dwelling_limit", "dwelling_settlement", "extended_replacement_pct", "premium_total",
-                                  "liability_limit", "loss_of_use_limit", "code_upgrade", "debris_removal")},
+            **{k: ss[k] for k in ("dwelling_limit", "dwelling_settlement", "premium_total", "code_upgrade", "debris_removal")},
+            **{k: zero(k) for k in ("extended_replacement_pct", "liability_limit", "loss_of_use_limit")},
         },
         "budget": ss["budget"],
     }
@@ -148,10 +179,16 @@ def fmt_money(x) -> str:
 
 # ------------------------------------------------------------------ sidebar
 with st.sidebar:
-    st.header("Test controls")
+    st.header("Demo shortcuts")
+    st.caption("For testing only. A real homeowner fills in the form on the right.")
     sid = st.selectbox("Sample homeowner", list(SCENARIOS), format_func=lambda k: SCENARIOS[k]["title"])
     st.caption(SCENARIOS[sid]["description"])
-    st.button("Load this homeowner", on_click=load_scenario, args=(sid,), width="stretch")
+    c1, c2 = st.columns(2)
+    c1.button("Fill form", on_click=load_scenario, args=(sid,), width="stretch", type="primary")
+    c2.button("Clear all", on_click=clear_all, width="stretch")
+    st.selectbox("Or just a demo address", ["-"] + DEMO_ADDRESSES, key="demo_pick",
+                 on_change=lambda: st.session_state.update(address=st.session_state["demo_pick"])
+                 if st.session_state["demo_pick"] != "-" else None)
     st.divider()
     has_key = bool(os.environ.get("ANTHROPIC_API_KEY") or os.environ.get("ANTHROPIC_AUTH_TOKEN"))
     st.markdown(f"**Claude API key:** {'✅ set' if has_key else '❌ not set (cached samples and manual entry only)'}")
@@ -164,21 +201,24 @@ st.caption("Find the fire-safety fixes that move your home closest to affordable
 
 # ------------------------------------------------------------------ 1. address
 st.header("1. Your home's location")
-c1, c2 = st.columns([3, 2])
-c1.text_input("Address", key="address")
-c2.selectbox("Or pick a demo address", ["-"] + DEMO_ADDRESSES, key="demo_pick",
-             on_change=lambda: st.session_state.update(address=st.session_state["demo_pick"])
-             if st.session_state["demo_pick"] != "-" else None)
+st.text_input("Street address in Los Angeles County", key="address",
+              placeholder="e.g. 1000 E Mariposa St, Altadena, CA 91001",
+              help="Press Enter to look it up. Used only to find your hazard zone, fire history and local insurance data.")
 
 area: dict = {}
 t0 = time.time()
-try:
-    with st.spinner("Looking up hazard zone, fire history and insurance market..."):
-        area = load_area(st.session_state["address"])
-except Exception as e:  # geocoder down or no match: the rest of the app still works
-    st.warning(f"Could not look up this address ({e}). Choose the hazard zone by hand.")
-    area = {"hazard_class": st.selectbox("Fire hazard zone", ["Very High", "High", "Moderate", None],
-                                         format_func=lambda z: z or "Outside mapped zones")}
+if st.session_state["address"].strip():
+    try:
+        with st.spinner("Looking up hazard zone, fire history and insurance market..."):
+            area = load_area(st.session_state["address"])
+    except Exception as e:  # geocoder down or no match: the rest of the app still works
+        st.warning(f"Could not look up this address ({e}). Check it, or choose the fire hazard zone by hand.")
+        zone = st.selectbox("Fire hazard zone", ["Very High", "High", "Moderate", "Outside mapped zones"],
+                            index=None, placeholder="Select...")
+        if zone:
+            area = {"hazard_class": None if zone == "Outside mapped zones" else zone}
+else:
+    st.info("Enter your address to start.")
 area_seconds = time.time() - t0
 
 if area.get("geocode"):
@@ -209,11 +249,13 @@ if area.get("geocode"):
 st.header("2. Your home")
 cols = st.columns(4)
 for i, (field, (label, options)) in enumerate(HOME_QUESTIONS.items()):
-    cols[i % 4].selectbox(label, options + ["Unknown"], key=field)
+    cols[i % 4].selectbox(label, options + ["Unknown"], key=field, placeholder="Select...",
+                          format_func=lambda o: "I don't know" if o == "Unknown" else o)
 c1, c2, c3 = st.columns(3)
-c1.number_input("Year built", 1900, 2026, key="year_built")
-c2.number_input("Living area (sq ft)", 400, 15000, step=100, key="living_area_sqft")
-c3.number_input("Stories", 1, 4, key="stories")
+c1.number_input("Year built", 1900, 2026, key="year_built", placeholder="e.g. 1965")
+c2.number_input("Living area (sq ft)", 400, 15000, step=100, key="living_area_sqft", placeholder="e.g. 1800")
+c3.number_input("Stories", 1, 4, key="stories", placeholder="e.g. 1")
+st.caption("Already done any of these?")
 for k, label in EXTRA_MEASURES.items():
     st.checkbox(label, key=f"done_{k}")
 
@@ -278,16 +320,17 @@ with tab_manual:
     if st.session_state.get("extractions"):
         st.info("Pre-filled from your policy. Check every value before continuing.")
     st.radio("Current coverage", INS_TYPES, horizontal=True, key="ins_type")
+    st.caption("Find these numbers on your declarations page. Leave optional amounts empty if your policy doesn't include them.")
     c1, c2, c3 = st.columns(3)
-    c1.number_input("Dwelling limit ($)", 0, 10_000_000, step=10_000, key="dwelling_limit")
-    c2.selectbox("How the dwelling is paid", SETTLEMENTS, key="dwelling_settlement",
+    c1.number_input("Dwelling limit ($)", 0, 10_000_000, step=10_000, key="dwelling_limit", placeholder="Coverage A, e.g. 650000")
+    c2.selectbox("How the dwelling is paid", SETTLEMENTS, key="dwelling_settlement", placeholder="Select...",
                  format_func=lambda s: {"replacement_cost": "Replacement cost", "actual_cash_value": "Actual cash value",
                                         "unknown": "Not sure"}[s])
-    c3.number_input("Extended replacement (%)", 0, 100, key="extended_replacement_pct")
+    c3.number_input("Extended replacement (%, optional)", 0, 100, key="extended_replacement_pct", placeholder="e.g. 25")
     c1, c2, c3 = st.columns(3)
-    c1.number_input("Total annual premium ($)", 0, 100_000, step=100, key="premium_total")
-    c2.number_input("Personal liability ($)", 0, 5_000_000, step=50_000, key="liability_limit")
-    c3.number_input("Loss of use ($)", 0, 2_000_000, step=10_000, key="loss_of_use_limit")
+    c1.number_input("Total annual premium ($)", 0, 100_000, step=100, key="premium_total", placeholder="all policies, e.g. 6200")
+    c2.number_input("Personal liability ($, optional)", 0, 5_000_000, step=50_000, key="liability_limit", placeholder="Coverage E")
+    c3.number_input("Loss of use ($, optional)", 0, 2_000_000, step=10_000, key="loss_of_use_limit", placeholder="Coverage D")
     c1, c2 = st.columns(2)
     c1.checkbox("Building code upgrade coverage", key="code_upgrade")
     c2.checkbox("Debris removal coverage", key="debris_removal")
@@ -297,12 +340,16 @@ st.header("4. Your plan")
 st.slider("Budget for fire-safety work ($)", 0, 60_000, step=1_000, key="budget")
 inputs = build_inputs()
 
+missing = missing_fields(area)
 if st.button("Show my plan", type="primary"):
-    t0 = time.time()
-    st.session_state["result"] = assess(inputs, area)
-    st.session_state["assess_seconds"] = time.time() - t0
-    st.session_state["result_inputs"] = inputs
-    st.session_state.pop("report", None)
+    if missing:
+        st.error("Please fill in: " + ", ".join(missing) + ".")
+    else:
+        t0 = time.time()
+        st.session_state["result"] = assess(inputs, area)
+        st.session_state["assess_seconds"] = time.time() - t0
+        st.session_state["result_inputs"] = inputs
+        st.session_state.pop("report", None)
 
 res = st.session_state.get("result")
 if res:

@@ -26,20 +26,81 @@ def click(at, label):
     return at
 
 
+def widget(items, label):
+    return next(w for w in items if w.label == label)
+
+
 def select(at, label, value):
-    next(s for s in at.selectbox if s.label == label).set_value(value).run()
+    widget(at.selectbox, label).set_value(value).run()
     assert not at.exception, at.exception
     return at
 
 
-@pytest.mark.parametrize("sid", list(SCENARIOS))
-def test_load_scenario_and_plan(sid, no_key):
-    at = start(dev=True)
+def fill_sample(at, sid):
     select(at, "Sample homeowner", sid)
-    click(at, "Load this homeowner")
+    return click(at, "Fill form")
+
+
+# ---------------------------------------------------------------- a real homeowner's first visit
+def test_starts_empty(no_key):
+    at = start()
+    ss = at.session_state
+    assert ss["address"] == "" and ss["ROOFCONSTRUCTION"] is None and ss["dwelling_limit"] is None
+    assert any("Enter your address" in i.value for i in at.info)
+    assert not any(m.label == "Fire hazard zone" for m in at.metric), "no lookup before an address is entered"
+    click(at, "Show my plan")
+    assert at.error and "Please fill in" in at.error[0].value and "your address" in at.error[0].value
+    assert "result" not in ss
+
+
+def test_homeowner_types_everything_by_hand(no_key):
+    """Fill the form field by field, the way a homeowner would, with no sample loaded."""
+    at = start(dev=True)
+    widget(at.text_input, "Street address in Los Angeles County").input("1000 E Mariposa St, Altadena, CA 91001").run()
+    assert any(m.label == "Fire hazard zone" for m in at.metric)
+    for label, value in [("Roof material", "Asphalt"), ("Eaves", "Unenclosed"), ("Vent screens", 'Mesh Screen > 1/8"'),
+                         ("Exterior siding", "Stucco/Brick/Cement"), ("Windows", "Unknown"),
+                         ("Elevated deck", "No Deck/Porch"), ("Fence attached to the house", "Combustible"),
+                         ("Sheds or outbuildings", "Not Applicable")]:
+        widget(at.selectbox, label).set_value(value)
+    widget(at.number_input, "Year built").set_value(1958)
+    widget(at.number_input, "Living area (sq ft)").set_value(1600)
+    widget(at.number_input, "Stories").set_value(1)
+    widget(at.checkbox, "Defensible space done (trees trimmed, brush cleared)").check()
+    at.run()
+    click(at, "Show my plan")
+    assert at.error and "current coverage" in at.error[0].value, "insurance still missing"
+    widget(at.radio, "Current coverage").set_value("FAIR Plan only")
+    widget(at.number_input, "Dwelling limit ($)").set_value(600_000)
+    widget(at.selectbox, "How the dwelling is paid").set_value("actual_cash_value")
+    widget(at.number_input, "Total annual premium ($)").set_value(5_900)
+    at.run()
+    click(at, "Show my plan")
+    assert not at.error
+    md = " ".join(m.value for m in at.markdown)
+    assert "Inputs contract:** ✅ valid" in md and "Output contract:** ✅ valid" in md
+    assert "FAIR Plan only" in md and "actual cash value" in md.lower()
+    assert at.session_state["result_inputs"]["insurance"]["liability_limit"] == 0, "empty optional amount means none"
+
+
+def test_clear_all_resets_form(no_key):
+    at = start()
+    fill_sample(at, "altadena_fair_only")
+    click(at, "Show my plan")
+    click(at, "Clear all")
+    ss = at.session_state
+    assert ss["address"] == "" and ss["EAVES"] is None and ss["ins_type"] is None and "result" not in ss
+
+
+# ---------------------------------------------------------------- sample homeowners
+@pytest.mark.parametrize("sid", list(SCENARIOS))
+def test_fill_sample_and_plan(sid, no_key):
+    at = start(dev=True)
+    fill_sample(at, sid)
     assert at.session_state["address"] == SCENARIOS[sid]["address"]
     assert at.session_state["budget"] == SCENARIOS[sid]["budget"]
     click(at, "Show my plan")
+    assert not at.error, [e.value for e in at.error]
     md = " ".join(m.value for m in at.markdown)
     assert "Inputs contract:** ✅ valid" in md and "Output contract:** ✅ valid" in md
     for g in SCENARIOS[sid]["expect"]["gaps_include"]:
@@ -48,6 +109,15 @@ def test_load_scenario_and_plan(sid, no_key):
     assert any("Your AlwaysON plan" in m.value for m in at.markdown)
 
 
+def test_changed_inputs_warn_stale_plan(no_key):
+    at = start()
+    fill_sample(at, "altadena_fair_only")
+    click(at, "Show my plan")
+    at.slider[0].set_value(30_000).run()
+    assert any("Inputs changed" in i.value for i in at.info)
+
+
+# ---------------------------------------------------------------- policy PDFs
 @pytest.mark.parametrize("sample", [
     "FAIR Plan + DIC (Altadena)", "FAIR Plan only (Altadena)", "FAIR Plan, scanned copy (no text layer)",
     "Private HO-3, underinsured (Palisades)", "Private HO-3, two pages (Altadena)",
@@ -63,8 +133,9 @@ def test_read_sample_policy_with_ai(sample, fake_claude):
         assert any("Scanned PDF" in w.value for w in at.warning)
 
 
-def test_policy_prefills_form(fake_claude):
+def test_policy_fills_empty_insurance_form(fake_claude):
     at = start()
+    assert at.session_state["dwelling_limit"] is None
     select(at, "Or use a sample policy", "FAIR Plan + DIC (Altadena)")
     click(at, "Read policy")
     ss = at.session_state
@@ -80,9 +151,12 @@ def test_read_policy_without_key_falls_back(no_key):
     select(at, "Or use a sample policy", "FAIR Plan only (Altadena)")
     click(at, "Read policy")
     assert at.error and "enter by hand" in at.error[0].value.lower()
+    fill_sample(at, "altadena_fair_only")
     click(at, "Show my plan")  # the rest of the app still works
+    assert "result" in at.session_state
 
 
+# ---------------------------------------------------------------- addresses
 @pytest.mark.parametrize("address", [
     "1200 Chautauqua Blvd, Pacific Palisades, CA 90272",
     "1000 E Mariposa St, Altadena, CA 91001",
@@ -90,13 +164,6 @@ def test_read_policy_without_key_falls_back(no_key):
 ])
 def test_demo_addresses_load_offline(address, no_key):
     at = start()
-    select(at, "Or pick a demo address", address)
+    select(at, "Or just a demo address", address)
     assert at.session_state["address"] == address
     assert any(m.label == "Fire hazard zone" for m in at.metric)
-
-
-def test_changed_inputs_warn_stale_plan(no_key):
-    at = start()
-    click(at, "Show my plan")
-    at.slider[0].set_value(30_000).run()
-    assert any("Inputs changed" in i.value for i in at.info)
