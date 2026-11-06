@@ -1,7 +1,7 @@
 """AlwaysON - Streamlit prototype.
 
 Run: uv run streamlit run app.py
-Optional: export ANTHROPIC_API_KEY=... to read new policy PDFs (sample PDFs are cached).
+Optional: set an AI key to read new policy PDFs (see src/msba_vibathon_2026/llm.py).
 """
 from __future__ import annotations
 
@@ -172,7 +172,7 @@ with tab_pdf:
                 "Must have": "★" if prio == 1 else "",
             })
         st.dataframe(pd.DataFrame(rows), hide_index=True, width="stretch")
-        st.caption(f"Source: {'cached sample result' if res['source'] == 'cache' else 'Claude (live)'}. "
+        st.caption(f"Source: {'cached sample result' if res['source'] == 'cache' else res['source'] + ' (live)'}. "
                    "Values are pre-filled in 'Enter by hand': review and correct them there.")
 
 with tab_manual:
