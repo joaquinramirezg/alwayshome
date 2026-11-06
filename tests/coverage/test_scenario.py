@@ -54,8 +54,8 @@ def test_rent_is_looked_up_by_the_home_zip(rent_4000):
 def test_components_join_cost_payout_and_shortfall(rent_4000):
     rebuild = run().components[0]
     assert rebuild.cost == Range(low=540_000, high=900_000)
-    assert rebuild.payout == Range(low=450_000, high=450_000)
-    assert rebuild.shortfall == Range(low=90_000, high=450_000)
+    assert rebuild.payout == Range(low=405_000, high=450_000)
+    assert rebuild.shortfall == Range(low=90_000, high=495_000)
 
 
 def test_component_notes_combine_cost_and_payout_notes(rent_4000):
@@ -68,8 +68,8 @@ def test_totals_are_filled(rent_4000):
     result = run()
     assert result.deductible == 1_000
     assert result.total_cost == Range(low=902_500, high=1_459_000)
-    assert result.total_payout == Range(low=495_000, high=495_000)
-    assert result.total_shortfall == Range(low=408_500, high=965_000)
+    assert result.total_payout == Range(low=450_000, high=495_000)
+    assert result.total_shortfall == Range(low=408_500, high=1_010_000)
 
 
 def test_works_without_a_probability(rent_4000):
@@ -81,7 +81,7 @@ def test_works_without_a_probability(rent_4000):
 def test_uses_the_probability_when_known(rent_4000):
     result = run(p_destroyed=0.5)
     assert result.p_destroyed == 0.5
-    assert result.expected_shortfall == Range(low=204_250, high=482_500)
+    assert result.expected_shortfall == Range(low=204_250, high=505_000)
 
 
 def test_premium_is_passed_through(rent_4000):
@@ -219,13 +219,13 @@ def table(result) -> dict:
 def test_case_1_fair_plan_only_underinsured(monkeypatch):
     result = run_case(monkeypatch, CASE_1_POLICY, CASE_1_HOME, 4_000)
     assert table(result) == {
-        "rebuild": (540_000, 900_000, 450_000, 450_000, 90_000, 450_000),
+        "rebuild": (540_000, 900_000, 405_000, 450_000, 90_000, 495_000),
         "code_upgrade": (112_500, 225_000, 0, 0, 112_500, 225_000),
         "other_structures": (54_000, 90_000, 45_000, 45_000, 9_000, 45_000),
         "contents": (100_000, 100_000, 0, 0, 100_000, 100_000),
         "living_expenses": (96_000, 144_000, 0, 0, 96_000, 144_000),
     }
-    assert result.total_shortfall == Range(low=408_500, high=965_000)
+    assert result.total_shortfall == Range(low=408_500, high=1_010_000)
     assert sorted(g.gap for g in result.gaps) == sorted([
         "underinsured", "stale_coverage", "fair_no_dic", "actual_cash_value", "low_extended_replacement",
         "no_code_upgrade", "no_debris_removal", "no_living_expenses", "no_contents",
@@ -252,13 +252,13 @@ def test_case_2_private_policy_well_covered(monkeypatch):
 def test_case_3_high_value_home_on_the_fair_plan(monkeypatch):
     result = run_case(monkeypatch, CASE_1_POLICY, dict(CASE_1_HOME, sq_ft=5_500, contents_value_estimate=600_000), 4_000)
     assert table(result) == {
-        "rebuild": (1_650_000, 2_750_000, 450_000, 450_000, 1_200_000, 2_300_000),
+        "rebuild": (1_650_000, 2_750_000, 405_000, 450_000, 1_200_000, 2_345_000),
         "code_upgrade": (112_500, 225_000, 0, 0, 112_500, 225_000),
         "other_structures": (165_000, 275_000, 45_000, 45_000, 120_000, 230_000),
         "contents": (600_000, 600_000, 0, 0, 600_000, 600_000),
         "living_expenses": (96_000, 144_000, 0, 0, 96_000, 144_000),
     }
-    assert result.total_shortfall == Range(low=2_129_500, high=3_500_000)
+    assert result.total_shortfall == Range(low=2_129_500, high=3_545_000)
     assert "above_fair_cap" in [g.gap for g in result.gaps]
 
 

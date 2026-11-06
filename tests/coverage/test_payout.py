@@ -93,6 +93,57 @@ def test_unknown_rebuild_cost_has_no_shortfall():
     assert found.shortfall == UNKNOWN
 
 
+# ------------------------------------------- FAIR Plan with no Coverage B: range
+def test_fair_plan_without_coverage_b_widens_the_rebuild_range():
+    for limit in (None, 0):
+        found = item("rebuild", document_type="fair_plan", dwelling_limit=450_000, other_structures_limit=limit)
+        assert found.payout == Range(low=405_000, high=450_000)
+        assert found.shortfall == Range(low=90_000, high=495_000)
+        assert has_note(found, "coverage a")
+
+
+def test_fair_plan_widening_when_the_limit_falls_inside_the_cost_range():
+    found = item("rebuild", document_type="fair_plan", dwelling_limit=700_000)
+    assert found.payout == Range(low=540_000, high=700_000)
+    assert found.shortfall == Range(low=0, high=270_000)
+
+
+def test_fair_plan_widening_only_takes_what_other_structures_needs():
+    found = item("rebuild", home={"sq_ft": 1_800, "other_structures_estimate": 10_000},
+                 document_type="fair_plan", dwelling_limit=450_000)
+    assert found.payout == Range(low=440_000, high=450_000)
+    assert found.shortfall == Range(low=90_000, high=460_000)
+
+
+def test_fair_plan_widening_applies_to_the_extended_limit():
+    found = item("rebuild", document_type="fair_plan", dwelling_limit=400_000, extended_replacement_pct=0.25)
+    assert found.payout == Range(low=460_000, high=500_000)
+    assert found.shortfall == Range(low=40_000, high=440_000)
+
+
+def test_fair_plan_with_coverage_b_does_not_widen():
+    found = item("rebuild", document_type="fair_plan", dwelling_limit=450_000, other_structures_limit=20_000)
+    assert found.payout == Range(low=450_000, high=450_000)
+    assert found.shortfall == Range(low=90_000, high=450_000)
+    assert not has_note(found, "coverage a")
+
+
+def test_other_policies_do_not_widen():
+    found = item("rebuild", document_type="homeowners", dwelling_limit=450_000, other_structures_limit=0)
+    assert found.shortfall == Range(low=90_000, high=450_000)
+
+
+def test_guaranteed_replacement_does_not_widen():
+    found = item("rebuild", document_type="fair_plan", dwelling_limit=450_000, guaranteed_replacement=True)
+    assert found.shortfall == Range(low=0, high=0)
+
+
+def test_other_structures_payout_stays_the_same_in_both_cases():
+    found = item("other_structures", document_type="fair_plan", dwelling_limit=450_000)
+    assert found.payout == Range(low=45_000, high=45_000)
+    assert found.shortfall == Range(low=9_000, high=45_000)
+
+
 # ---------------------------------------------------------------- code upgrade
 def test_code_upgrade_pays_the_amount_given():
     found = item("code_upgrade", dwelling_limit=1_100_000, code_upgrade=True, code_upgrade_amount=275_000)
@@ -222,13 +273,13 @@ def test_case_1_payout_and_shortfall_columns_and_total():
     _, payouts, totals = run(CASE_1_POLICY, CASE_1_HOME, 4_000)
     assert {n: (i.payout.low, i.payout.high, i.shortfall.low, i.shortfall.high)
             for n, i in payouts.items.items()} == {
-        "rebuild": (450_000, 450_000, 90_000, 450_000),
+        "rebuild": (405_000, 450_000, 90_000, 495_000),
         "code_upgrade": (0, 0, 112_500, 225_000),
         "other_structures": (45_000, 45_000, 9_000, 45_000),
         "contents": (0, 0, 100_000, 100_000),
         "living_expenses": (0, 0, 96_000, 144_000),
     }
-    assert totals.total_shortfall == Range(low=408_500, high=965_000)
+    assert totals.total_shortfall == Range(low=408_500, high=1_010_000)
     assert totals.deductible == 1_000
 
 
@@ -248,7 +299,7 @@ def test_case_2_payout_and_shortfall_columns_and_total():
 
 def test_case_3_total():
     _, _, totals = run(CASE_1_POLICY, dict(sq_ft=5_500, contents_value_estimate=600_000), 4_000)
-    assert totals.total_shortfall == Range(low=2_129_500, high=3_500_000)
+    assert totals.total_shortfall == Range(low=2_129_500, high=3_545_000)
 
 
 def test_case_4_total():
@@ -263,7 +314,7 @@ def test_total_cost_sums_the_components():
 
 
 def test_total_payout_caps_each_component_at_its_cost():
-    assert run(CASE_1_POLICY, CASE_1_HOME, 4_000)[2].total_payout == Range(low=495_000, high=495_000)
+    assert run(CASE_1_POLICY, CASE_1_HOME, 4_000)[2].total_payout == Range(low=450_000, high=495_000)
     assert run(CASE_2_POLICY, CASE_2_HOME, 5_000)[2].total_payout == Range(low=1_355_000, high=1_855_000)
 
 
@@ -290,7 +341,7 @@ def test_totals_leave_out_unknown_components_and_name_them():
 
 def test_expected_shortfall_scales_the_total():
     totals = run(CASE_1_POLICY, CASE_1_HOME, 4_000, p_destroyed=0.5)[2]
-    assert totals.expected_shortfall == Range(low=204_250, high=482_500)
+    assert totals.expected_shortfall == Range(low=204_250, high=505_000)
 
 
 def test_expected_shortfall_is_none_without_a_probability():

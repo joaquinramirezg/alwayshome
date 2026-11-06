@@ -61,7 +61,15 @@ def _is_fair_plan(policy: PolicyInput) -> bool:
     return policy.document_type == "fair_plan"
 
 
-def _rebuild(policy: PolicyInput, cost: Range) -> PayoutItem:
+def _fair_plan_b_from_a(policy: PolicyInput) -> float | None:
+    """The share of Coverage A a FAIR Plan policy with no Coverage B can use for other structures."""
+    limit = policy.other_structures_limit
+    if not _is_fair_plan(policy) or policy.dwelling_limit is None or (limit is not None and limit > 0):
+        return None
+    return round(policy.dwelling_limit * load_config().fair_plan_other_structures_pct_of_dwelling.value, 2)
+
+
+def _rebuild(policy: PolicyInput, cost: Range, other_structures_cost: Range) -> PayoutItem:
     notes = []
     if policy.guaranteed_replacement is None:
         notes.append("Guaranteed replacement not stated: treated as not included.")
@@ -83,9 +91,16 @@ def _rebuild(policy: PolicyInput, cost: Range) -> PayoutItem:
     if policy.extended_replacement_pct is None:
         notes.append("Extended replacement not stated: treated as none.")
     cap = round(policy.dwelling_limit * (1 + (policy.extended_replacement_pct or 0)), 2)
+    cap_if_b_from_a = cap
+    from_a = _fair_plan_b_from_a(policy)
+    if from_a is not None and _is_known(other_structures_cost):
+        cap_if_b_from_a = round(cap - min(from_a, other_structures_cost.high), 2)
+        notes.append("Other structures cover can be within or on top of the dwelling limit, depending on the policy. "
+                     "The low shortfall assumes on top; the high shortfall assumes it comes out of Coverage A.")
     if not _is_known(cost):
-        return _fixed(cost, cap, notes)
-    return PayoutItem(Range(low=min(cost.low, cap), high=min(cost.high, cap)), _shortfall(cost, cap, cap), notes)
+        return PayoutItem(Range(low=cap_if_b_from_a, high=cap), UNKNOWN, notes)
+    return PayoutItem(Range(low=min(cost.low, cap_if_b_from_a), high=min(cost.high, cap)),
+                      _shortfall(cost, cap_if_b_from_a, cap), notes)
 
 
 def _code_upgrade(policy: PolicyInput, cost: Range) -> PayoutItem:
@@ -103,10 +118,8 @@ def _other_structures(policy: PolicyInput, cost: Range) -> PayoutItem:
     if _is_fair_plan(policy):
         if policy.dwelling_limit is None:
             return _unknown(cost, "Other structures payout unknown: no Coverage B or dwelling limit.")
-        share = load_config().fair_plan_other_structures_pct_of_dwelling
-        return _fixed(cost, round(policy.dwelling_limit * share.value, 2),
-                      [f"{share.note} This may come out of the Coverage A limit rather than add to it, "
-                       "which would raise the shortfall."])
+        return _fixed(cost, _fair_plan_b_from_a(policy),
+                      [load_config().fair_plan_other_structures_pct_of_dwelling.note])
     if limit is None:
         return _unknown(cost, "Other structures limit unknown: the low shortfall assumes it is fully covered.")
     return _fixed(cost, limit)
@@ -141,7 +154,7 @@ def compute_payouts(policy: PolicyInput, costs: CostBreakdown) -> PayoutBreakdow
 
     return PayoutBreakdown(
         items={
-            "rebuild": _rebuild(policy, costs.items["rebuild"].cost),
+            "rebuild": _rebuild(policy, costs.items["rebuild"].cost, costs.items["other_structures"].cost),
             "code_upgrade": _code_upgrade(policy, costs.items["code_upgrade"].cost),
             "other_structures": _other_structures(policy, costs.items["other_structures"].cost),
             "contents": _contents(policy, costs.items["contents"].cost),

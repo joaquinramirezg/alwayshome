@@ -24,11 +24,11 @@ result.total_shortfall.low, result.total_shortfall.high
 
 ## Example: Case 1
 
-This uses the inputs above with a mocked rent of $4,000 a month and `as_of_year=2026`. **With real data, 91001's rent is about $3,833, so the live total is $404,490 to $958,985.**
+This uses the inputs above with a mocked rent of $4,000 a month and `as_of_year=2026`. **With real data, 91001's rent is about $3,833, so the live total is $404,490 to $1,003,985.**
 
 | Component | Cost | Payout | Shortfall |
 | --- | --- | --- | --- |
-| rebuild | 540,000 to 900,000 | 450,000 | 90,000 to 450,000 |
+| rebuild | 540,000 to 900,000 | 405,000 to 450,000 | 90,000 to 495,000 |
 | code_upgrade | 112,500 to 225,000 | 0 | 112,500 to 225,000 |
 | other_structures | 54,000 to 90,000 | 45,000 | 9,000 to 45,000 |
 | contents | 100,000 | 0 | 100,000 |
@@ -40,8 +40,8 @@ This uses the inputs above with a mocked rent of $4,000 a month and `as_of_year=
   "p_destroyed": null,
   "deductible": 1000.0,
   "total_cost": {"low": 902500.0, "high": 1459000.0},
-  "total_payout": {"low": 495000.0, "high": 495000.0},
-  "total_shortfall": {"low": 408500.0, "high": 965000.0},
+  "total_payout": {"low": 450000.0, "high": 495000.0},
+  "total_shortfall": {"low": 408500.0, "high": 1010000.0},
   "expected_shortfall": null,
   "premium_total": null
 }
@@ -66,7 +66,8 @@ The result also has `components`, `warnings` (ACV, debris, price surge) and `ass
 - **Partly unknown totals are minimums.** Totals leave out components with unknown cost, and a warning names them. Show that warning next to the total.
 - **`total_payout` caps each component at its cost,** because a limit above the loss isn't money paid. Component payouts show the full limit.
 - **Actual cash value policies are computed as if they paid replacement cost.** The real shortfall may be above the high figure, and the output warns about this.
-- **The DIC policy adds no dollars.** It only adds a note listing `dic_covers`.
+- **The DIC policy adds no dollars.** It only adds a note listing `dic_covers`, so shortfalls for FAIR Plan + DIC homes may be overstated.
+- **FAIR Plan with no Coverage B is a range.** The 10% of Coverage A can be within or on top of the dwelling limit, depending on the policy. The low shortfall assumes on top, and the high shortfall assumes it comes out of Coverage A. This differs from the build plan's Case 1 and Case 3 totals (see open issues).
 
 ## Connecting it to the app
 
@@ -77,7 +78,7 @@ Nothing calls this module yet. The caller has to convert these, based on `origin
 | `extended_replacement_pct` of `25` | `0.25` | **Divide by 100.** Values above 1 raise a validation error. |
 | `living_area_sqft` | `sq_ft` | Rename |
 | `deductible_wildfire` as a percentage | Dollars | Convert first; a percentage isn't accepted as dollars. |
-| `documents` list | `document_type` plus `has_dic` | Use `fair_plan` as the type when a FAIR Plan is present. |
+| `documents` list | `document_type` plus `has_dic` | **Always set `document_type="fair_plan"` for FAIR Plan homes.** With `None`, the FAIR-specific rules don't run. |
 | Not extracted | `code_upgrade_amount`, `last_coverage_update_year`, `nonrenewal_notice` | Ask the user, or leave as `None`. `stale_coverage` and `renewal_risk` can't fire on these fields without them. |
 
 `origin/app-streamlit` also has its own `gaps.py` with a hard-coded $450/sq ft, while this module uses $300 to $500. Use one or the other, or the demo can show two answers.
@@ -92,7 +93,7 @@ Nothing calls this module yet. The caller has to convert these, based on `origin
 | `price_surge_note` | 30% to 50% (warning text) | Sourced | [Coverage Cat](https://www.coveragecat.com/insurance-types/which-homeowners-endorsements-are-worth-the-money) |
 | `code_upgrade_recommended_pct_of_dwelling` | 25% to 50% | **Used as an assumption:** a recommendation, not a measured cost | [Coverage Cat](https://www.coveragecat.com/insurance-types/which-homeowners-endorsements-are-worth-the-money) |
 | `other_structures_cost_pct_of_rebuild` | 10% | **Assumption** | None |
-| `fair_plan_other_structures_pct_of_dwelling` | 10% | Sourced, see open issues | [United Policyholders PDF](https://uphelp.org/wp-content/uploads/2022/07/1-5-22-FINAL-CFP-Claims-and-Coverage-Basics-.pdf) |
+| `fair_plan_other_structures_pct_of_dwelling` | 10% | Sourced, modeled as a range | [United Policyholders PDF](https://uphelp.org/wp-content/uploads/2022/07/1-5-22-FINAL-CFP-Claims-and-Coverage-Basics-.pdf) |
 | `living_expense_months` | 24 to 36 | Sourced | [Merlin Law](https://www.propertyinsurancecoveragelaw.com/blog/wildfire-rebuilding-timelines-and-ale-extensions/) |
 | `fair_plan_combined_cap` | $3,000,000 | Sourced, **VERIFY** | [ValuePenguin](https://www.valuepenguin.com/california-fair-plan-home-insurance) |
 | `extended_replacement_recommended_min_pct` | 25% | Sourced | [Coverage Cat](https://www.coveragecat.com/insurance-types/which-homeowners-endorsements-are-worth-the-money) |
@@ -109,7 +110,7 @@ Nothing calls this module yet. The caller has to convert these, based on `origin
 
 ## Open issues from the source check
 
-- **FAIR Plan Coverage B may be counted twice.** The United Policyholders PDF says that with no Coverage B on the declarations, "you can use up to 10% of the Coverage A limit" (slide 25). Slide 26 says other structures cover can be within or on top of the dwelling limit, depending on what was sold. The module follows the build plan and pays it on top. If it comes out of Coverage A, Case 1's total is $453,500 to $1,010,000.
+- **FAIR Plan Coverage B (decided: range).** The United Policyholders PDF says that with no Coverage B on the declarations, "you can use up to 10% of the Coverage A limit" (slide 25). Slide 26 says other structures cover can be within or on top of the dwelling limit, depending on what was sold. Since the source doesn't settle it, the module widens the range. This deliberately departs from `docs/coverage_gap_build_plan.md`: Case 1 is now $408,500 to $1,010,000 (the plan says $965,000 high). Case 3, which has no total in the plan, is now $2,129,500 to $3,545,000.
 - **SB 495 wording.** The config note says insurers pay "without an itemized inventory". CDI says no detailed inventory is needed "for at least 100 days", so it's deferred, not waived. The note appears in the contents component's notes.
 
 ## Limits
