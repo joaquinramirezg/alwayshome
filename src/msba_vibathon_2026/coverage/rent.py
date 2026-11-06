@@ -7,6 +7,7 @@ from pathlib import Path
 import pandas as pd
 
 RENT_PATH = Path(__file__).resolve().parents[3] / "data" / "processed" / "zip_rent_latest.parquet"
+RENT_SOURCE_URL = "https://www.zillow.com/research/data/"
 
 
 @lru_cache(maxsize=1)
