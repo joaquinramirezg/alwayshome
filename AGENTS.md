@@ -15,6 +15,7 @@ Read first:
 - `docs/hackathon_brief.md`: rules, judging criteria, problem, demo flow, scope
 - `docs/data_dictionary.md`: every processed table, its columns, join keys and limitations
 - `docs/validation_report.md`: data checks and known data problems
+- `docs/TESTING.md`: setup, running the app, the test scripts
 
 ## Rules
 
@@ -36,7 +37,19 @@ scripts/utils.py         geocode(address) and area_context(address) helpers
 data/processed/          tables the app reads (parquet, GeoParquet, CSV)
 data/manual/             hand-downloaded inputs (HUD crosswalks)
 docs/                    brief, data dictionary, validation report
-src/msba_vibathon_2026/  package (app logic goes here)
+src/msba_vibathon_2026/  app logic:
+  policy_extract.py      policy PDF -> fields (Claude + pdfplumber quote check), spec in docs/policy_extraction_spec.md
+  wildfire.py            wildfire analysis from Atharva's tract exposure index
+  gaps.py                coverage gap rules
+  contract.py            validate_inputs/validate_output for the model contract
+  report.py              plain-language plan (template, optional AI rewrite)
+  scenarios.py           sample homeowners -> assess() inputs
+  assess_stub.py         placeholder assess() until the model replaces it (contract in docs/inputs_and_contract.md)
+app.py                   Streamlit app
+data/demo/               cached lookups and extractions so the demo runs offline
+data/samples/policies/   synthetic declarations pages + answer_key.json
+data/samples/scenarios.json  sample homeowners with expected results
+tests/                   pytest suite (fake Claude, no key needed)
 ```
 
 ## Running
@@ -45,8 +58,13 @@ Python 3.14 with `uv`:
 
 ```
 uv sync
-uv run python scripts/03_validate.py
+uv run streamlit run app.py              # the app
+uv run python scripts/03_validate.py     # data checks
 ```
+
+Reading new policy PDFs needs `ANTHROPIC_API_KEY` in the environment. Without it, only the cached sample PDFs work and the manual form is the fallback.
+
+Before pushing to `main`, run `uv run pytest` (no API key needed).
 
 ## Git
 

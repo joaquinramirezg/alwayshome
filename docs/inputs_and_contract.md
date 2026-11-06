@@ -71,8 +71,8 @@ Policy PDF upload stays on the roadmap.
 
 One model built by Atharva and David, with two outputs:
 
-- **Wildfire analysis:** how likely the home's tract is to be caught in a wildfire.
-- **House analysis:** how much damage that would do to this house, given its features.
+- **Wildfire analysis:** how exposed the home's tract is to wildfire. **Done (Atharva):** `relative_exposure_score_0_100` from `data/processed/tract_wildfire_features.parquet` (method in `docs/wildfire_methodology.md`), read by `src/msba_vibathon_2026/wildfire.py`. It is a relative index, not a probability; `p_fire_annual` is FEMA's annualized wildfire frequency for the tract, used only for expected-loss math. Ratings: 0 = No observed exposure; then Low / Moderate / High / Very High at the quartiles of positive scores (9, 29, 50).
+- **House analysis:** how much damage that would do to this house, given its features. **Still a placeholder** (`house_impact()` in `assess_stub.py`).
 
 The model team decides the method and features. For the app, only the contract below matters.
 
@@ -114,7 +114,12 @@ Unknown answers are sent as `"Unknown"` (home fields) or `null` (numbers).
 {
   "current": {
     "area": { "...": "the area_context() dict, for display" },
-    "wildfire": { "p_fire_annual": 0.012, "rating": "Very High" },
+    "wildfire": {
+      "score": 73.2, "rating": "Very High", "level": "tract", "tract_geoid": "06037460101",
+      "p_fire_annual": 0.02199,
+      "components": { "very_high_hazard_pct": 51.7, "high_hazard_pct": 9.9, "burned_footprint_pct": 86.5,
+                      "fires_since_2015": 1, "last_fire_year": 2025, "fema_expected_annual_loss": 2701245 }
+    },
     "house": { "impact": 0.71, "rating": "High", "top_drivers": ["EAVES", "VENTSCREEN"] },
     "insurance_gap": [ { "gap": "FAIR Plan only, no theft or liability cover", "severity": "high" } ]
   },

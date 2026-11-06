@@ -1,0 +1,72 @@
+{
+  "fair_plan_altadena.pdf": {
+    "document_type": "fair_plan",
+    "effective_date": "2026-03-01",
+    "dwelling_limit": 650000,
+    "dwelling_settlement": "actual_cash_value",
+    "extended_replacement_pct": null,
+    "code_upgrade": null,
+    "debris_removal": true,
+    "premium_total": 6180
+  },
+  "dic_altadena.pdf": {
+    "document_type": "dic",
+    "effective_date": "2026-03-01",
+    "dwelling_limit": 650000,
+    "dwelling_settlement": "replacement_cost",
+    "extended_replacement_pct": null,
+    "code_upgrade": null,
+    "debris_removal": null,
+    "premium_total": 1450
+  },
+  "homeowners_palisades_underinsured.pdf": {
+    "document_type": "homeowners",
+    "effective_date": "2026-07-15",
+    "dwelling_limit": 900000,
+    "dwelling_settlement": "replacement_cost",
+    "extended_replacement_pct": null,
+    "code_upgrade": true,
+    "debris_removal": true,
+    "premium_total": 9220
+  },
+  "homeowners_well_covered.pdf": {
+    "document_type": "homeowners",
+    "effective_date": "2026-05-01",
+    "dwelling_limit": 1400000,
+    "dwelling_settlement": "replacement_cost",
+    "extended_replacement_pct": 25,
+    "code_upgrade": true,
+    "debris_removal": true,
+    "premium_total": 4210
+  },
+  "fair_plan_scanned.pdf": {
+    "document_type": "fair_plan",
+    "effective_date": "2026-03-01",
+    "dwelling_limit": 650000,
+    "dwelling_settlement": "actual_cash_value",
+    "extended_replacement_pct": null,
+    "code_upgrade": null,
+    "debris_removal": true,
+    "premium_total": 6180
+  },
+  "homeowners_two_page.pdf": {
+    "document_type": "homeowners",
+    "effective_date": "2026-09-01",
+    "dwelling_limit": 1050000,
+    "dwelling_settlement": "replacement_cost",
+    "extended_replacement_pct": 50,
+    "code_upgrade": false,
+    "debris_removal": true,
+    "premium_total": 7980
+  },
+  "nonrenewal_letter.pdf": {
+    "document_type": "other",
+    "effective_date": null,
+    "dwelling_limit": null,
+    "dwelling_settlement": null,
+    "extended_replacement_pct": null,
+    "code_upgrade": null,
+    "debris_removal": null,
+    "premium_total": null
+  }
+}
