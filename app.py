@@ -256,7 +256,7 @@ with tab_pdf:
         if not res["text_layer"]:
             st.warning("Scanned PDF: quotes can't be checked automatically. Compare each value with the document.")
         rows = []
-        for f, (_, label, prio) in FIELDS.items():
+        for f, (label, prio) in FIELDS.items():
             v = res["fields"][f]
             val = v["value"]
             if isinstance(val, dict):

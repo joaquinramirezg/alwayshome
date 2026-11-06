@@ -34,87 +34,104 @@ class ExtractionUnavailable(RuntimeError):
 
 
 # ---------------------------------------------------------------- schema
-def _nullable(t: dict) -> dict:
-    return {"anyOf": [t, {"type": "null"}]}
+# Kept flat and small on purpose: the API limits structured-output schemas (at most 16
+# nullable parameters, and a maximum compiled size). So nothing is nullable: the model
+# lists missing fields in `not_found`, puts placeholders in their slots, and cites each
+# value once in `evidence`. `normalize()` turns that into {value, source_text, page}.
+NUM = {"type": "number"}
+STR = {"type": "string"}
+ADDON_STATUS = {"type": "string", "enum": ["covered", "excluded", "not_mentioned"]}
 
-
-NUM = _nullable({"type": "number"})
-STR = _nullable({"type": "string"})
-BOOL = _nullable({"type": "boolean"})
-SETTLEMENT = _nullable({"type": "string", "enum": ["actual_cash_value", "replacement_cost", "unknown"]})
-DOC_TYPE = {"type": "string", "enum": ["fair_plan", "dic", "homeowners", "dwelling_fire", "other"]}
-ADDON = _nullable({
-    "type": "object",
-    "properties": {"covered": BOOL, "limit": NUM, "pct": NUM},
-    "required": ["covered", "limit", "pct"],
-    "additionalProperties": False,
-})
-PCT_OR_AMOUNT = _nullable({
-    "type": "object",
-    "properties": {"amount": NUM, "pct": NUM},
-    "required": ["amount", "pct"],
-    "additionalProperties": False,
-})
-NAMED_AMOUNTS = _nullable({
-    "type": "array",
-    "items": {
-        "type": "object",
-        "properties": {"name": {"type": "string"}, "amount": NUM},
-        "required": ["name", "amount"],
-        "additionalProperties": False,
-    },
-})
-STR_LIST = _nullable({"type": "array", "items": {"type": "string"}})
-
-# field -> (value schema, label shown in the app, priority 1 must / 2 should)
-FIELDS: dict[str, tuple[dict, str, int]] = {
-    "document_type": (_nullable(DOC_TYPE), "Document type", 1),
-    "insurer_name": (STR, "Insurer", 2),
-    "effective_date": (STR, "Effective date (YYYY-MM-DD)", 1),
-    "dwelling_limit": (NUM, "Dwelling limit (Coverage A)", 1),
-    "other_structures_limit": (NUM, "Other structures (Coverage B)", 2),
-    "contents_limit": (NUM, "Contents (Coverage C)", 2),
-    "loss_of_use_limit": (NUM, "Loss of use (Coverage D)", 2),
-    "liability_limit": (NUM, "Personal liability (Coverage E)", 2),
-    "dwelling_settlement": (SETTLEMENT, "How the dwelling is paid", 1),
-    "extended_replacement_pct": (NUM, "Extended replacement cost %", 1),
-    "code_upgrade": (ADDON, "Building code upgrade (ordinance or law)", 1),
-    "debris_removal": (ADDON, "Debris removal", 1),
-    "deductible_all_perils": (NUM, "Deductible (all perils)", 2),
-    "deductible_wildfire": (PCT_OR_AMOUNT, "Wildfire deductible", 2),
-    "premium_total": (NUM, "Total annual premium", 1),
-    "discounts_listed": (NAMED_AMOUNTS, "Discounts listed", 2),
-    "dic_covers": (STR_LIST, "What the DIC policy adds", 2),
+# field -> (label shown in the app, priority 1 must / 2 should)
+FIELDS: dict[str, tuple[str, int]] = {
+    "document_type": ("Document type", 1),
+    "insurer_name": ("Insurer", 2),
+    "effective_date": ("Effective date (YYYY-MM-DD)", 1),
+    "dwelling_limit": ("Dwelling limit (Coverage A)", 1),
+    "other_structures_limit": ("Other structures (Coverage B)", 2),
+    "contents_limit": ("Contents (Coverage C)", 2),
+    "loss_of_use_limit": ("Loss of use (Coverage D)", 2),
+    "liability_limit": ("Personal liability (Coverage E)", 2),
+    "dwelling_settlement": ("How the dwelling is paid", 1),
+    "extended_replacement_pct": ("Extended replacement cost %", 1),
+    "code_upgrade": ("Building code upgrade (ordinance or law)", 1),
+    "debris_removal": ("Debris removal", 1),
+    "deductible_all_perils": ("Deductible (all perils)", 2),
+    "deductible_wildfire": ("Wildfire deductible", 2),
+    "premium_total": ("Total annual premium", 1),
+    "discounts_listed": ("Discounts listed", 2),
+    "dic_covers": ("What the DIC policy adds", 2),
 }
 
-
-def _field_schema(value_schema: dict) -> dict:
-    return {
-        "type": "object",
-        "properties": {"value": value_schema, "source_text": STR, "page": _nullable({"type": "integer"})},
-        "required": ["value", "source_text", "page"],
-        "additionalProperties": False,
-    }
-
-
-SCHEMA = {
-    "type": "object",
-    "properties": {name: _field_schema(s) for name, (s, _, _) in FIELDS.items()},
-    "required": list(FIELDS),
-    "additionalProperties": False,
+_PROPS = {
+    "document_type": {"type": "string", "enum": ["fair_plan", "dic", "homeowners", "dwelling_fire", "other"]},
+    "insurer_name": STR,
+    "effective_date": STR,
+    "dwelling_limit": NUM,
+    "other_structures_limit": NUM,
+    "contents_limit": NUM,
+    "loss_of_use_limit": NUM,
+    "liability_limit": NUM,
+    "dwelling_settlement": {"type": "string", "enum": ["actual_cash_value", "replacement_cost", "unknown"]},
+    "extended_replacement_pct": NUM,
+    "code_upgrade": ADDON_STATUS,
+    "code_upgrade_pct": NUM,
+    "debris_removal": ADDON_STATUS,
+    "deductible_all_perils": NUM,
+    "deductible_wildfire_amount": NUM,
+    "deductible_wildfire_pct": NUM,
+    "premium_total": NUM,
+    "discounts_listed": {"type": "array", "items": {"type": "object", "properties": {"name": STR, "amount": NUM},
+                                                    "required": ["name", "amount"], "additionalProperties": False}},
+    "dic_covers": {"type": "array", "items": STR},
+    "not_found": {"type": "array", "items": STR},
+    "evidence": {"type": "array", "items": {"type": "object", "properties": {"field": STR, "quote": STR, "page": {"type": "integer"}},
+                                            "required": ["field", "quote", "page"], "additionalProperties": False}},
 }
+SCHEMA = {"type": "object", "properties": _PROPS, "required": list(_PROPS), "additionalProperties": False}
 
 SYSTEM = """You extract fields from a homeowner's insurance declarations page for a coverage review.
 
+Fields: """ + ", ".join(FIELDS) + """.
+
 Rules:
-- For every field return value, source_text and page. source_text is the exact words copied from the PDF that show the value (one line or phrase, verbatim). page is 1-indexed.
-- If a field is not on the page, return null for value, source_text and page. Never infer, estimate or calculate a value.
-- Dollar amounts are plain numbers (650000, not "$650,000"). Percentages are numbers (25 for 25%).
-- For coverages B, C and D on FAIR Plan pages: null if missing; 0 only if the page explicitly says not covered, not purchased or excluded.
-- For add-ons (code_upgrade, debris_removal): covered true if listed, false if marked declined or excluded, null if not mentioned. Fill limit or pct only if printed.
-- document_type: fair_plan for the California FAIR Plan, dic for a difference-in-conditions / supplemental policy, homeowners for HO-3 style policies, dwelling_fire for DP forms.
+- Fill every property. If a field is not on the page, add its name to not_found and put a placeholder in its slot (0, "", "unknown", "other", "not_mentioned" or []). Never infer, estimate or calculate a value.
+- evidence: one entry per field you found, with field (the field name), quote (the exact words copied from the PDF that show the value, verbatim, one line or phrase) and page (1-indexed).
+- Dollar amounts are plain numbers (650000, not "$650,000"). Percentages are numbers (25 for 25%). Dates as YYYY-MM-DD.
+- Coverages B, C and D: in not_found if missing; value 0 (found) only if the page explicitly says not covered, not purchased or excluded.
+- code_upgrade and debris_removal: covered if listed, excluded if marked declined, not included or excluded, not_mentioned otherwise. code_upgrade_pct only if printed, else 0.
+- deductible_wildfire: deductible_wildfire_amount and deductible_wildfire_pct as printed, 0 for whichever is not printed.
+- discounts_listed: every discount or credit line, amount as a positive number.
+- document_type: fair_plan for the California FAIR Plan, dic for a difference-in-conditions / supplemental policy, homeowners for HO-3 style policies, dwelling_fire for DP forms, other for anything that is not a declarations page.
 - dic_covers only for DIC policies: short names of the perils or coverages it adds (e.g. theft, liability, water damage, loss of use).
-- Do not extract personal data: names of insured people, policy numbers, mortgage companies, phone numbers or emails. Never put them in source_text either; if the only evidence line contains personal data, quote just the part with the value."""
+- Do not extract personal data: names of insured people, policy numbers, mortgage companies, phone numbers or emails. Never put them in a quote either; if the only evidence line contains personal data, quote just the part with the value."""
+
+
+def normalize(raw: dict) -> dict:
+    """Flat model output -> internal shape: {field: {value, source_text, page}}, nulls when not found."""
+    missing = set(raw.get("not_found") or [])
+    evidence = {}
+    for e in raw.get("evidence") or []:
+        evidence.setdefault(e.get("field"), e)
+    out = {}
+    for name in FIELDS:
+        if name in missing:
+            out[name] = {"value": None, "source_text": None, "page": None}
+            continue
+        if name in ("code_upgrade", "debris_removal"):
+            status = raw.get(name)
+            pct = raw.get("code_upgrade_pct") or None if name == "code_upgrade" else None
+            v = None if status in (None, "not_mentioned") else {"covered": status == "covered", "limit": None, "pct": pct}
+        elif name == "deductible_wildfire":
+            amount, pct = raw.get("deductible_wildfire_amount") or None, raw.get("deductible_wildfire_pct") or None
+            v = {"amount": amount, "pct": pct} if (amount or pct) else None
+        else:
+            v = raw.get(name)
+            if (name == "dwelling_settlement" and v == "unknown") or (isinstance(v, (list, str)) and not v):
+                v = None
+        e = evidence.get(name, {})
+        out[name] = {"value": v, "source_text": e.get("quote") or None, "page": e.get("page") or None}
+    return out
 
 
 # ---------------------------------------------------------------- helpers
@@ -198,7 +215,7 @@ def _call_claude(pdf_bytes: bytes) -> dict:
     if response.stop_reason == "max_tokens":
         raise ExtractionUnavailable("The response was cut off.")
     text = next(b.text for b in response.content if b.type == "text")
-    return json.loads(text)
+    return normalize(json.loads(text))
 
 
 # ---------------------------------------------------------------- public API
