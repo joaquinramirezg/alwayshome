@@ -1,3 +1,46 @@
+## How to work (follow strictly)
+
+1. **Plan first, don't code yet.** Read this whole plan and the existing repo
+   (data/processed/, scripts/, docs/data_dictionary.md). Then reply with:
+   - your understanding of the task in 5 lines,
+   - anything ambiguous or contradictory in this plan,
+   - the files you will create or change.
+   Wait for my OK before writing code.
+
+2. **One step at a time.** Do Steps 1 to 8 in order. Never start the next
+   step until the current one is checked and I've approved it.
+
+3. **Tests first.** For each step, write its tests before the code, run them
+   and show they fail, then write the code until they pass. For Step 8, the
+   five cases must match the expected numbers exactly.
+
+4. **Check after every step.** Before reporting a step done:
+   - run `pytest tests/coverage -q` and show the output,
+   - run a quick type/lint check (e.g. `python -m pyflakes src/coverage`),
+   - re-read this plan's section for that step and confirm every item is done.
+
+5. **Report, then stop.** After each step, reply with:
+   - what you built (files),
+   - test results (pass/fail counts),
+   - any deviation from the plan and why,
+   - any value or rule you were unsure about.
+   Then stop and wait.
+
+6. **Commit after each approved step** with a message like
+   `coverage: step 3 schemas`. Never commit data/raw or data/manual.
+
+7. **Never guess.** If a value isn't in config.yaml or this plan, or two parts
+   of the plan conflict, stop and ask. Don't invent numbers, don't "improve"
+   rules, don't add features that aren't in the plan.
+
+8. **Don't touch other teammates' code** (extraction, risk model, optimizer,
+   frontend, report) or existing pipeline outputs except as Step 2 says.
+
+9. **Final review.** After Step 8, review the whole module against this plan
+   as a skeptical reviewer would: check every config value has a source, every
+   output number traces to inputs or config, and edge cases (all-None inputs)
+   don't crash. List anything that doesn't match, then fix it.
+
 # Build plan: Coverage gap and loss scenario module
 
 ## Context
