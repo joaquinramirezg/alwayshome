@@ -113,6 +113,7 @@ About 85 tests, a few seconds, **no API key needed**. Claude is replaced by a fa
 |---|---|
 | `tests/test_policy_extract.py` | Every sample PDF, quote verification, invented quotes, wrong page numbers, implausible values, scanned PDFs, no key, API errors, cache, FAIR + DIC merge, no personal data in the schema |
 | `tests/test_plan.py` | Each coverage gap rule, every sample homeowner end to end against its expected results, budget limits, the model contract checker, the report and its AI fallback |
+| `tests/test_api.py` | The HTTP API for the future frontend: every endpoint, uploads, limits, path checks |
 | `tests/test_app.py` | The real Streamlit UI: loading each homeowner, reading each sample policy, form pre-fill, fallbacks, demo addresses, stale-plan warning |
 
 Run one file or one test: `uv run pytest tests/test_plan.py` or `uv run pytest -k palisades`.
@@ -127,7 +128,14 @@ Other checks:
 
 Run `uv run pytest` before every push to `main`.
 
-## 5. For the model team: plugging in `assess()`
+## 5. The API (for the future frontend)
+
+```
+uv run uvicorn api.main:app --reload --port 8000
+```
+Open http://localhost:8000/docs to try every endpoint in the browser. Container: `docker build -t alwayson-api .` then `docker run -p 8000:8000 alwayson-api`. See `docs/DEPLOYMENT.md`.
+
+## 6. For the model team: plugging in `assess()`
 
 The app calls `assess(inputs, area)` from `src/msba_vibathon_2026/assess_stub.py`. Input and output shapes are in `docs/inputs_and_contract.md`.
 
@@ -138,7 +146,7 @@ The app calls `assess(inputs, area)` from `src/msba_vibathon_2026/assess_stub.py
 
 If your model changes which fixes are recommended, update the `fixes` lists in `data/samples/scenarios.json`.
 
-## 6. Troubleshooting
+## 7. Troubleshooting
 
 | Problem | Fix |
 |---|---|
