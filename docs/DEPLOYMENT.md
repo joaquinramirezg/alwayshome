@@ -77,7 +77,19 @@ Streamlit stays as the internal test bench: same backend code, so every feature 
 
 Deploy to Cloud Run (once `gcloud` is set up): `gcloud run deploy alwayson-api --source . --region us-west1 --allow-unauthenticated --set-env-vars ALLOWED_ORIGINS=https://<vercel-app>.vercel.app --set-secrets ANTHROPIC_API_KEY=anthropic-key:latest`
 
-### Frontend (to build next)
+### Frontend: built (`web/`)
+
+Next.js 16 + TypeScript + Tailwind, four steps (Location, Your home, Insurance, Your plan) plus the report. It calls `/api/*`, which Next.js forwards to `API_URL`, so the browser never talks to the API directly (no CORS setup, and the API key never reaches the browser). Run and deploy steps: `web/README.md`.
+
+#### Deploy both, step by step
+
+1. **API on Render:** render.com > New > Blueprint > this repo (uses `render.yaml`, Docker). Paste `ANTHROPIC_API_KEY` when asked. Wait for the health check at `https://<name>.onrender.com/api/health`. Use the Starter plan: the free 512 MB instance may run out of memory loading the geospatial tables.
+2. **Frontend on Vercel:** vercel.com > Add New Project > this repo > Root Directory `web` > env `API_URL=https://<name>.onrender.com` > Deploy.
+3. Open the Vercel URL, then `/?demo=altadena_fair_only&step=4` to check the full flow.
+
+Known risk: reading a policy PDF takes 10 to 60 seconds; if the Vercel proxy times out on it, call the API directly from the browser for that one request (set `ALLOWED_ORIGINS` on the API to the Vercel URL).
+
+#### Original plan for the frontend
 
 Stack: **Next.js (App Router) + TypeScript on Vercel**, Tailwind CSS with shadcn/ui components, react-hook-form + zod (forms mirror `validate_inputs`), TanStack Query for API calls, react-markdown for the report, MapLibre or Leaflet for the map.
 

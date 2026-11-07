@@ -3,10 +3,11 @@
 Same logic as the Streamlit app, exposed as JSON:
   GET  /api/health                         status, AI availability, which parts are real or placeholder
   GET  /api/samples                        sample homeowners and sample policy PDFs
-  GET  /api/area?address=...               hazard zone, fire history, insurance market (area_context)
+  GET  /api/area?address=...               hazard zone, fire history, insurance market, wildfire exposure score
   POST /api/assess                         contract inputs -> contract output (docs/inputs_and_contract.md)
   POST /api/policy/extract                 upload 1-2 declarations PDFs -> fields with quotes + merged insurance
   GET  /api/policy/sample/{name}           same, for a bundled sample PDF (cached, works without a key)
+  GET  /api/policy/samples?names=a&names=b same for several samples together (e.g. FAIR Plan + DIC)
   POST /api/report                         plan -> Markdown report (template, or AI rewrite when allowed)
 
 Run locally:  uv run uvicorn api.main:app --reload --port 8000   (docs at http://localhost:8000/docs)
@@ -22,7 +23,7 @@ import time
 from collections import defaultdict, deque
 from pathlib import Path
 
-from fastapi import FastAPI, File, HTTPException, Request, UploadFile
+from fastapi import FastAPI, File, HTTPException, Query, Request, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
@@ -34,6 +35,7 @@ from msba_vibathon_2026.contract import validate_inputs, validate_output  # noqa
 from msba_vibathon_2026.policy_extract import FIELDS, ExtractionUnavailable, extract, merge_policies  # noqa: E402
 from msba_vibathon_2026.report import ai_report, template_report  # noqa: E402
 from msba_vibathon_2026.scenarios import load_scenarios  # noqa: E402
+from msba_vibathon_2026.wildfire import wildfire_analysis  # noqa: E402
 
 SAMPLES = ROOT / "data" / "samples" / "policies"
 AREA_CACHE = ROOT / "data" / "demo" / "area_cache.json"
@@ -61,7 +63,8 @@ _ai_calls: dict[str, deque] = defaultdict(deque)
 def check_ai_quota(request: Request) -> None:
     """Simple per-IP limit on paid AI calls, so a public URL can't run up the API bill."""
     limit = int(os.environ.get("AI_CALLS_PER_HOUR", "20"))
-    ip = request.client.host if request.client else "unknown"
+    fwd = request.headers.get("x-forwarded-for", "")  # behind Vercel or a load balancer
+    ip = fwd.split(",")[0].strip() or (request.client.host if request.client else "unknown")
     q, now = _ai_calls[ip], time.time()
     while q and now - q[0] > 3600:
         q.popleft()
@@ -106,7 +109,8 @@ def area(address: str) -> dict:
     if not address.strip():
         raise HTTPException(422, "address is empty")
     try:
-        return load_area(address)
+        data = load_area(address)
+        return {**data, "wildfire": wildfire_analysis(data)}
     except ValueError as e:  # geocoder found no match
         raise HTTPException(404, str(e)) from e
     except Exception as e:  # geocoder down
@@ -153,16 +157,30 @@ async def policy_extract(request: Request, files: list[UploadFile] = File(...)) 
             "merged": merge_policies([r for _, r in results])}
 
 
-@app.get("/api/policy/sample/{name}")
-def policy_sample(name: str) -> dict:
+def _sample_path(name: str) -> Path:
     path = SAMPLES / name
     if path.suffix != ".pdf" or path.parent != SAMPLES or not path.exists():
         raise HTTPException(404, "unknown sample")
-    try:
-        res = extract(path.read_bytes())  # served from data/demo cache: no key needed
-    except ExtractionUnavailable as e:
-        raise HTTPException(503, str(e)) from e
-    return {"documents": [_extraction_payload(name, res)], "merged": merge_policies([res])}
+    return path
+
+
+@app.get("/api/policy/samples")
+def policy_samples(names: list[str] = Query(...)) -> dict:
+    if not 1 <= len(names) <= MAX_FILES:
+        raise HTTPException(422, f"1 or {MAX_FILES} sample names")
+    results = []
+    for name in names:
+        try:
+            results.append((name, extract(_sample_path(name).read_bytes())))  # cached: no key needed
+        except ExtractionUnavailable as e:
+            raise HTTPException(503, str(e)) from e
+    return {"documents": [_extraction_payload(n, r) for n, r in results],
+            "merged": merge_policies([r for _, r in results])}
+
+
+@app.get("/api/policy/sample/{name}")
+def policy_sample(name: str) -> dict:
+    return policy_samples([name])
 
 
 class ReportRequest(BaseModel):

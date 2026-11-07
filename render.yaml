@@ -1,0 +1,15 @@
+# Render Blueprint for the AlwaysON API (phase 2). In Render: New > Blueprint > pick this repo.
+services:
+  - type: web
+    name: alwayson-api
+    runtime: docker
+    plan: starter            # 512 MB free tier may run out of memory with the geospatial tables; starter is safer
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: ANTHROPIC_API_KEY
+        sync: false          # paste the key in the Render dashboard; never commit it
+      - key: AI_CALLS_PER_HOUR
+        value: "20"
+      - key: ALLOWED_ORIGINS
+        value: "https://alwayson.vercel.app"   # only needed if the browser calls the API directly
