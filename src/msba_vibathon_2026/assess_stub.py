@@ -2,10 +2,12 @@
 
 - Wildfire analysis: REAL, Atharva's tract exposure index (wildfire.py).
 - House analysis (`house_impact`): still a PLACEHOLDER until the house model replaces it.
-- Coverage gaps: rules in gaps.py. Fix costs and discounts: labelled assumptions below.
+- Coverage gaps and total-loss scenario: the coverage module (coverage/); gaps.py is the fallback.
+- Fix costs and discounts: labelled assumptions below.
 """
 from __future__ import annotations
 
+from .coverage.adapter import coverage_for_assess, display_gaps
 from .gaps import coverage_gaps, rebuild_estimate
 from .wildfire import wildfire_analysis
 
@@ -104,13 +106,15 @@ def assess(inputs: dict, area: dict | None = None) -> dict:
     for f in fixes:
         f["within_budget"] = f["measure_id"] in plan
     after_plan = house_impact([m for m in missing if m not in plan])
+    coverage = coverage_for_assess(inputs, area)
 
     return {
         "current": {
             "area": area,
             "wildfire": wildfire,
             "house": {"impact": impact, "rating": _rating(impact), "missing": missing, "stub": True},
-            "insurance_gap": coverage_gaps(ins, sqft),
+            "insurance_gap": display_gaps(coverage, ins) if coverage else coverage_gaps(ins, sqft),
+            "coverage": coverage,
         },
         "future": {
             "fixes": fixes,

@@ -424,5 +424,11 @@
       "grants.csv"
     ],
     "status": "ok"
+  },
+  "zillow_rent": {
+    "zips": 260,
+    "latest_date": "2026-09-30",
+    "zips_not_at_latest_date": 0,
+    "status": "ok"
   }
 }

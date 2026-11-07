@@ -222,6 +222,21 @@ Zillow Home Value Index by ZIP and month: all homes, mid tier, smoothed, seasona
 | `zhvi_5yr_change` | float | `zhvi_latest / value 5 years earlier - 1` as a fraction (0.10 = +10%) |
 | `latest_date` | timestamp | Month of `zhvi_latest` |
 
+## `zip_rent_latest.parquet`
+
+Latest Zillow Observed Rent Index (ZORI) by ZIP: all home types, smoothed. Read by `monthly_rent()` in the coverage module.
+
+- **Source:** [Zillow Research](https://www.zillow.com/research/data/), [CSV](https://files.zillowstatic.com/research/public_csvs/zori/Zip_zori_uc_sfrcondomfr_sm_month.csv)
+- **Join key:** `zip`
+
+| Column | Type | Meaning |
+| --- | --- | --- |
+| `zip` | string | 5-digit ZIP |
+| `rent_latest` | float | Most recent non-empty typical monthly rent, in dollars |
+| `latest_date` | timestamp | Month of `rent_latest` |
+
+**Limitations:** 260 ZIPs only; a ZIP with no series gets no rent, and `monthly_rent()` returns `None`. ZORI describes typical asking rents across the ZIP's rental market, not the rent of a home comparable to the insured one. Some values are very high: 90077, 90265 and 90272 (Pacific Palisades) are all above $12,000 a month.
+
 ---
 
 ## `zcta_census.parquet`
