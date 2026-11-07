@@ -16,6 +16,7 @@ Read first:
 - `docs/data_dictionary.md`: every processed table, its columns, join keys and limitations
 - `docs/validation_report.md`: data checks and known data problems
 - `docs/TESTING.md`: setup, running the app, the test scripts
+- `docs/coverage_handoff_for_agents.md`: read this before connecting the ROI and plan-comparison model to the coverage module
 
 ## Rules
 
