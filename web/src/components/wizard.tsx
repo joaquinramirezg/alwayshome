@@ -67,6 +67,7 @@ export default function Wizard() {
   const [health, setHealth] = useState<Health | null>(null);
   const [scenarios, setScenarios] = useState<Record<string, Scenario>>({});
   const [apiDown, setApiDown] = useState(false);
+  const [example, setExample] = useState<string | null>(null); // title of the sample homeowner being shown
 
   const [address, setAddress] = useState("");
   const [area, setArea] = useState<Area | null>(null);
@@ -128,7 +129,19 @@ export default function Wizard() {
     }
   }
 
+  /** Clear everything and start a homeowner's own assessment at step 1. */
+  function startOwn() {
+    setExample(null);
+    setAddress(""); setArea(null); setAreaState({ loading: false, error: null });
+    setHome({}); setYearBuilt(null); setSqft(null); setStories(null); setDone([]);
+    setInsType(null); setIns(EMPTY_INS); setExtraction(null); setExtractState({ loading: false, error: null });
+    setBudget(10000); setResult(null); setReport(null);
+    setStep(0);
+    window.scrollTo({ top: 0 });
+  }
+
   function fillSample(s: Scenario) {
+    setExample(s.title);
     setAddress(s.address);
     lookUp(s.address);
     const h: Record<string, string | null> = {};
@@ -295,7 +308,7 @@ export default function Wizard() {
                 See your real wildfire exposure, what your policy would actually pay, and the fire-safety fixes that give you the most for your money.
               </p>
               <div className="mt-8 flex flex-wrap items-center gap-3">
-                <button type="button" onClick={() => setStep(0)}
+                <button type="button" onClick={() => (example ? startOwn() : setStep(0))}
                   className="rounded-xl bg-brand-600 px-6 py-3 text-base font-semibold text-white shadow-lg shadow-black/20 hover:bg-brand-700">
                   Get started
                 </button>
@@ -353,6 +366,15 @@ export default function Wizard() {
             ))}
           </section>
           </>
+        )}
+
+        {step >= 0 && example && (
+          <div className="mb-6 flex flex-col gap-3 rounded-2xl border border-brand-200 bg-brand-50 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-sm text-brand-900">
+              <span className="font-semibold">You&rsquo;re viewing an example:</span> {example}. Steps 1 to 3 are already filled in; click them to see the inputs.
+            </p>
+            <Button onClick={startOwn}>Start with my own home</Button>
+          </div>
         )}
 
         {step >= 0 && (

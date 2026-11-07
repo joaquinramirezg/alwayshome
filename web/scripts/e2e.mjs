@@ -130,6 +130,13 @@ await check("See an example from the home page", async () => {
   await btn("See an example").click();
   await text("If your home burned down tomorrow").waitFor({ timeout: T });
 });
+await check("example banner: Start with my own home clears the form", async () => {
+  await text("You’re viewing an example").waitFor();
+  await btn("Start with my own home").click();
+  await text("Where is your home?").waitFor();
+  if (await page.getByPlaceholder("Street address, city, ZIP").inputValue()) throw new Error("address not cleared");
+  if (await text("You’re viewing an example").isVisible()) throw new Error("banner still visible");
+});
 await check("deep link ?demo=...&step=5", async () => {
   await page.goto(BASE + "/?demo=palisades_underinsured&step=5", { waitUntil: "networkidle" });
   await text("Fixes, best value first").waitFor({ timeout: T });
