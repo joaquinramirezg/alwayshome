@@ -506,6 +506,53 @@ function ExtractionReview({ extraction }: { extraction: Extraction }) {
   );
 }
 
+const COMPONENT_LABELS: Record<string, string> = {
+  rebuild: "Rebuild the house",
+  code_upgrade: "Build to today's fire code",
+  other_structures: "Garage, fences, sheds",
+  contents: "Belongings",
+  living_expenses: "Rent while you rebuild",
+  debris_removal: "Clear the burned lot",
+};
+const range = (r: { low: number; high: number }) =>
+  Math.round(r.low) === Math.round(r.high) ? money(r.low) : `${money(r.low)}–${money(r.high)}`;
+
+function LossScenario({ c }: { c: NonNullable<Result["current"]["coverage"]> }) {
+  const short = c.total_shortfall.high > 0;
+  return (
+    <Card>
+      <h2 className="text-lg font-semibold text-stone-900">If your home burned down tomorrow</h2>
+      <p className="text-sm text-stone-600">What rebuilding would cost, what your policy would pay, and what you would pay yourself.</p>
+      <div className="mt-4 grid gap-3 sm:grid-cols-3">
+        <Stat label="Total cost" value={range(c.total_cost)} />
+        <Stat label="Insurance pays" value={range(c.total_payout)} />
+        <div className={`rounded-xl p-4 ${short ? "bg-red-50" : "bg-emerald-50"}`}>
+          <div className={`text-xs font-medium uppercase tracking-wide ${short ? "text-red-700" : "text-emerald-700"}`}>You pay out of pocket</div>
+          <div className={`mt-1 text-2xl font-semibold ${short ? "text-red-800" : "text-emerald-800"}`}>{range(c.total_shortfall)}</div>
+        </div>
+      </div>
+      <div className="mt-4 overflow-x-auto rounded-xl border border-stone-200">
+        <table className="w-full text-left text-sm">
+          <thead className="bg-stone-50 text-xs uppercase text-stone-500">
+            <tr><th className="px-3 py-2">Cost</th><th className="px-3 py-2">Estimate</th><th className="px-3 py-2">Policy pays</th><th className="px-3 py-2">Your share</th></tr>
+          </thead>
+          <tbody>
+            {c.components.map((p) => (
+              <tr key={p.name} className="border-t border-stone-100">
+                <td className="px-3 py-2 text-stone-800">{COMPONENT_LABELS[p.name] ?? p.name.replaceAll("_", " ")}</td>
+                <td className="px-3 py-2">{range(p.cost)}</td>
+                <td className="px-3 py-2">{range(p.payout)}</td>
+                <td className={`px-3 py-2 font-medium ${p.shortfall.high > 0 ? "text-red-700" : "text-emerald-700"}`}>{range(p.shortfall)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p className="mt-2 text-xs text-stone-500">{c.scope_note} Ranges reflect uncertain rebuild costs; see assumptions below.</p>
+    </Card>
+  );
+}
+
 function PlanView({
   missing, result, assessState, budget, setBudget, report, reportLoading, aiEnabled, onReport, onEdit,
 }: {
@@ -548,6 +595,8 @@ function PlanView({
             sub={drop > 0 ? <span className="font-medium text-emerald-700">▼ {pct(drop)} less damage</span> : "No change"} />
         </div>
       </Card>
+
+      {cur.coverage && <LossScenario c={cur.coverage} />}
 
       <Card>
         <h2 className="text-lg font-semibold text-stone-900">Gaps in your coverage</h2>

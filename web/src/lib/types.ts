@@ -66,11 +66,21 @@ export type Fix = {
 
 export type Gap = { gap: string; severity: "high" | "medium" | "low"; why: string };
 
+export type Range = { low: number; high: number };
+export type Coverage = {
+  scope_note: string;
+  components: { name: string; cost: Range; payout: Range; shortfall: Range; notes: string[] }[];
+  total_cost: Range;
+  total_payout: Range;
+  total_shortfall: Range;
+};
+
 export type Result = {
   current: {
     wildfire: Wildfire;
     house: { impact: number; rating: string };
     insurance_gap: Gap[];
+    coverage?: Coverage | null;
   };
   future: {
     fixes: Fix[];

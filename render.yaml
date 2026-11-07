@@ -3,7 +3,7 @@ services:
   - type: web
     name: alwayson-api
     runtime: docker
-    plan: starter            # 512 MB free tier may run out of memory with the geospatial tables; starter is safer
+    plan: free               # measured ~310 MB after loading all tables; fits the 512 MB free instance (sleeps when idle)
     healthCheckPath: /api/health
     autoDeploy: true
     envVars:
@@ -12,4 +12,4 @@ services:
       - key: AI_CALLS_PER_HOUR
         value: "20"
       - key: ALLOWED_ORIGINS
-        value: "https://alwayson.vercel.app"   # only needed if the browser calls the API directly
+        value: "*"   # the frontend calls the API through Vercel rewrites; tighten to the Vercel URL later
