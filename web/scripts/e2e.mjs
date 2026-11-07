@@ -40,6 +40,10 @@ await check("Try: Altadena link looks up the area", async () => {
   await text("Wildfire exposure").waitFor({ timeout: T });
   await text("Very High").waitFor({ timeout: T });
 });
+await check("editing the address clears the old lookup", async () => {
+  await page.getByPlaceholder("Street address, city, ZIP").fill("1200 Chautauqua Blvd");
+  if (await btn("Continue").isEnabled()) throw new Error("Continue still enabled with a stale area");
+});
 await check("typed address + Look up", async () => {
   await page.getByPlaceholder("Street address, city, ZIP").fill("1200 Chautauqua Blvd, Pacific Palisades, CA 90272");
   await btn("Look up").click();
@@ -118,8 +122,12 @@ await check("theme toggle switches dark/light", async () => {
 for (const label of ["Altadena, FAIR Plan only, older home", "Altadena, FAIR Plan + DIC, partly hardened", "Pacific Palisades, private HO-3, underinsured",
   "Wilshire, well covered, fully hardened", "Edge case: owner answers Unknown to everything, no budget", "Edge case: Unknown everywhere, large budget"]) {
   await check(`demo menu: ${label}`, async () => {
-    await page.getByLabel("Fill with a sample homeowner").selectOption({ label });
+    const menu = page.getByLabel("Load an example homeowner");
+    await menu.selectOption({ label });
     await text("Your situation today").waitFor({ timeout: T });
+    const shown = await menu.evaluate((el) => el.options[el.selectedIndex].text);
+    if (shown !== label) throw new Error(`menu shows "${shown}"`);
+    await text("You’re viewing an example").waitFor();
     await text("Chance of losing the house").waitFor({ timeout: T });
     await btn("See my plan").click();
     await text("Your plan").waitFor({ timeout: T });
@@ -136,6 +144,8 @@ await check("example banner: Start with my own home clears the form", async () =
   await text("Where is your home?").waitFor();
   if (await page.getByPlaceholder("Street address, city, ZIP").inputValue()) throw new Error("address not cleared");
   if (await text("You’re viewing an example").isVisible()) throw new Error("banner still visible");
+  const shown = await page.getByLabel("Load an example homeowner").evaluate((el) => el.options[el.selectedIndex].text);
+  if (shown !== "Choose an example…") throw new Error(`menu shows "${shown}"`);
 });
 await check("deep link ?demo=...&step=5", async () => {
   await page.goto(BASE + "/?demo=palisades_underinsured&step=5", { waitUntil: "networkidle" });

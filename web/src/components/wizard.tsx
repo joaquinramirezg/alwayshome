@@ -67,7 +67,8 @@ export default function Wizard() {
   const [health, setHealth] = useState<Health | null>(null);
   const [scenarios, setScenarios] = useState<Record<string, Scenario>>({});
   const [apiDown, setApiDown] = useState(false);
-  const [example, setExample] = useState<string | null>(null); // title of the sample homeowner being shown
+  const [exampleId, setExampleId] = useState<string>(""); // id of the sample homeowner being shown, "" = own home
+  const example = exampleId ? scenarios[exampleId]?.title ?? null : null;
 
   const [address, setAddress] = useState("");
   const [area, setArea] = useState<Area | null>(null);
@@ -107,7 +108,7 @@ export default function Wizard() {
       const q = new URLSearchParams(window.location.search);
       const id = q.get("demo");
       if (id && s.homeowners[id]) {
-        fillSample(s.homeowners[id]);
+        fillSample(s.homeowners[id], id);
         const n = Number(q.get("step"));
         if (n >= 1 && n <= 5) setStep(n - 1);
       }
@@ -131,7 +132,7 @@ export default function Wizard() {
 
   /** Clear everything and start a homeowner's own assessment at step 1. */
   function startOwn() {
-    setExample(null);
+    setExampleId("");
     setAddress(""); setArea(null); setAreaState({ loading: false, error: null });
     setHome({}); setYearBuilt(null); setSqft(null); setStories(null); setDone([]);
     setInsType(null); setIns(EMPTY_INS); setExtraction(null); setExtractState({ loading: false, error: null });
@@ -140,8 +141,8 @@ export default function Wizard() {
     window.scrollTo({ top: 0 });
   }
 
-  function fillSample(s: Scenario) {
-    setExample(s.title);
+  function fillSample(s: Scenario, id: string) {
+    setExampleId(id);
     setAddress(s.address);
     lookUp(s.address);
     const h: Record<string, string | null> = {};
@@ -274,10 +275,10 @@ export default function Wizard() {
           <ThemeToggle />
           {Object.keys(scenarios).length > 0 && (
             <label className="flex items-center gap-2 text-sm text-stone-600">
-              <Badge>Demo</Badge>
-              <select className="rounded-lg border border-stone-300 bg-surface px-2 py-1.5 text-sm" aria-label="Fill with a sample homeowner"
-                value="" onChange={(e) => { const sc = scenarios[e.target.value]; if (sc) { fillSample(sc); setStep(3); window.scrollTo({ top: 0 }); } }}>
-                <option value="">Fill with a sample homeowner…</option>
+              <span className="font-medium">Examples</span>
+              <select className="max-w-[16rem] rounded-lg border border-stone-300 bg-surface px-2 py-1.5 text-sm text-stone-800" aria-label="Load an example homeowner"
+                value={exampleId} onChange={(e) => { const id = e.target.value; const sc = scenarios[id]; if (sc) { fillSample(sc, id); setStep(3); window.scrollTo({ top: 0 }); } else { startOwn(); } }}>
+                <option value="">{exampleId ? "Start with my own home" : "Choose an example…"}</option>
                 {Object.entries(scenarios).map(([id, s]) => <option key={id} value={id}>{s.title}</option>)}
               </select>
             </label>
@@ -313,7 +314,7 @@ export default function Wizard() {
                   Get started
                 </button>
                 <button type="button" disabled={!scenarios.altadena_fair_only}
-                  onClick={() => { if (scenarios.altadena_fair_only) { fillSample(scenarios.altadena_fair_only); setStep(3); } }}
+                  onClick={() => { if (scenarios.altadena_fair_only) { fillSample(scenarios.altadena_fair_only, "altadena_fair_only"); setStep(3); } }}
                   className="rounded-xl border border-white/25 px-6 py-3 text-base font-semibold text-white hover:bg-white/10 disabled:opacity-50">
                   See an example
                 </button>
@@ -399,12 +400,12 @@ export default function Wizard() {
             <h1 className="text-2xl font-bold text-stone-900">Where is your home?</h1>
             <p className="mt-1 text-stone-600">We look up your wildfire exposure, fire history and the local insurance market. Los Angeles County only for now.</p>
             <form className="mt-5 flex flex-col gap-3 sm:flex-row" onSubmit={(e) => { e.preventDefault(); lookUp(address); }}>
-              <input value={address} onChange={(e) => setAddress(e.target.value)} placeholder="Street address, city, ZIP"
+              <input value={address} onChange={(e) => { setAddress(e.target.value); if (area) { setArea(null); setResult(null); } }} placeholder="Street address, city, ZIP"
                 className="flex-1 rounded-xl border border-stone-300 px-4 py-3 text-stone-900 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100" />
               <Button type="submit" disabled={!address.trim() || areaState.loading}>Look up</Button>
             </form>
             <div className="mt-2 flex flex-wrap gap-2 text-xs text-stone-500">
-              Try:
+              Try an example address:
               {DEMO_ADDRESSES.map((a) => (
                 <button key={a} type="button" className="underline hover:text-stone-800" onClick={() => { setAddress(a); lookUp(a); }}>{a.split(",")[1].trim()}</button>
               ))}
@@ -492,8 +493,8 @@ export default function Wizard() {
                     onChange={(e) => { const f = Array.from(e.target.files ?? []).slice(0, 2); e.target.value = ""; if (f.length) readPolicies(() => api.extract(f)); }} />
                 </label>
                 <div className="rounded-xl border border-stone-200 p-6">
-                  <div className="font-medium text-stone-900">Or try a sample policy</div>
-                  <div className="mb-3 text-xs text-stone-500">Fictional declarations pages, read by the AI ahead of time.</div>
+                  <div className="font-medium text-stone-900">Or try a sample policy (fictional)</div>
+                  <div className="mb-3 text-xs text-stone-500">Made-up declarations pages for testing, already read by the AI.</div>
                   <select className="w-full rounded-lg border border-stone-300 bg-surface px-3 py-2 text-sm" defaultValue=""
                     onChange={(e) => e.target.value && readPolicies(() => api.samplePolicies(SAMPLE_POLICIES[e.target.value]))}>
                     <option value="">Choose a sample…</option>
@@ -596,6 +597,10 @@ function StepFooter({ missing, onBack, onNext, nextLabel = "Continue" }: { missi
   );
 }
 
+const DOC_LABELS: Record<string, string> = {
+  fair_plan: "FAIR Plan", dic: "DIC policy", homeowners: "Homeowners policy", dwelling_fire: "Dwelling fire policy", other: "Not a declarations page",
+};
+
 function fmtValue(v: unknown): string {
   if (v === null || v === undefined) return "—";
   if (typeof v === "number") return v >= 1000 ? `$${v.toLocaleString("en-US")}` : String(v);
@@ -616,7 +621,7 @@ function ExtractionReview({ extraction }: { extraction: Extraction }) {
         <div key={d.file}>
           <div className="mb-2 flex flex-wrap items-center gap-2">
             <span className="font-semibold text-stone-900">{d.file}</span>
-            <Badge tone="orange">{fmtValue(d.fields.find((f) => f.field === "document_type")?.value)}</Badge>
+            <Badge tone="orange">{DOC_LABELS[String(d.fields.find((f) => f.field === "document_type")?.value)] ?? "Unknown document"}</Badge>
             {d.source === "cache" && <Badge>pre-read sample</Badge>}
             {!d.text_layer && <Badge tone="amber">scanned: compare values with the document</Badge>}
           </div>
