@@ -129,7 +129,14 @@ Other checks:
 
 Run `uv run pytest` before every push to `main`.
 
-## 5. The API (for the future frontend)
+## 5. The web app: click every button
+
+```
+cd web && npm run e2e -- https://msba-vibathon-2026.vercel.app   # or http://localhost:3000
+```
+Drives Google Chrome through the home page, all 5 steps, every button, policy upload, report and download, every sample homeowner in the demo menu, deep links, dark mode and the credits page (25 checks).
+
+## 5b. The API (for the future frontend)
 
 ```
 uv run uvicorn api.main:app --reload --port 8000

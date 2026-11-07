@@ -63,7 +63,7 @@ const EMPTY_INS: InsForm = {
 const sevTone = { high: "red", medium: "amber", low: "stone" } as const;
 
 export default function Wizard() {
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState(-1); // -1 = home page
   const [health, setHealth] = useState<Health | null>(null);
   const [scenarios, setScenarios] = useState<Record<string, Scenario>>({});
   const [apiDown, setApiDown] = useState(false);
@@ -90,7 +90,16 @@ export default function Wizard() {
   const [reportLoading, setReportLoading] = useState(false);
 
   useEffect(() => {
-    api.health().then(setHealth).catch(() => setApiDown(true));
+    // The free API host sleeps when idle and can take ~1 minute to wake: retry before giving up.
+    let tries = 0;
+    let cancelled = false;
+    const check = () => api.health().then((h) => { if (!cancelled) { setHealth(h); setApiDown(false); } }).catch(() => {
+      tries += 1;
+      if (cancelled) return;
+      if (tries >= 8) setApiDown(true);
+      else setTimeout(check, 8000);
+    });
+    check();
     api.samples().then((s) => {
       setScenarios(s.homeowners);
       // Demo deep link: /?demo=altadena_fair_only&step=4 fills a sample homeowner and opens that step.
@@ -102,6 +111,7 @@ export default function Wizard() {
         if (n >= 1 && n <= 5) setStep(n - 1);
       }
     }).catch(() => {});
+    return () => { cancelled = true; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -231,11 +241,12 @@ export default function Wizard() {
 
   // ---------------------------------------------------------------- render
   const wf = area?.wildfire;
+  const aiOn = health ? health.ai_enabled : true; // optimistic while the server wakes up; errors fall back to manual entry
   return (
     <div className="min-h-screen bg-sand">
       <header className="sticky top-0 z-20 border-b border-stone-200/80 bg-surface/85 backdrop-blur">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
-          <button type="button" onClick={() => setStep(0)} className="flex items-center gap-3 text-left" aria-label="AlwaysHome, back to start">
+          <button type="button" onClick={() => setStep(-1)} className="flex items-center gap-3 text-left" aria-label="AlwaysHome home page">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/brand/alwayshome-mark.svg" alt="" width={45} height={36} className="h-9 w-auto dark:hidden" />
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -251,8 +262,8 @@ export default function Wizard() {
           {Object.keys(scenarios).length > 0 && (
             <label className="flex items-center gap-2 text-sm text-stone-600">
               <Badge>Demo</Badge>
-              <select className="rounded-lg border border-stone-300 bg-surface px-2 py-1.5 text-sm" defaultValue=""
-                onChange={(e) => e.target.value && scenarios[e.target.value] && fillSample(scenarios[e.target.value])}>
+              <select className="rounded-lg border border-stone-300 bg-surface px-2 py-1.5 text-sm" aria-label="Fill with a sample homeowner"
+                value="" onChange={(e) => { const sc = scenarios[e.target.value]; if (sc) { fillSample(sc); setStep(3); window.scrollTo({ top: 0 }); } }}>
                 <option value="">Fill with a sample homeowner…</option>
                 {Object.entries(scenarios).map(([id, s]) => <option key={id} value={id}>{s.title}</option>)}
               </select>
@@ -263,14 +274,18 @@ export default function Wizard() {
       </header>
 
       <main className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        {apiDown && <div className="mb-6"><ErrorNote>The AlwaysHome API is not reachable. Start it with <code>uv run uvicorn api.main:app --port 8000</code>.</ErrorNote></div>}
+        {apiDown && <div className="mb-6"><ErrorNote>We can&rsquo;t reach the AlwaysHome server right now. Please refresh the page in a minute.</ErrorNote></div>}
+        {!health && !apiDown && step >= 0 && (
+          <div className="mb-6"><Spinner label="Connecting to the AlwaysHome server… the first visit of the day can take up to a minute." /></div>
+        )}
 
-        {step === 0 && !area && (
-          <section className="relative mb-10 overflow-hidden rounded-3xl bg-night px-6 py-10 text-white sm:px-10 sm:py-14">
+        {step === -1 && (
+          <>
+          <section className="relative overflow-hidden rounded-3xl bg-night px-6 py-12 text-white sm:px-12 sm:py-20">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/brand/alwayshome-mark-on-dark.svg" alt="" aria-hidden className="pointer-events-none absolute -right-24 -top-6 w-64 opacity-[0.12] sm:w-80" />
             <div className="relative max-w-2xl">
-              <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/15 bg-surface/5 px-3 py-1 text-xs text-white/80">
+              <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs text-white/80">
                 <span className="h-1.5 w-1.5 rounded-full bg-brand-500" /> For California homeowners on the FAIR Plan
               </div>
               <h1 className="font-display text-4xl font-semibold leading-tight sm:text-5xl">
@@ -279,6 +294,18 @@ export default function Wizard() {
               <p className="mt-4 text-lg text-white/75">
                 See your real wildfire exposure, what your policy would actually pay, and the fire-safety fixes that give you the most for your money.
               </p>
+              <div className="mt-8 flex flex-wrap items-center gap-3">
+                <button type="button" onClick={() => setStep(0)}
+                  className="rounded-xl bg-brand-600 px-6 py-3 text-base font-semibold text-white shadow-lg shadow-black/20 hover:bg-brand-700">
+                  Get started
+                </button>
+                <button type="button" disabled={!scenarios.altadena_fair_only}
+                  onClick={() => { if (scenarios.altadena_fair_only) { fillSample(scenarios.altadena_fair_only); setStep(3); } }}
+                  className="rounded-xl border border-white/25 px-6 py-3 text-base font-semibold text-white hover:bg-white/10 disabled:opacity-50">
+                  See an example
+                </button>
+                <span className="text-sm text-white/60">Takes about 5 minutes. Los Angeles County.</span>
+              </div>
             </div>
             <dl className="relative mt-8 grid max-w-3xl grid-cols-1 gap-4 sm:grid-cols-3">
               {[
@@ -286,15 +313,49 @@ export default function Wizard() {
                 ["41%", "of homes in the riskiest ZIP codes are on the FAIR Plan"],
                 ["+84%", "average California premiums since 2020"],
               ].map(([v, l]) => (
-                <div key={v} className="rounded-2xl border border-white/10 bg-surface/5 p-4">
+                <div key={v} className="rounded-2xl border border-white/10 bg-white/5 p-4">
                   <dt className="font-display text-3xl font-semibold text-brand-400">{v}</dt>
                   <dd className="mt-1 text-sm text-white/70">{l}</dd>
                 </div>
               ))}
             </dl>
           </section>
+
+          <section className="mt-12">
+            <h2 className="font-display text-3xl font-semibold text-ink">How it works</h2>
+            <ol className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+              {[
+                ["Your location", "Wildfire exposure of your neighborhood, fire history and the local insurance market."],
+                ["Your home", "Eight quick questions about the features fire inspectors check."],
+                ["Your insurance", "Upload your policy and AI reads it, quoting the exact line for every value. Or type it in."],
+                ["Your situation", "Your chance of losing the house in a fire, and what your policy would really pay."],
+                ["Your plan", "Fixes ranked by value for your budget, and a report to share with your broker."],
+              ].map(([t, d], i) => (
+                <li key={t} className="rounded-2xl border border-stone-200 bg-surface p-5">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-100 text-sm font-semibold text-brand-800">{i + 1}</span>
+                  <h3 className="mt-3 font-semibold text-ink">{t}</h3>
+                  <p className="mt-1 text-sm text-stone-600">{d}</p>
+                </li>
+              ))}
+            </ol>
+          </section>
+
+          <section className="mt-12 grid gap-4 rounded-3xl border border-stone-200 bg-surface p-8 md:grid-cols-3">
+            {[
+              ["Real data", "CAL FIRE hazard maps and 22,071 home inspections from the 2025 Eaton and Palisades fires, FEMA and Department of Insurance data."],
+              ["Checkable AI", "The AI only reads your documents and shows where each number came from. It never invents costs or discounts."],
+              ["Private", "Policy files are read in memory and never stored. No account needed."],
+            ].map(([t, d]) => (
+              <div key={t}>
+                <h3 className="font-display text-xl font-semibold text-ink">{t}</h3>
+                <p className="mt-1 text-sm text-stone-600">{d}</p>
+              </div>
+            ))}
+          </section>
+          </>
         )}
 
+        {step >= 0 && (
         <ol className="mb-8 grid grid-cols-2 gap-2 sm:grid-cols-5">
           {STEPS.map((s, i) => (
             <li key={s}>
@@ -308,6 +369,7 @@ export default function Wizard() {
             </li>
           ))}
         </ol>
+        )}
 
         {/* ---------------- step 1: location */}
         {step === 0 && (
@@ -399,13 +461,13 @@ export default function Wizard() {
               <h1 className="text-2xl font-bold text-stone-900">Your insurance</h1>
               <p className="mt-1 text-stone-600">Upload your declarations page and our AI fills in the form, showing the exact line it read for every value. Or type the numbers yourself.</p>
               <div className="mt-5 grid gap-4 md:grid-cols-2">
-                <label className={`flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed p-6 text-center ${health?.ai_enabled ? "border-brand-300 bg-brand-50/50 hover:bg-brand-50" : "border-stone-200 bg-stone-50 opacity-60"}`}>
+                <label className={`flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed p-6 text-center ${aiOn ? "border-brand-300 bg-brand-50/50 hover:bg-brand-50" : "border-stone-200 bg-stone-50 opacity-60"}`}>
                   <span className="text-3xl">📄</span>
                   <span className="mt-2 font-medium text-stone-900">Upload policy PDFs</span>
                   <span className="text-xs text-stone-500">FAIR Plan, plus your DIC policy if you have one. Max 2 files. Not stored.</span>
-                  {!health?.ai_enabled && <span className="mt-2 text-xs text-red-700">AI reading is off on this server</span>}
-                  <input type="file" accept="application/pdf" multiple className="hidden" disabled={!health?.ai_enabled}
-                    onChange={(e) => { const f = Array.from(e.target.files ?? []).slice(0, 2); if (f.length) readPolicies(() => api.extract(f)); }} />
+                  {!aiOn && <span className="mt-2 text-xs text-stone-600">AI reading is not available right now. Use a sample or enter the numbers below.</span>}
+                  <input type="file" accept="application/pdf" multiple className="hidden" disabled={!aiOn}
+                    onChange={(e) => { const f = Array.from(e.target.files ?? []).slice(0, 2); e.target.value = ""; if (f.length) readPolicies(() => api.extract(f)); }} />
                 </label>
                 <div className="rounded-xl border border-stone-200 p-6">
                   <div className="font-medium text-stone-900">Or try a sample policy</div>
@@ -467,11 +529,15 @@ export default function Wizard() {
             onNext={next} onBack={() => setStep(step - 1)}
             missing={[...missing[0], ...missing[1], ...missing[2]]}
             result={result} assessState={assessState} budget={budget} setBudget={setBudget}
-            report={report} reportLoading={reportLoading} aiEnabled={!!health?.ai_enabled}
+            report={report} reportLoading={reportLoading} aiEnabled={aiOn}
             onReport={async () => {
               if (!result) return;
               setReportLoading(true);
-              try { setReport(await api.report(address, result, !!health?.ai_enabled)); } finally { setReportLoading(false); }
+              try {
+                setReport(await api.report(address, result, aiOn));
+              } catch {
+                try { setReport(await api.report(address, result, false)); } catch { setReport({ markdown: "We couldn't write the report right now. Please try again.", source: "error" }); }
+              } finally { setReportLoading(false); }
             }}
             onEdit={setStep}
           />
