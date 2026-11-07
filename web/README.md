@@ -11,8 +11,8 @@ uv run uvicorn api.main:app --port 8000      # API (uses ANTHROPIC_API_KEY if se
 cd web && npm install && npm run dev          # app at http://localhost:3000
 ```
 
-Demo shortcut: http://localhost:3000/?demo=altadena_fair_only&step=4 fills a sample homeowner and opens the plan
-(other ids: altadena_fair_dic, palisades_underinsured, wilshire_fully_hardened, all_unknown_no_budget, all_unknown_big_budget; step 1-4).
+Demo shortcut: http://localhost:3000/?demo=altadena_fair_only&step=4 fills a sample homeowner and opens the situation step
+(other ids: altadena_fair_dic, palisades_underinsured, wilshire_fully_hardened, all_unknown_no_budget, all_unknown_big_budget; step 1-5: 4 = your situation, 5 = your plan).
 
 ## Deploy (Vercel)
 

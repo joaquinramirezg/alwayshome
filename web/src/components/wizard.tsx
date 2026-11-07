@@ -50,7 +50,7 @@ const DEMO_ADDRESSES = [
   "1200 Chautauqua Blvd, Pacific Palisades, CA 90272",
   "3200 Wilshire Blvd, Los Angeles, CA 90010",
 ];
-const STEPS = ["Location", "Your home", "Insurance", "Your plan"];
+const STEPS = ["Location", "Your home", "Insurance", "Your situation", "Your plan"];
 
 type InsForm = Omit<Insurance, "documents" | "has_dic">;
 const EMPTY_INS: InsForm = {
@@ -97,7 +97,7 @@ export default function Wizard() {
       if (id && s.homeowners[id]) {
         fillSample(s.homeowners[id]);
         const n = Number(q.get("step"));
-        if (n >= 1 && n <= 4) setStep(n - 1);
+        if (n >= 1 && n <= 5) setStep(n - 1);
       }
     }).catch(() => {});
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -213,7 +213,7 @@ export default function Wizard() {
     }
   }
   useEffect(() => {
-    if (step !== 3 || !inputs) return;
+    if (step < 3 || !inputs) return;
     if (timer.current) clearTimeout(timer.current);
     timer.current = setTimeout(() => runAssess(inputs), 250);
     return () => {
@@ -223,7 +223,7 @@ export default function Wizard() {
   }, [step, inputs, area]);
 
   function next() {
-    setStep((s) => Math.min(3, s + 1));
+    setStep((s) => Math.min(4, s + 1));
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
@@ -256,7 +256,7 @@ export default function Wizard() {
       <main className="mx-auto max-w-5xl px-4 py-8">
         {apiDown && <div className="mb-6"><ErrorNote>The AlwaysON API is not reachable. Start it with <code>uv run uvicorn api.main:app --port 8000</code>.</ErrorNote></div>}
 
-        <ol className="mb-8 grid grid-cols-4 gap-2">
+        <ol className="mb-8 grid grid-cols-2 gap-2 sm:grid-cols-5">
           {STEPS.map((s, i) => (
             <li key={s}>
               <button type="button" onClick={() => setStep(i)}
@@ -416,21 +416,23 @@ export default function Wizard() {
                 <label className="flex items-center gap-2"><input type="checkbox" className="h-4 w-4 accent-orange-600" checked={ins.debris_removal}
                   onChange={(e) => setIns({ ...ins, debris_removal: e.target.checked })} />Debris removal coverage</label>
               </div>
-              <StepFooter missing={missing[2]} onBack={() => setStep(1)} onNext={next} nextLabel="See my plan" />
+              <StepFooter missing={missing[2]} onBack={() => setStep(1)} onNext={next} nextLabel="See my situation" />
             </Card>
           </div>
         )}
 
-        {/* ---------------- step 4: plan */}
-        {step === 3 && (
+        {/* ---------------- step 4: situation, step 5: plan */}
+        {step >= 3 && (
           <PlanView
+            section={step === 3 ? "situation" : "plan"}
+            onNext={next} onBack={() => setStep(step - 1)}
             missing={[...missing[0], ...missing[1], ...missing[2]]}
             result={result} assessState={assessState} budget={budget} setBudget={setBudget}
             report={report} reportLoading={reportLoading} aiEnabled={!!health?.ai_enabled}
-            onReport={async (ai) => {
+            onReport={async () => {
               if (!result) return;
               setReportLoading(true);
-              try { setReport(await api.report(address, result, ai)); } finally { setReportLoading(false); }
+              try { setReport(await api.report(address, result, !!health?.ai_enabled)); } finally { setReportLoading(false); }
             }}
             onEdit={setStep}
           />
@@ -554,11 +556,12 @@ function LossScenario({ c }: { c: NonNullable<Result["current"]["coverage"]> }) 
 }
 
 function PlanView({
-  missing, result, assessState, budget, setBudget, report, reportLoading, aiEnabled, onReport, onEdit,
+  section, onNext, onBack, missing, result, assessState, budget, setBudget, report, reportLoading, aiEnabled, onReport, onEdit,
 }: {
+  section: "situation" | "plan"; onNext: () => void; onBack: () => void;
   missing: string[]; result: Result | null; assessState: { loading: boolean; error: string | null };
   budget: number; setBudget: (b: number) => void; report: { markdown: string; source: string } | null;
-  reportLoading: boolean; aiEnabled: boolean; onReport: (ai: boolean) => void; onEdit: (step: number) => void;
+  reportLoading: boolean; aiEnabled: boolean; onReport: () => void; onEdit: (step: number) => void;
 }) {
   if (missing.length) {
     return <Card><ErrorNote>Please complete the earlier steps first. Still needed: {missing.join(", ")}.</ErrorNote>
@@ -568,6 +571,7 @@ function PlanView({
   if (!result) return <Card><Spinner label="Building your plan…" /></Card>;
   const { current: cur, future: fut } = result;
   const drop = cur.house.impact - fut.house_after_plan.impact;
+  const pts = (x: number) => `${Math.round(x * 100)} points`;
 
   function download() {
     if (!report) return;
@@ -582,9 +586,11 @@ function PlanView({
       {result.sources.house === "placeholder" && (
         <Note>Prototype: the house damage estimate is a placeholder until our house model is plugged in. The wildfire exposure score uses real data.</Note>
       )}
+      {section === "situation" && <>
       <Card>
-        <h1 className="text-2xl font-bold text-stone-900">Your plan</h1>
-        <div className="mt-5 grid gap-4 md:grid-cols-3">
+        <h1 className="text-2xl font-bold text-stone-900">Your situation today</h1>
+        <p className="mt-1 text-stone-600">How exposed your area is, how likely your home is to survive a fire, and what your insurance would really pay.</p>
+        <div className="mt-5 grid gap-4 md:grid-cols-2">
           <div className="flex flex-col items-center rounded-xl bg-orange-50 p-4 text-center">
             <div className="text-xs font-medium uppercase tracking-wide text-orange-800">Wildfire exposure</div>
             <Gauge value={cur.wildfire.score} label="Wildfire exposure" />
@@ -593,8 +599,6 @@ function PlanView({
           <Stat label="Chance of losing the house if fire reaches it" value={pct(cur.house.impact)} sub={cur.house.rating}>
             <div className="mt-1 text-xs text-stone-500">Homes like yours in the 2025 Eaton and Palisades fires (22,071 CAL FIRE inspections)</div>
           </Stat>
-          <Stat label="After your plan" value={pct(fut.house_after_plan.impact)}
-            sub={drop > 0 ? <span className="font-medium text-emerald-700">▼ {pct(drop)} less damage</span> : "No change"} />
         </div>
       </Card>
 
@@ -612,6 +616,22 @@ function PlanView({
             ))}
           </div>
         )}
+      </Card>
+      <div className="flex justify-between">
+        <Button variant="secondary" onClick={onBack}>Back</Button>
+        <Button onClick={onNext}>See my plan</Button>
+      </div>
+      </>}
+
+      {section === "plan" && <>
+      <Card>
+        <h1 className="text-2xl font-bold text-stone-900">Your plan</h1>
+        <p className="mt-1 text-stone-600">The fire-safety fixes that lower your risk the most for the money, within your budget.</p>
+        <div className="mt-5 grid gap-4 md:grid-cols-2">
+          <Stat label="Chance of losing the house today" value={pct(cur.house.impact)} sub={cur.house.rating} />
+          <Stat label="After the fixes in your plan" value={pct(fut.house_after_plan.impact)}
+            sub={drop > 0 ? <span className="font-medium text-emerald-700">▼ {pts(drop)} lower</span> : "No change"} />
+        </div>
       </Card>
 
       <Card>
@@ -662,15 +682,15 @@ function PlanView({
         <div className="flex flex-wrap items-center justify-between gap-3">
           <h2 className="text-lg font-semibold text-stone-900">Your report</h2>
           <div className="flex flex-wrap gap-2">
-            <Button variant="secondary" onClick={() => onReport(false)} disabled={reportLoading}>Write report</Button>
-            <Button onClick={() => onReport(true)} disabled={reportLoading || !aiEnabled}>Rewrite with AI</Button>
+            <Button onClick={onReport} disabled={reportLoading}>{report ? "Generate again" : "Generate report"}</Button>
             {report && <Button variant="secondary" onClick={download}>Download</Button>}
           </div>
         </div>
-        {reportLoading && <div className="mt-3"><Spinner label="Writing…" /></div>}
+        {!report && !reportLoading && <p className="mt-2 text-sm text-stone-600">A plain-language summary of your situation and plan{aiEnabled ? ", written by AI from your numbers" : ""}, ready to download or share with a broker.</p>}
+        {reportLoading && <div className="mt-3"><Spinner label={aiEnabled ? "Writing your report… about 20 seconds" : "Writing your report…"} /></div>}
         {report && (
           <article className="report mt-4 rounded-xl bg-stone-50 p-5 text-stone-800">
-            <p className="mb-2 text-xs text-stone-500">{report.source === "ai" ? "Written by AI from your plan's numbers" : "Template report"}</p>
+            <p className="mb-2 text-xs text-stone-500">{report.source === "ai" ? "Written by AI from your plan's numbers; every figure comes from the analysis above" : "Standard report"}</p>
             <ReactMarkdown>{report.markdown}</ReactMarkdown>
           </article>
         )}
@@ -680,6 +700,8 @@ function PlanView({
         <summary className="cursor-pointer font-medium text-stone-800">Assumptions and limits</summary>
         <ul className="mt-2 list-disc space-y-1 pl-5">{result.caveats.map((c) => <li key={c}>{c}</li>)}</ul>
       </details>
+      <div><Button variant="secondary" onClick={onBack}>Back</Button></div>
+      </>}
     </div>
   );
 }
