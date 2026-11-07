@@ -9,16 +9,16 @@ export const metadata: Metadata = {
 
 const TEAM = [
   {
-    name: "Joaquin Ramirez",
-    email: "joaquin.elias.ramirez.gutierrez.2027@anderson.ucla.edu",
-    role: "Co-founder & CEO · Head of Product and AI",
-    work: "Sets the vision and leads product and AI. Built the homeowner experience end to end: the AI policy reader that quotes the exact line behind every number, the house-damage model trained on 22,000 homes from the 2025 fires, and the platform it all runs on.",
-  },
-  {
     name: "David Ewenczyk",
     email: "david.ewenczyk.2027@anderson.ucla.edu",
     role: "Co-founder & Chief Data Officer",
     work: "Architect of the data engine and the coverage model. Turned scattered state, federal and insurance data into one validated pipeline for Los Angeles County, and built the total-loss model that shows homeowners what their policy would pay, and what it wouldn't.",
+  },
+  {
+    name: "Joaquin Ramirez",
+    email: "joaquin.elias.ramirez.gutierrez.2027@anderson.ucla.edu",
+    role: "Co-founder & Chief Product Officer",
+    work: "Leads product and AI. Built the homeowner experience end to end: the AI policy reader that quotes the exact line behind every number, the house-damage model trained on 22,000 homes from the 2025 fires, and the platform it all runs on.",
   },
   {
     name: "Atharva Uplap",
