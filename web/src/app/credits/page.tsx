@@ -10,18 +10,21 @@ export const metadata: Metadata = {
 const TEAM = [
   {
     name: "David Ewenczyk",
+    photo: "/team/david-ewenczyk.jpg",
     email: "david.ewenczyk.2027@anderson.ucla.edu",
     role: "Co-founder & Chief Data Officer",
     work: "Architect of the data engine and the coverage model. Turned scattered state, federal and insurance data into one validated pipeline for Los Angeles County, and built the total-loss model that shows homeowners what their policy would pay, and what it wouldn't.",
   },
   {
     name: "Joaquin Ramirez",
+    photo: "/team/joaquin-ramirez.jpg",
     email: "joaquin.elias.ramirez.gutierrez.2027@anderson.ucla.edu",
     role: "Co-founder & Chief Product Officer",
     work: "Leads product and AI. Built the homeowner experience end to end: the AI policy reader that quotes the exact line behind every number, the house-damage model trained on 22,000 homes from the 2025 fires, and the platform it all runs on.",
   },
   {
     name: "Atharva Uplap",
+    photo: "/team/atharva-uplap.jpg",
     email: "atharva.uplap.2027@anderson.ucla.edu",
     role: "Co-founder & Chief Risk Officer",
     work: "Leads wildfire risk science. Built the neighborhood wildfire exposure index from state hazard maps, 75 years of fire history and FEMA loss data, and the insurance gap and recommendations engine powering our next release.",
@@ -69,17 +72,19 @@ export default function Credits() {
 
         <section className="mt-10 grid gap-6 md:grid-cols-3">
           {TEAM.map((p) => (
-            <article key={p.name} className="rounded-2xl border border-stone-200 bg-surface p-6 shadow-sm">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-brand-100 font-display text-lg font-semibold text-brand-800">
-                {p.name.split(" ").map((w) => w[0]).join("")}
-              </div>
-              <h2 className="mt-4 font-display text-2xl font-semibold text-ink">{p.name}</h2>
+            <article key={p.name} className="overflow-hidden rounded-2xl border border-stone-200 bg-surface shadow-sm">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={p.photo} alt={`Portrait of ${p.name}`} width={800} height={1000} loading="lazy"
+                className="aspect-[4/5] w-full object-cover object-top" />
+              <div className="p-6">
+              <h2 className="font-display text-2xl font-semibold text-ink">{p.name}</h2>
               <p className="mt-1 text-sm font-semibold text-brand-600">{p.role}</p>
               <p className="mt-3 text-sm text-stone-600">{p.work}</p>
               <a href={`mailto:${p.email}`} className="mt-4 block break-all text-sm text-stone-700 underline decoration-stone-300 hover:text-brand-600">
                 {p.email}
               </a>
               <p className="mt-1 text-xs text-stone-500">MSBA Class of 2027, UCLA Anderson</p>
+              </div>
             </article>
           ))}
         </section>

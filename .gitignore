@@ -17,3 +17,6 @@ __pycache__/
 # Local Streamlit secrets (never commit)
 .streamlit/secrets.toml
 .env
+
+# Original team portraits (web-sized copies live in web/public/team)
+portraits/
