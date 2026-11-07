@@ -48,7 +48,7 @@ def main() -> None:
     button(at, "Show my plan").click().run()
     check(at, "plan screen")
     print("metrics:", {m.label: m.value for m in at.metric if m.label in (
-        "Wildfire likelihood (per year)", "Damage if fire reaches the house", "After your plan")})
+        "Wildfire exposure of your area", "Damage if fire reaches the house", "After your plan")})
     print("\nAll checks passed.")
 
 

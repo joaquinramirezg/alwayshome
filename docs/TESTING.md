@@ -113,6 +113,7 @@ About 85 tests, a few seconds, **no API key needed**. Claude is replaced by a fa
 |---|---|
 | `tests/test_policy_extract.py` | Every sample PDF, quote verification, invented quotes, wrong page numbers, implausible values, scanned PDFs, no key, API errors, cache, FAIR + DIC merge, no personal data in the schema |
 | `tests/test_plan.py` | Each coverage gap rule, every sample homeowner end to end against its expected results, budget limits, the model contract checker, the report and its AI fallback |
+| `tests/coverage/` | The total-loss scenario and coverage gaps: config, rent, costs, payouts, gap rules, five hand-calculated cases, and its connection to `assess()`, the report and the app |
 | `tests/test_app.py` | The real Streamlit UI: loading each homeowner, reading each sample policy, form pre-fill, fallbacks, demo addresses, stale-plan warning |
 
 Run one file or one test: `uv run pytest tests/test_plan.py` or `uv run pytest -k palisades`.

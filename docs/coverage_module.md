@@ -66,22 +66,30 @@ The result also has `components`, `warnings` (ACV, debris, price surge) and `ass
 - **Partly unknown totals are minimums.** Totals leave out components with unknown cost, and a warning names them. Show that warning next to the total.
 - **`total_payout` caps each component at its cost,** because a limit above the loss isn't money paid. Component payouts show the full limit.
 - **Actual cash value policies are computed as if they paid replacement cost.** The real shortfall may be above the high figure, and the output warns about this.
-- **The DIC policy adds no dollars.** It only adds a note listing `dic_covers`, so shortfalls for FAIR Plan + DIC homes may be overstated.
+- **The DIC policy adds no dollars.** It only adds a note listing `dic_covers`, and the dwelling payout stays the FAIR Plan's. One exception: limits the homeowner confirms in the form count, and `merge_policies` fills loss of use and contents from the DIC when the FAIR Plan has none. Other DIC cover isn't counted, so these homes' shortfalls may still be overstated.
 - **FAIR Plan with no Coverage B is a range.** The 10% of Coverage A can be within or on top of the dwelling limit, depending on the policy. The low shortfall assumes on top, and the high shortfall assumes it comes out of Coverage A. This differs from the build plan's Case 1 and Case 3 totals (see open issues).
 
-## Connecting it to the app
+## How the app uses it
 
-Nothing calls this module yet. The caller has to convert these, based on `origin/app-streamlit` at the time of writing:
+`assess()` calls `coverage_for_assess()` in `coverage/adapter.py`. The result goes in `current.coverage`, and the module's gaps become `current.insurance_gap`. The app shows them under "If your home is destroyed" and "Coverage gaps", and the report includes the totals.
+
+The adapter does these conversions:
 
 | App or extractor | This module | Conversion |
 | --- | --- | --- |
-| `extended_replacement_pct` of `25` | `0.25` | **Divide by 100.** Values above 1 raise a validation error. |
-| `living_area_sqft` | `sq_ft` | Rename |
-| `deductible_wildfire` as a percentage | Dollars | Convert first; a percentage isn't accepted as dollars. |
-| `documents` list | `document_type` plus `has_dic` | **Always set `document_type="fair_plan"` for FAIR Plan homes.** With `None`, the FAIR-specific rules don't run. |
-| Not extracted | `code_upgrade_amount`, `last_coverage_update_year`, `nonrenewal_notice` | Ask the user, or leave as `None`. `stale_coverage` and `renewal_risk` can't fire on these fields without them. |
+| `extended_replacement_pct` of `25` | `0.25` | Divided by 100 |
+| `living_area_sqft` | `sq_ft` | Renamed |
+| ZIP from `area["geocode"]` | `zip` | Empty if the address wasn't matched, so rent is unknown |
+| `documents` list | `document_type` | `fair_plan` whenever a FAIR Plan is present |
+| `code_upgrade`, `debris_removal` as `{covered, limit, pct}` | Booleans | A code upgrade percentage becomes dollars |
+| `deductible_wildfire` as `{amount, pct}` | Dollars | A percentage is taken of the dwelling limit |
+| `deductible` from the form | `deductible_all_perils` | Renamed |
 
-`origin/app-streamlit` also has its own `gaps.py` with a hard-coded $450/sq ft, while this module uses $300 to $500. Use one or the other, or the demo can show two answers.
+- **If the module fails,** `current.coverage` is `None`, the older rules in `gaps.py` supply the gap list, and the plan still finishes.
+- **`p_destroyed` stays `None`** until a real house model exists. FEMA's frequency times a placeholder damage score would look like a probability without being one.
+- **The liability gap** comes from `gaps.py`, because the module doesn't model liability.
+- **`gaps.py` and $450/sq ft:** that rate is now only used by the fallback gap rules and the avoided-loss estimate behind each fix's yearly benefit. It sits inside the module's $300 to $500 range, and homeowners see the range.
+- **Not extracted yet:** `last_coverage_update_year` and `nonrenewal_notice`, so `stale_coverage` and `renewal_risk` can't fire on those fields in the app.
 
 ## Assumptions and sources
 
