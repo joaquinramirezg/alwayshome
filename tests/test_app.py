@@ -176,7 +176,7 @@ def test_plan_shows_real_wildfire_score(no_key):
     m = {x.label: x.value for x in at.metric}
     assert m["Wildfire exposure of your area"] == "73 / 100"
     assert m["Tract in Very High zone"] == "52%"
-    assert any("house damage score is a placeholder" in w.value for w in at.warning)
+    assert not any("placeholder" in w.value for w in at.warning), "both models are real now"
 
 
 def test_password_gate(no_key, monkeypatch):

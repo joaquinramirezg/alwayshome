@@ -42,6 +42,7 @@ docs/                    brief, data dictionary, validation report
 src/msba_vibathon_2026/  app logic:
   policy_extract.py      policy PDF -> fields (Claude + pdfplumber quote check), spec in docs/policy_extraction_spec.md
   wildfire.py            wildfire analysis from Atharva's tract exposure index
+  house.py               house-damage model (CAL FIRE inspections), docs/house_model.md
   coverage/              total-loss scenario and coverage gaps, connected in adapter.py (docs/coverage_module.md)
   gaps.py                liability rule, and the fallback gap rules if coverage/ fails
   contract.py            validate_inputs/validate_output for the model contract

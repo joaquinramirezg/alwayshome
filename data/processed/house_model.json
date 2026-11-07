@@ -1,0 +1,157 @@
+{
+ "fields": {
+  "DECKPORCHELEVATED": {
+   "Composite": -1.37204,
+   "Masonry/Concrete": -0.04955,
+   "No Deck/Porch": -0.02875,
+   "Unknown": 1.44601,
+   "Wood": -0.24884
+  },
+  "EAVES": {
+   "Enclosed": -1.79046,
+   "No Eaves": -1.14953,
+   "Unenclosed": -1.31593,
+   "Unknown": 4.00276
+  },
+  "EXTERIORSIDING": {
+   "Metal": 1.53899,
+   "Other": -1.26291,
+   "Stucco/Brick/Cement": 0.47624,
+   "Unknown": -0.70823,
+   "Vinyl": 0.35981,
+   "Wood": -0.65706
+  },
+  "FENCEATTACHEDTOSTRUCTURE": {
+   "Combustible": -0.94551,
+   "No Fence": 0.03857,
+   "Non Combustible": -0.54583,
+   "Unknown": 1.19961
+  },
+  "ROOFCONSTRUCTION": {
+   "Asphalt": 0.60887,
+   "Concrete": -0.05467,
+   "Metal": 0.2289,
+   "Other": -1.34817,
+   "Tile": -0.42655,
+   "Unknown": -0.97157,
+   "Wood": 1.71002
+  },
+  "UTILITYMISCSTRUCTUREDISTANCE": {
+   "30-50'": -0.12739,
+   "<30'": 0.21184,
+   ">50'": 0.04983,
+   "Not Applicable": -0.16775,
+   "Unknown": -0.21969
+  },
+  "VENTSCREEN": {
+   "Mesh Screen <= 1/8\"": -0.0864,
+   "Mesh Screen > 1/8\"": 0.34601,
+   "No Vents": -0.93803,
+   "Unknown": 1.34753,
+   "Unscreened": -0.92228
+  },
+  "WINDOWPANE": {
+   "Multi Pane": -1.185,
+   "No Windows": -0.53353,
+   "Single Pane": -0.84609,
+   "Unknown": 2.31145
+  }
+ },
+ "fire_effects": {
+  "Eaton:00000": 1.2330348488214615,
+  "Eaton:91001": 1.3316977017851557,
+  "Eaton:91006": -0.9173489347585239,
+  "Eaton:91024": -2.4045545583197234,
+  "Eaton:91103": -0.6951544031213113,
+  "Eaton:91104": -0.7447460900589206,
+  "Eaton:91107": -0.5673040976412025,
+  "Palisades:00000": 0.5308704419770343,
+  "Palisades:90049": -1.5621746351231325,
+  "Palisades:90265": 2.1171690296926577,
+  "Palisades:90272": 2.0231580198183923,
+  "Palisades:90290": 0.042379572695532094,
+  "Palisades:90402": -0.6552508327257733,
+  "Palisades:91302": -0.002326804385237993,
+  "Palisades:91367": 0.004232457185473621,
+  "Palisades:93536": 0.013154432084062855
+ },
+ "fire_weight": {
+  "Eaton:00000": 0.0032,
+  "Eaton:91001": 0.4363,
+  "Eaton:91006": 0.0051,
+  "Eaton:91024": 0.0308,
+  "Eaton:91103": 0.0047,
+  "Eaton:91104": 0.0157,
+  "Eaton:91107": 0.0564,
+  "Palisades:00000": 0.0039,
+  "Palisades:90049": 0.0092,
+  "Palisades:90265": 0.0832,
+  "Palisades:90272": 0.3357,
+  "Palisades:90290": 0.0129,
+  "Palisades:90402": 0.0028,
+  "Palisades:91302": 0.0,
+  "Palisades:91367": 0.0,
+  "Palisades:93536": 0.0
+ },
+ "frequencies": {
+  "DECKPORCHELEVATED": {
+   "Composite": 0.01215,
+   "Masonry/Concrete": 0.2453,
+   "No Deck/Porch": 0.60867,
+   "Wood": 0.13388
+  },
+  "EAVES": {
+   "Enclosed": 0.25423,
+   "No Eaves": 0.14068,
+   "Unenclosed": 0.60509
+  },
+  "EXTERIORSIDING": {
+   "Metal": 0.00503,
+   "Other": 0.00485,
+   "Stucco/Brick/Cement": 0.83756,
+   "Vinyl": 0.00632,
+   "Wood": 0.14624
+  },
+  "FENCEATTACHEDTOSTRUCTURE": {
+   "Combustible": 0.36207,
+   "No Fence": 0.23492,
+   "Non Combustible": 0.40301
+  },
+  "ROOFCONSTRUCTION": {
+   "Asphalt": 0.71231,
+   "Concrete": 0.01683,
+   "Metal": 0.02816,
+   "Other": 0.00481,
+   "Tile": 0.23449,
+   "Wood": 0.0034
+  },
+  "UTILITYMISCSTRUCTUREDISTANCE": {
+   "30-50'": 0.07951,
+   "<30'": 0.26027,
+   ">50'": 0.03028,
+   "Not Applicable": 0.62995
+  },
+  "VENTSCREEN": {
+   "Mesh Screen <= 1/8\"": 0.19954,
+   "Mesh Screen > 1/8\"": 0.62157,
+   "No Vents": 0.15446,
+   "Unscreened": 0.02443
+  },
+  "WINDOWPANE": {
+   "Multi Pane": 0.54196,
+   "No Windows": 0.0055,
+   "Single Pane": 0.45254
+  }
+ },
+ "intercept": -0.29050585824654196,
+ "metrics": {
+  "cv_auc_all": 0.951,
+  "cv_auc_rows_without_unknown": 0.797,
+  "cv_brier_all": 0.083,
+  "destroyed_share": 0.529,
+  "rows": 22071,
+  "rows_without_unknown": 4525
+ },
+ "source": "CAL FIRE DINS, Eaton and Palisades fires, January 2025 (data/processed/dins_2025_la.parquet)",
+ "trained_on": "2026-11-06"
+}

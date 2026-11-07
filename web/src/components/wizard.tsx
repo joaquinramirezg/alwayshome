@@ -590,7 +590,9 @@ function PlanView({
             <Gauge value={cur.wildfire.score} label="Wildfire exposure" />
             <div className="font-semibold text-stone-900">{cur.wildfire.rating}</div>
           </div>
-          <Stat label="Damage if fire reaches your home" value={pct(cur.house.impact)} sub={cur.house.rating} />
+          <Stat label="Chance of losing the house if fire reaches it" value={pct(cur.house.impact)} sub={cur.house.rating}>
+            <div className="mt-1 text-xs text-stone-500">Homes like yours in the 2025 Eaton and Palisades fires (22,071 CAL FIRE inspections)</div>
+          </Stat>
           <Stat label="After your plan" value={pct(fut.house_after_plan.impact)}
             sub={drop > 0 ? <span className="font-medium text-emerald-700">▼ {pct(drop)} less damage</span> : "No change"} />
         </div>
@@ -637,13 +639,18 @@ function PlanView({
                       <div className="text-sm text-stone-600">{f.why}</div>
                     </div>
                   </div>
-                  {f.within_budget ? <Badge tone="green">in your plan</Badge> : <Badge>later</Badge>}
+                  <div className="flex flex-wrap gap-1">
+                    {f.effect_basis === "data" && <Badge tone="orange">backed by 2025 fire data</Badge>}
+                    {f.effect_basis === "assumed" && <Badge>effect assumed</Badge>}
+                    {f.effect_basis === "no_measured_effect" && <Badge>no measured effect; discount only</Badge>}
+                    {f.within_budget ? <Badge tone="green">in your plan</Badge> : <Badge>later</Badge>}
+                  </div>
                 </div>
                 <div className="mt-3 grid grid-cols-2 gap-3 text-sm sm:grid-cols-4">
                   <div><div className="text-xs text-stone-500">Cost (estimate)</div><div className="font-medium">{money(f.cost_low)}–{money(f.cost_high)}</div></div>
                   <div><div className="text-xs text-stone-500">Back per year</div><div className="font-medium">{money(f.est_annual_benefit)}</div></div>
                   <div><div className="text-xs text-stone-500">Pays back in</div><div className="font-medium">{f.payback_years != null ? `${f.payback_years} yrs` : "n/a"}</div></div>
-                  <div><div className="text-xs text-stone-500">Damage after</div><div className="font-medium">{pct(f.impact_after)}</div></div>
+                  <div><div className="text-xs text-stone-500">Loss chance after</div><div className="font-medium">{pct(f.impact_after)}</div></div>
                 </div>
               </li>
             ))}

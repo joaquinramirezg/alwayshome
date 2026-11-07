@@ -11,8 +11,10 @@ from .coverage.adapter import coverage_for_assess, display_gaps
 from .gaps import coverage_gaps, rebuild_estimate
 from .wildfire import wildfire_analysis
 
-STUB = True  # True while house_impact() is a placeholder
-SOURCES = {"wildfire": "real", "house": "placeholder"}
+from . import house as house_model
+
+STUB = house_model.model() is None  # placeholder only if the trained model file is missing
+SOURCES = {"wildfire": "real", "house": "placeholder" if STUB else "real"}
 
 # ---- labelled assumptions (cost ranges in USD, assumed premium discount as fraction)
 # Sources to replace these: contractor quotes, CDI Safer from Wildfires filings.
@@ -66,8 +68,16 @@ def missing_measures(home: dict, done: list[str]) -> list[str]:
     return out
 
 
-def house_impact(missing: list[str]) -> float:
+def _stub_impact(missing: list[str]) -> float:
     return round(min(0.95, 0.15 + sum(_WEIGHTS[m] for m in missing)), 2)
+
+
+def house_impact(home: dict, missing: list[str], fixes: list[str] | None = None) -> float:
+    """Damage share if fire reaches the house, after applying `fixes` (subset of missing)."""
+    fixes = fixes or []
+    if STUB:
+        return _stub_impact([m for m in missing if m not in fixes])
+    return round(house_model.impact_with_fixes(home, fixes), 3)
 
 
 def assess(inputs: dict, area: dict | None = None) -> dict:
@@ -80,12 +90,12 @@ def assess(inputs: dict, area: dict | None = None) -> dict:
 
     wildfire = wildfire_analysis(area)
     missing = missing_measures(home, inputs.get("measures_done", []))
-    impact = house_impact(missing)
+    impact = house_impact(home, missing)
 
     fixes = []
     for mid in missing:
         name, lo, hi, disc, _, _ = MEASURES[mid]
-        after = house_impact([m for m in missing if m != mid])
+        after = house_impact(home, missing, [mid])
         avoided = wildfire["p_fire_annual"] * (impact - after) * rebuild
         benefit = premium * disc + avoided
         cost = (lo + hi) / 2
@@ -94,7 +104,10 @@ def assess(inputs: dict, area: dict | None = None) -> dict:
             "impact_after": after, "est_annual_benefit": round(benefit),
             "est_premium_saving": round(premium * disc), "est_avoided_loss": round(avoided),
             "payback_years": round(cost / benefit, 1) if benefit else None,
-            "why": WHY[mid], "assumptions": ["cost", "discount", "impact (stub)"],
+            "why": WHY[mid],
+            "effect_basis": "stub" if STUB else house_model.effect_basis(mid, home),
+            "assumptions": ["cost", "discount"] + (["impact (stub)"] if STUB else
+                           ["impact (assumed)"] if mid in house_model.ASSUMED else []),
         })
     fixes.sort(key=lambda f: (f["payback_years"] is None, f["payback_years"] or 0))
 
@@ -105,14 +118,16 @@ def assess(inputs: dict, area: dict | None = None) -> dict:
             spent += f["cost_low"]
     for f in fixes:
         f["within_budget"] = f["measure_id"] in plan
-    after_plan = house_impact([m for m in missing if m not in plan])
+    after_plan = house_impact(home, missing, plan)
     coverage = coverage_for_assess(inputs, area)
 
     return {
         "current": {
             "area": area,
             "wildfire": wildfire,
-            "house": {"impact": impact, "rating": _rating(impact), "missing": missing, "stub": True},
+            "house": {"impact": impact, "rating": _rating(impact), "missing": missing, "stub": STUB,
+                      "method": None if STUB else "CAL FIRE damage inspections, 2025 Eaton and Palisades fires "
+                      "(22,071 homes); logistic regression with fire x ZIP effect"},
             "insurance_gap": display_gaps(coverage, ins) if coverage else coverage_gaps(ins, sqft),
             "coverage": coverage,
         },
@@ -126,7 +141,10 @@ def assess(inputs: dict, area: dict | None = None) -> dict:
             "Wildfire exposure is a relative index for your census tract compared with other LA County tracts, "
             "not a probability or an inspection of your home.",
             "Expected-loss figures use FEMA's annualized wildfire frequency for your tract (National Risk Index).",
-            "House damage scores are placeholders until the house model is plugged in.",
+            ("House damage scores are placeholders until the house model is plugged in." if STUB else
+             "House damage is the chance a home like yours was destroyed when the 2025 Eaton and Palisades fires "
+             "reached it (CAL FIRE inspections), not an inspection of your home. Fix effects are associations; "
+             "siding and attached-fence changes showed no measurable effect, so no damage reduction is claimed for them."),
             "Fix costs and discounts are assumptions; no public price list exists.",
             "CDI insurance data ends in 2023, before the January 2025 fires.",
         ],

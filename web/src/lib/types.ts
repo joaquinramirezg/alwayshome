@@ -62,6 +62,7 @@ export type Fix = {
   payback_years: number | null;
   within_budget: boolean;
   why: string;
+  effect_basis?: "data" | "assumed" | "no_measured_effect" | "stub";
 };
 
 export type Gap = { gap: string; severity: "high" | "medium" | "low"; why: string };
@@ -78,7 +79,7 @@ export type Coverage = {
 export type Result = {
   current: {
     wildfire: Wildfire;
-    house: { impact: number; rating: string };
+    house: { impact: number; rating: string; method?: string | null };
     insurance_gap: Gap[];
     coverage?: Coverage | null;
   };

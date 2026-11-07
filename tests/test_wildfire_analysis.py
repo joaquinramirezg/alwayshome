@@ -61,10 +61,10 @@ def test_every_la_tract_gives_a_valid_block():
         assert 0 <= wf["p_fire_annual"] <= 1, tract
 
 
-def test_assess_marks_wildfire_real_and_house_placeholder():
+def test_assess_marks_wildfire_and_house_real():
     s = SCENARIOS["altadena_fair_only"]
     out = assess(scenario_inputs(s), cached_area(s["address"]))
-    assert out["sources"] == {"wildfire": "real", "house": "placeholder"}
+    assert out["sources"] == {"wildfire": "real", "house": "real"}
     assert out["current"]["wildfire"]["score"] == 73.2
     assert validate_output(out) == []
     assert "73 out of 100" in template_report(s["address"], out)
