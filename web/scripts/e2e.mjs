@@ -74,6 +74,13 @@ await check("sample policy (FAIR Plan + DIC) fills the form", async () => {
   const v = await page.locator('input[placeholder="650000"]').inputValue();
   if (v !== "650000") throw new Error("dwelling limit not filled: " + v);
 });
+await check("coverage card collapses to a summary and reopens", async () => {
+  await page.getByRole("button", { name: /Check the values we found/ }).click();
+  await text("Dwelling $650K").waitFor();
+  if (await page.locator('input[placeholder="650000"]').isVisible()) throw new Error("form still open");
+  await page.getByRole("button", { name: /Check the values we found/ }).click();
+  await page.locator('input[placeholder="650000"]').waitFor();
+});
 await check("upload a PDF file", async () => {
   await page.locator('input[type="file"]').setInputFiles(path.join(SAMPLES, "homeowners_two_page.pdf"));
   await text("homeowners_two_page.pdf").waitFor({ timeout: T });

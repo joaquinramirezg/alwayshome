@@ -86,6 +86,7 @@ export default function Wizard() {
   const [extractState, setExtractState] = useState<{ loading: boolean; error: string | null }>({ loading: false, error: null });
 
   const [budget, setBudget] = useState(10000);
+  const [insOpen, setInsOpen] = useState(true); // the coverage form card in step 3 can collapse to a summary
   const [result, setResult] = useState<Result | null>(null);
   const [assessState, setAssessState] = useState<{ loading: boolean; error: string | null }>({ loading: false, error: null });
   const [report, setReport] = useState<{ markdown: string; source: string } | null>(null);
@@ -510,8 +511,30 @@ export default function Wizard() {
             </Card>
 
             <Card>
-              <h2 className="text-lg font-semibold text-stone-900">{extraction ? "Check the values we found" : "Enter your coverage"}</h2>
-              <p className="text-sm text-stone-600">Find these on your declarations page. Leave optional amounts empty if your policy doesn&rsquo;t include them.</p>
+              <button type="button" onClick={() => setInsOpen((o) => !o)} aria-expanded={insOpen}
+                className="flex w-full items-start justify-between gap-4 text-left">
+                <div>
+                  <h2 className="text-lg font-semibold text-stone-900">{extraction ? "Check the values we found" : "Enter your coverage"}</h2>
+                  {insOpen ? (
+                    <p className="text-sm text-stone-600">Find these on your declarations page. Leave optional amounts empty if your policy doesn&rsquo;t include them.</p>
+                  ) : (
+                    <p className="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-sm text-stone-700">
+                      <span>{insType ? INS_TYPES[insType] : "Coverage not chosen"}</span>
+                      <span>Dwelling {money(ins.dwelling_limit)}</span>
+                      <span>{ins.dwelling_settlement === "replacement_cost" ? "Replacement cost" : ins.dwelling_settlement === "actual_cash_value" ? "Actual cash value" : ins.dwelling_settlement === "unknown" ? "Payment basis not sure" : "Payment basis missing"}</span>
+                      <span>Premium {money(ins.premium_total)}/yr</span>
+                      {missing[2].length > 0 && <span className="font-medium text-red-700">Still needed: {missing[2].join(", ")}</span>}
+                    </p>
+                  )}
+                </div>
+                <span className="mt-1 flex shrink-0 items-center gap-1 text-sm font-medium text-brand-600">
+                  {insOpen ? "Collapse" : "Edit"}
+                  <svg viewBox="0 0 20 20" className={`h-4 w-4 transition-transform ${insOpen ? "rotate-180" : ""}`} fill="currentColor" aria-hidden>
+                    <path d="M5.3 7.3a1 1 0 0 1 1.4 0L10 10.6l3.3-3.3a1 1 0 1 1 1.4 1.4l-4 4a1 1 0 0 1-1.4 0l-4-4a1 1 0 0 1 0-1.4z" />
+                  </svg>
+                </span>
+              </button>
+              {insOpen && <>
               <div className="mt-4">
                 <div className="mb-2 text-sm font-medium text-stone-800">Current coverage</div>
                 <Choice options={Object.keys(INS_TYPES) as InsType[]} value={insType} labels={INS_TYPES} onChange={setInsType} />
@@ -540,6 +563,7 @@ export default function Wizard() {
                 <label className="flex items-center gap-2"><input type="checkbox" className="h-4 w-4 accent-brand-600" checked={ins.debris_removal}
                   onChange={(e) => setIns({ ...ins, debris_removal: e.target.checked })} />Debris removal coverage</label>
               </div>
+              </>}
               <StepFooter missing={missing[2]} onBack={() => setStep(1)} onNext={next} nextLabel="See my situation" />
             </Card>
           </div>
