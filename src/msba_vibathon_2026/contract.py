@@ -50,6 +50,23 @@ def validate_inputs(inputs: dict) -> list[str]:
     return errs
 
 
+def _coverage_errors(cov: dict | None) -> list[str]:
+    """`current.coverage` is optional: None means the loss scenario was unavailable."""
+    if cov is None:
+        return []
+    errs = []
+    if not cov.get("scope_note"):
+        errs.append("coverage.scope_note missing")
+    if not isinstance(cov.get("components"), list):
+        errs.append("coverage.components must be a list")
+    for key in ("total_cost", "total_payout", "total_shortfall"):
+        r = cov.get(key) or {}
+        low, high = r.get("low"), r.get("high")
+        if key not in cov or (low is None) != (high is None) or (_num(low) and _num(high) and not 0 <= low <= high):
+            errs.append(f"coverage.{key} must be a low/high range with 0 <= low <= high")
+    return errs
+
+
 def validate_output(out: dict) -> list[str]:
     errs = []
     cur, fut = out.get("current", {}), out.get("future", {})
@@ -88,6 +105,7 @@ def validate_output(out: dict) -> list[str]:
         errs.append("future.plan_within_budget lists a fix not in future.fixes")
     if not _prob(fut.get("house_after_plan", {}).get("impact")):
         errs.append("future.house_after_plan.impact must be 0-1")
+    errs += _coverage_errors(cur.get("coverage"))
     if not isinstance(out.get("caveats"), list):
         errs.append("caveats must be a list")
     return errs

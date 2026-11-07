@@ -369,6 +369,23 @@ def zillow():
          zips_without_5yr=int(latest["zhvi_5yr_change"].isna().sum()))
 
 
+def zillow_rent():
+    path = next((RAW / "zillow_rent").glob("*.csv"))
+    id_cols = ["RegionID", "SizeRank", "RegionName", "RegionType", "StateName", "State", "City", "Metro", "CountyName"]
+    df = pd.read_csv(path, dtype={c: str for c in id_cols})
+    df["zip"] = df["RegionName"].str.strip().str.zfill(5)
+    scope = la_zips()
+    df = df[(df["State"] == "CA") & ((df["CountyName"] == "Los Angeles County") | df["zip"].isin(scope))]
+    long = df.melt(id_vars="zip", value_vars=[c for c in df.columns if re.fullmatch(r"\d{4}-\d{2}-\d{2}", c)],
+                   var_name="latest_date", value_name="rent_latest").dropna(subset=["rent_latest"])
+    long["latest_date"] = pd.to_datetime(long["latest_date"])
+    long["rent_latest"] = long["rent_latest"].astype(float)
+    latest = long.sort_values(["zip", "latest_date"]).groupby("zip").tail(1)
+    latest[["zip", "rent_latest", "latest_date"]].to_parquet(PROCESSED / "zip_rent_latest.parquet", index=False)
+    note("zillow_rent", zips=len(latest), latest_date=str(latest["latest_date"].max().date()),
+         zips_not_at_latest_date=int((latest["latest_date"] < latest["latest_date"].max()).sum()))
+
+
 # ---------------------------------------------------------------- 7. Census
 def census():
     tables = {
@@ -553,7 +570,7 @@ def templates():
 
 STEPS = {"crosswalks": crosswalks, "cdi_policies": cdi_policies, "cdi_fair_plan": cdi_fair_plan,
          "hazard_zones": hazard_zones, "fire_perimeters": fire_perimeters, "wrc_communities": wrc_communities,
-         "nri_tracts": nri_tracts, "zillow": zillow, "census": census, "dins": dins,
+         "nri_tracts": nri_tracts, "zillow": zillow, "zillow_rent": zillow_rent, "census": census, "dins": dins,
          "zip_zcta": zip_zcta, "templates": templates}
 
 

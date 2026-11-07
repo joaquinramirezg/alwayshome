@@ -95,12 +95,16 @@ def assess(inputs: dict) -> dict: ...
     "DECKPORCHONGRADE": "Wood", "DECKPORCHELEVATED": "No Deck/Porch",
     "PATIOCOVERCARPORT": "Combustible", "FENCEATTACHEDTOSTRUCTURE": "Combustible",
     "PROPANETANKDISTANCE": "Not Applicable", "UTILITYMISCSTRUCTUREDISTANCE": "<30'",
-    "year_built": 1958, "living_area_sqft": 1800, "stories": 1
+    "year_built": 1958, "living_area_sqft": 1800, "stories": 1,
+    "contents_value_estimate": 100000, "other_structures_estimate": null
   },
   "measures_done": ["defensible_space"],
   "insurance": {
-    "type": "fair_only", "annual_premium": 6200, "dwelling_limit": 900000, "deductible": 2500,
-    "nonrenewed": true, "nonrenewed_date": "2025-03"
+    "documents": ["fair_plan"], "has_dic": false, "premium_total": 6200, "dwelling_limit": 900000,
+    "dwelling_settlement": "actual_cash_value", "extended_replacement_pct": 0, "liability_limit": 0,
+    "loss_of_use_limit": 0, "code_upgrade": false, "debris_removal": true,
+    "other_structures_limit": null, "contents_limit": 0, "deductible": 2500, "code_upgrade_amount": null,
+    "dic_covers": []
   },
   "budget": 15000
 }
@@ -121,7 +125,8 @@ Unknown answers are sent as `"Unknown"` (home fields) or `null` (numbers).
                       "fires_since_2015": 1, "last_fire_year": 2025, "fema_expected_annual_loss": 2701245 }
     },
     "house": { "impact": 0.71, "rating": "High", "top_drivers": ["EAVES", "VENTSCREEN"] },
-    "insurance_gap": [ { "gap": "FAIR Plan only, no theft or liability cover", "severity": "high" } ]
+    "insurance_gap": [ { "gap": "FAIR Plan only, no supplemental (DIC) policy", "severity": "high", "why": "..." } ],
+    "coverage": { "...": "the CoverageResult dict from docs/coverage_module.md, or null if unavailable" }
   },
   "future": {
     "fixes": [

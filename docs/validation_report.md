@@ -2,7 +2,7 @@
 
 Generated 2026-11-06 by `scripts/03_validate.py`.
 
-**Results:** 42 passed, 1 failed, 8 warnings, 0 skipped.
+**Results:** 44 passed, 1 failed, 8 warnings, 0 skipped.
 
 **Failed checks and warnings:**
 
@@ -118,6 +118,17 @@ Generated 2026-11-06 by `scripts/03_validate.py`.
 - Columns (4): `zip`, `zhvi_latest`, `zhvi_5yr_change`, `latest_date`
 - Nulls in key columns: `zip` 0
 
+### `zip_rent_latest`
+
+- Source page: https://www.zillow.com/research/data/
+- File: `data/raw/zillow_rent/Zip_zori_uc_sfrcondomfr_sm_month.csv`
+  - URL: https://files.zillowstatic.com/research/public_csvs/zori/Zip_zori_uc_sfrcondomfr_sm_month.csv
+  - Downloaded: 2026-11-06
+- Note: Zillow Observed Rent Index by ZIP. https://www.zillow.com/research/data/ refuses automated clients (HTTP 403). The CSV is the file Zillow publishes on its public CDN.
+- Rows: 260
+- Columns (3): `zip`, `rent_latest`, `latest_date`
+- Nulls in key columns: `zip` 0
+
 ### `zcta_census`
 
 - Source page: https://www.census.gov/programs-surveys/acs/data/summary-file.html
@@ -178,6 +189,7 @@ Generated 2026-11-06 by `scripts/03_validate.py`.
 - **PASS** `zip_fair_plan.zip`: all 5-character strings (0 bad).
 - **PASS** `zip_home_values.zip`: all 5-character strings (0 bad).
 - **PASS** `zip_home_values_latest.zip`: all 5-character strings (0 bad).
+- **PASS** `zip_rent_latest.zip`: all 5-character strings (0 bad).
 - **PASS** `zip_tract_crosswalk.zip`: all 5-character strings (0 bad).
 - **PASS** `tract_zip_crosswalk.zip`: all 5-character strings (0 bad).
 - **PASS** `zip_zcta.zip`: all 5-character strings (0 bad).
@@ -191,6 +203,7 @@ Generated 2026-11-06 by `scripts/03_validate.py`.
 - **PASS** `nri_tracts`: no duplicate tract_geoid (0 found).
 - **PASS** `zip_home_values`: no duplicate zip+date (0 found).
 - **PASS** `zip_home_values_latest`: no duplicate zip (0 found).
+- **PASS** `zip_rent_latest`: no duplicate zip (0 found).
 - **PASS** `zcta_census`: no duplicate zcta (0 found).
 - **PASS** `dins_2025_la`: no duplicate GLOBALID (0 found).
 - **PASS** `zip_tract_crosswalk`: no duplicate zip+tract_geoid (0 found).
@@ -243,6 +256,7 @@ LA ZIP universe: 490 ZIPs in any ZIP table, 436 of them with residential address
 | CDI policies | 452 | 38 | 15 |
 | CDI FAIR Plan | 291 | 199 | 146 |
 | Zillow | 287 | 203 | 149 |
+| Zillow rent | 260 | 230 | 176 |
 | Census ZCTA | 307 | 183 | 142 |
 | HUD crosswalk | 477 | 13 | 0 |
 
@@ -261,6 +275,12 @@ LA ZIP universe: 490 ZIPs in any ZIP table, 436 of them with residential address
 <details><summary>Residential LA ZIPs missing from Zillow (149)</summary>
 
 90009, 90030, 90050, 90051, 90053, 90054, 90060, 90070, 90071, 90072, 90075, 90076, 90078, 90079, 90081, 90082, 90083, 90086, 90087, 90089, 90091, 90093, 90095, 90202, 90209, 90213, 90223, 90224, 90231, 90239, 90251, 90264, 90267, 90294, 90295, 90296, 90306, 90307, 90308, 90309, 90310, 90406, 90408, 90409, 90507, 90508, 90510, 90607, 90608, 90609, 90637, 90651, 90652, 90662, 90702, 90707, 90711, 90714, 90733, 90734, 90748, 90749, 90801, 90809, 90832, 90853, 91003, 91009, 91012, 91017, 91021, 91023, 91025, 91031, 91041, 91043, 91046, 91066, 91077, 91102, 91109, 91114, 91115, 91116, 91117, 91118, 91209, 91221, 91222, 91224, 91225, 91226, 91305, 91308, 91309, 91310, 91313, 91322, 91327, 91328, 91330, 91333, 91334, 91337, 91341, 91346, 91353, 91357, 91365, 91372, 91376, 91380, 91385, 91386, 91392, 91393, 91394, 91395, 91396, 91404, 91407, 91408, 91409, 91412, 91413, 91416, 91426, 91503, 91507, 91508, 91510, 91603, 91609, 91610, 91614, 91615, 91617, 91715, 91734, 91747, 91769, 91778, 91788, 91793, 91802, 93539, 93563, 93584, 93590
+
+</details>
+
+<details><summary>Residential LA ZIPs missing from Zillow rent (176)</summary>
+
+90009, 90030, 90040, 90050, 90051, 90053, 90054, 90058, 90060, 90070, 90071, 90072, 90075, 90076, 90078, 90079, 90081, 90082, 90083, 90086, 90087, 90089, 90091, 90093, 90095, 90202, 90209, 90213, 90220, 90221, 90222, 90223, 90224, 90231, 90239, 90240, 90248, 90251, 90264, 90267, 90294, 90295, 90296, 90306, 90307, 90308, 90309, 90310, 90406, 90408, 90409, 90507, 90508, 90510, 90603, 90607, 90608, 90609, 90623, 90637, 90651, 90652, 90662, 90670, 90701, 90702, 90704, 90707, 90711, 90714, 90716, 90733, 90734, 90748, 90749, 90801, 90809, 90832, 90853, 91003, 91008, 91009, 91012, 91017, 91021, 91023, 91025, 91031, 91041, 91043, 91046, 91066, 91077, 91102, 91108, 91109, 91114, 91115, 91116, 91117, 91118, 91209, 91210, 91221, 91222, 91224, 91225, 91226, 91305, 91308, 91309, 91310, 91313, 91322, 91327, 91328, 91330, 91333, 91334, 91337, 91341, 91345, 91346, 91353, 91357, 91365, 91372, 91376, 91380, 91384, 91385, 91386, 91392, 91393, 91394, 91395, 91396, 91404, 91407, 91408, 91409, 91412, 91413, 91416, 91426, 91503, 91507, 91508, 91510, 91603, 91609, 91610, 91614, 91615, 91617, 91715, 91722, 91734, 91746, 91747, 91769, 91778, 91788, 91793, 91802, 93243, 93510, 93532, 93539, 93543, 93544, 93553, 93563, 93584, 93590, 93591
 
 </details>
 
@@ -961,6 +981,7 @@ Geocoder behavior to design around: Los Angeles City Hall, typed as `200 N Sprin
 | zip_home_values.parquet | 0.95 |  |
 | zip_home_values_latest.parquet | 0.01 |  |
 | zip_insurance.parquet | 0.08 |  |
+| zip_rent_latest.parquet | 0.01 |  |
 | zip_tract_crosswalk.parquet | 0.10 |  |
 | zip_zcta.parquet | 0.01 |  |
 

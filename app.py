@@ -21,6 +21,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 
 from msba_vibathon_2026.assess_stub import MEASURES, SOURCES, assess  # noqa: E402
 from msba_vibathon_2026.contract import validate_inputs, validate_output  # noqa: E402
+from msba_vibathon_2026.coverage.adapter import to_policy_input  # noqa: E402
 from msba_vibathon_2026.policy_extract import FIELDS, ExtractionUnavailable, extract, merge_policies  # noqa: E402
 from msba_vibathon_2026.report import ai_report, template_report  # noqa: E402
 
@@ -59,6 +60,9 @@ EXTRA_MEASURES = {
 }
 INS_TYPES = ["FAIR Plan only", "FAIR Plan + DIC policy", "Private homeowners"]
 SETTLEMENTS = ["replacement_cost", "actual_cash_value", "unknown"]
+# Used by the loss scenario. Empty means unknown here, which widens the range instead of assuming $0.
+OPTIONAL_INSURANCE = ("other_structures_limit", "contents_limit", "deductible", "code_upgrade_amount")
+OPTIONAL_HOME = ("contents_value_estimate", "other_structures_estimate")
 # The app starts empty: the homeowner fills in everything (or loads a sample from the sidebar).
 DEFAULTS = {
     "address": "",
@@ -68,6 +72,7 @@ DEFAULTS = {
     "ins_type": None, "dwelling_limit": None, "dwelling_settlement": None,
     "extended_replacement_pct": None, "premium_total": None, "liability_limit": None, "loss_of_use_limit": None,
     "code_upgrade": False, "debris_removal": False, "budget": 10_000,
+    **{k: None for k in OPTIONAL_INSURANCE + OPTIONAL_HOME}, "dic_covers": [],
 }
 TRANSIENT = ("result", "result_inputs", "extractions", "extraction_errors", "report")
 
@@ -117,6 +122,11 @@ def load_scenario(sid: str) -> None:
     for k in ("dwelling_limit", "dwelling_settlement", "extended_replacement_pct", "premium_total",
               "liability_limit", "loss_of_use_limit", "code_upgrade", "debris_removal"):
         st.session_state[k] = ins[k]
+    for k in OPTIONAL_INSURANCE:
+        st.session_state[k] = ins.get(k)
+    for k in OPTIONAL_HOME:
+        st.session_state[k] = s["home"].get(k)
+    st.session_state["dic_covers"] = []
     st.session_state["budget"] = s["budget"]
     for k in TRANSIENT:
         st.session_state.pop(k, None)
@@ -166,6 +176,16 @@ def apply_policy(merged: dict) -> None:
         v = merged.get(k)
         if v is not None:
             st.session_state[k] = bool(v.get("covered")) if isinstance(v, dict) else bool(v)
+    policy = to_policy_input(merged)  # converts add-on and deductible percentages to dollars
+    for k in ("other_structures_limit", "contents_limit"):
+        if merged.get(k) is not None:
+            st.session_state[k] = int(merged[k])
+    deductible = policy.deductible_wildfire if policy.deductible_wildfire is not None else policy.deductible_all_perils
+    if deductible is not None:
+        st.session_state["deductible"] = int(deductible)
+    if policy.code_upgrade_amount is not None:
+        st.session_state["code_upgrade_amount"] = int(policy.code_upgrade_amount)
+    st.session_state["dic_covers"] = merged.get("dic_covers") or []
 
 
 def build_inputs() -> dict:
@@ -174,7 +194,8 @@ def build_inputs() -> dict:
     return {
         "address": ss["address"],
         "home": {**{f: ss[f] for f in HOME_QUESTIONS}, "year_built": ss["year_built"],
-                 "living_area_sqft": ss["living_area_sqft"], "stories": ss["stories"]},
+                 "living_area_sqft": ss["living_area_sqft"], "stories": ss["stories"],
+                 **{k: ss[k] for k in OPTIONAL_HOME}},
         "measures_done": [k for k in EXTRA_MEASURES if ss[f"done_{k}"]],
         "insurance": {
             "documents": {INS_TYPES[0]: ["fair_plan"], INS_TYPES[1]: ["fair_plan", "dic"],
@@ -182,6 +203,7 @@ def build_inputs() -> dict:
             "has_dic": ss["ins_type"] == INS_TYPES[1],
             **{k: ss[k] for k in ("dwelling_limit", "dwelling_settlement", "premium_total", "code_upgrade", "debris_removal")},
             **{k: zero(k) for k in ("extended_replacement_pct", "liability_limit", "loss_of_use_limit")},
+            **{k: ss[k] for k in OPTIONAL_INSURANCE}, "dic_covers": ss["dic_covers"],
         },
         "budget": ss["budget"],
     }
@@ -203,6 +225,12 @@ def load_area(address: str) -> dict:
 
 def fmt_money(x) -> str:
     return "n/a" if x is None else f"${x:,.0f}"
+
+
+def fmt_range(r: dict) -> str:
+    if r["low"] is None:
+        return "n/a"
+    return fmt_money(r["low"]) if r["low"] == r["high"] else f"{fmt_money(r['low'])} to {fmt_money(r['high'])}"
 
 
 # ------------------------------------------------------------------ sidebar
@@ -368,6 +396,18 @@ with tab_manual:
     c1, c2 = st.columns(2)
     c1.checkbox("Building code upgrade coverage", key="code_upgrade")
     c2.checkbox("Debris removal coverage", key="debris_removal")
+    with st.expander("More details for the loss estimate (optional)"):
+        st.caption("Leave empty if you don't know. Unknown amounts widen the estimate; nothing is assumed to be $0.")
+        c1, c2, c3 = st.columns(3)
+        c1.number_input("Other structures limit, Coverage B ($)", 0, 5_000_000, step=10_000, key="other_structures_limit")
+        c2.number_input("Contents limit, Coverage C ($)", 0, 5_000_000, step=10_000, key="contents_limit",
+                        help="Enter 0 if your policy explicitly doesn't cover belongings.")
+        c3.number_input("Deductible ($)", 0, 1_000_000, step=500, key="deductible")
+        c1, c2, c3 = st.columns(3)
+        c1.number_input("Code upgrade amount ($)", 0, 5_000_000, step=10_000, key="code_upgrade_amount")
+        c2.number_input("Value of your belongings ($)", 0, 10_000_000, step=10_000, key="contents_value_estimate")
+        c3.number_input("Value of sheds, fences and other structures ($)", 0, 5_000_000, step=5_000,
+                        key="other_structures_estimate")
 
 # ------------------------------------------------------------------ 4. plan
 st.header("4. Your plan")
@@ -429,6 +469,34 @@ if res:
         for gp in cur["insurance_gap"]:
             icon = {"high": "🔴", "medium": "🟠", "low": "🟡"}[gp["severity"]]
             st.markdown(f"{icon} **{gp['gap']}**: {gp['why']}")
+
+        cov = cur.get("coverage")
+        if cov:
+            st.subheader("If your home is destroyed")
+            at_least = "at least " if any(w.startswith("Totals leave out") for w in cov["warnings"]) else ""
+            with st.container(border=True):  # text, because st.metric cuts off a long range
+                st.markdown("You would pay")
+                st.markdown(f"### {at_least}{fmt_range(cov['total_shortfall'])}")
+                st.markdown(f"Cost to recover: **{at_least}{fmt_range(cov['total_cost'])}**  \n"
+                            f"Policy pays: **{at_least}{fmt_range(cov['total_payout'])}**")
+            st.caption(f"{cov['scope_note']} The low and high figures are separate best and worst cases, "
+                       "so they don't subtract line by line. All are estimates, not a quote or a claim outcome.")
+            st.dataframe(pd.DataFrame([{
+                "Part of the loss": c["name"].replace("_", " ").capitalize(),
+                "Cost": fmt_range(c["cost"]), "Policy pays": fmt_range(c["payout"]),
+                "You would pay": fmt_range(c["shortfall"]),
+            } for c in cov["components"]]), hide_index=True, width="stretch")
+            with st.expander("What could change these numbers"):
+                for w in cov["warnings"]:
+                    st.markdown(f"- {w}")
+                for c in cov["components"]:
+                    for n in c["notes"]:
+                        st.markdown(f"- {c['name'].replace('_', ' ').capitalize()}: {n}")
+            with st.expander("Sources and assumptions for the loss estimate"):
+                for a in cov["assumptions"]:
+                    st.markdown(f"- {a}")
+        else:
+            st.info("The loss estimate isn't available for these inputs. Your fixes and basic coverage gaps are still shown.")
 
         st.subheader("Recommended fixes, best value first")
         if fut["fixes"]:

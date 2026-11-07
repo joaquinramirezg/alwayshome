@@ -1,0 +1,62 @@
+rebuild_cost_per_sqft:
+  low: 300
+  high: 500
+  source_url: https://uphelp.org/wildfire-survivors-are-finding-out-they-are-underinsured-after-losing-their-homes/
+  note: "United Policyholders rule of thumb: coverage of at least $300/sq ft; experts say rebuilding may need upwards of $500/sq ft. Post-disaster price surges can add more."
+
+price_surge_note:
+  text: "Contractor prices after disasters can run 30% to 50% above normal."
+  source_url: https://www.coveragecat.com/insurance-types/which-homeowners-endorsements-are-worth-the-money
+
+code_upgrade_recommended_pct_of_dwelling:
+  low: 0.25
+  high: 0.50
+  source_url: https://www.coveragecat.com/insurance-types/which-homeowners-endorsements-are-worth-the-money
+  note: "Expert recommendation for older California homes, not a measured cost. Policies commonly carry 5% to 20%. United Policyholders: code upgrades can hit six figures (https://uphelp.org/cracking-the-code/)."
+
+other_structures_cost_pct_of_rebuild:
+  value: 0.10
+  assumption: true
+  note: "Default when the user gives no estimate. Mirrors the common 10% of Coverage A convention."
+
+fair_plan_other_structures_pct_of_dwelling:
+  value: 0.10
+  source_url: https://uphelp.org/wp-content/uploads/2022/07/1-5-22-FINAL-CFP-Claims-and-Coverage-Basics-.pdf
+  note: "If Coverage B is not purchased on a FAIR Plan policy, up to 10% of Coverage A may be used."
+
+living_expense_months:
+  low: 24
+  high: 36
+  source_url: https://www.propertyinsurancecoveragelaw.com/blog/wildfire-rebuilding-timelines-and-ale-extensions/
+  note: "CA law: ALE paid at least 24 months after a declared wildfire emergency, mandatory extensions up to 36 months in some cases. Rebuilding often takes longer (Pepperdine study: 5 to 6+ years)."
+
+fair_plan_combined_cap:
+  value: 3000000
+  source_url: https://www.valuepenguin.com/california-fair-plan-home-insurance
+  note: "Combined maximum for dwelling + personal property. VERIFY on cfpnet.com before the demo."
+
+extended_replacement_recommended_min_pct:
+  value: 0.25
+  source_url: https://www.coveragecat.com/insurance-types/which-homeowners-endorsements-are-worth-the-money
+  note: "Typical range 10% to 50%; at least 25% to 50% advised in California."
+
+stale_coverage_years:
+  value: 3
+  assumption: true
+  note: "Coverage not updated in this many years is flagged. United Policyholders cites a family whose policy hadn't been updated since 2017."
+
+contents_no_inventory_rule:
+  pct_of_limit: 0.60
+  cap: 350000
+  effective: "2026-01"
+  source_url: https://www.insurance.ca.gov/0400-news/0100-press-releases/2025/release067-2025.cfm
+  note: "SB 495: insurers pay 60% of contents limit, up to $350,000, without a detailed inventory for at least 100 days after a declared-emergency total loss. Informational only."
+
+debris_removal_note:
+  text: "In the LA County government cleanup program, the county recovers the policy's debris-removal amount from the insurer, and owners were not supposed to pay out of pocket or be liable beyond that coverage. Not included in the dollar shortfall."
+  source_url: https://www.aol.com/news/fire-debris-clearance-decide-between-002402432.html
+
+acv_warning:
+  text: "Your policy pays actual cash value (depreciated value). For a total loss, the payout could be much lower than the amounts shown. Replacement cost may be recoverable only if you rebuild within the legal deadline."
+  source_url: https://www.propertyinsurancecoveragelaw.com/blog/california-wildfires-strike-again-a-summary-of-changes-in-the-law-to-help-policyholders/
+  note: "Sources disagree on the current deadline (24+6 months vs at least 36 months). VERIFY current Ins. Code 2051.5 before the demo."

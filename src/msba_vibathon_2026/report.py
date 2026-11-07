@@ -26,6 +26,23 @@ def _wildfire_line(wf: dict) -> str:
     return f"- Wildfire exposure of your area: **{wf['rating']}** (based on the fire hazard zone only)."
 
 
+def _range(r: dict) -> str:
+    if r["low"] is None:
+        return "n/a"
+    return _money(r["low"]) if r["low"] == r["high"] else f"{_money(r['low'])} to {_money(r['high'])}"
+
+
+def _coverage_lines(cov: dict | None) -> list[str]:
+    if not cov:
+        return []
+    prefix = "at least " if any(w.startswith("Totals leave out") for w in cov["warnings"]) else ""
+    return ["", "## If your home is destroyed",
+            f"- Cost to recover: **{prefix}{_range(cov['total_cost'])}**",
+            f"- Your policy pays: **{prefix}{_range(cov['total_payout'])}**",
+            f"- You would pay: **{prefix}{_range(cov['total_shortfall'])}**",
+            f"- {cov['scope_note']} These are estimates, not a quote or a claim outcome."]
+
+
 def template_report(address: str, result: dict) -> str:
     cur, fut = result["current"], result["future"]
     plan_ids = set(fut["plan_within_budget"])
@@ -41,6 +58,7 @@ def template_report(address: str, result: dict) -> str:
     if cur["insurance_gap"]:
         lines += ["", "## Gaps in your coverage"]
         lines += [f"- **{g['gap']}** ({g['severity']}): {g['why']}" for g in cur["insurance_gap"]]
+    lines += _coverage_lines(cur.get("coverage"))
     lines += ["", "## Do these first (within your budget)"]
     if plan:
         lines += [f"{i}. **{f['name']}**: {_money(f['cost_low'])} to {_money(f['cost_high'])}, "

@@ -11,3 +11,7 @@ openpyxl
 duckdb
 censusgeocode
 pdfplumber
+pydantic
+pyyaml
+pytest
+pyflakes
