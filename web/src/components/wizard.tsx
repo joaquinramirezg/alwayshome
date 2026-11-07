@@ -5,6 +5,7 @@ import ReactMarkdown from "react-markdown";
 import { api } from "@/lib/api";
 import type { Area, Extraction, Health, Inputs, Insurance, Result, Scenario } from "@/lib/types";
 import { Badge, Button, Card, Choice, ErrorNote, Gauge, Note, NumberField, Spinner, Stat, money, pct, roundMoneyText } from "./ui";
+import Link from "next/link";
 import ThemeToggle from "./theme-toggle";
 
 // ---------------------------------------------------------------- questions (CAL FIRE inspection options)
@@ -233,7 +234,7 @@ export default function Wizard() {
   return (
     <div className="min-h-screen bg-sand">
       <header className="sticky top-0 z-20 border-b border-stone-200/80 bg-surface/85 backdrop-blur">
-        <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-3 px-4 py-3">
+        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
           <button type="button" onClick={() => setStep(0)} className="flex items-center gap-3 text-left" aria-label="AlwaysHome, back to start">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/brand/alwayshome-mark.svg" alt="" width={45} height={36} className="h-9 w-auto dark:hidden" />
@@ -245,6 +246,7 @@ export default function Wizard() {
             </div>
           </button>
           <div className="flex flex-wrap items-center gap-3">
+          <Link href="/credits" className="text-sm font-medium text-stone-600 hover:text-brand-600">Credits</Link>
           <ThemeToggle />
           {Object.keys(scenarios).length > 0 && (
             <label className="flex items-center gap-2 text-sm text-stone-600">
@@ -260,7 +262,7 @@ export default function Wizard() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-5xl px-4 py-8">
+      <main className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         {apiDown && <div className="mb-6"><ErrorNote>The AlwaysHome API is not reachable. Start it with <code>uv run uvicorn api.main:app --port 8000</code>.</ErrorNote></div>}
 
         {step === 0 && !area && (
@@ -358,7 +360,7 @@ export default function Wizard() {
           <Card>
             <h1 className="text-2xl font-bold text-stone-900">Tell us about your home</h1>
             <p className="mt-1 text-stone-600">These are the features fire inspectors check. Not sure? Choose &ldquo;I don&rsquo;t know&rdquo;.</p>
-            <div className="mt-6 grid gap-6 md:grid-cols-2">
+            <div className="mt-6 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
               {HOME_QUESTIONS.map((q) => (
                 <div key={q.field}>
                   <div className="font-medium text-stone-900">{q.label}</div>
@@ -476,13 +478,13 @@ export default function Wizard() {
         )}
       </main>
       <footer className="mt-8 border-t border-stone-200 bg-surface">
-        <div className="mx-auto flex max-w-5xl flex-col gap-4 px-4 py-8 text-sm text-stone-500 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-8 sm:px-6 lg:px-8 text-sm text-stone-500 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-3">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/brand/alwayshome-monogram.svg" alt="" width={14} height={28} className="h-7 w-auto dark:hidden" />
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/brand/alwayshome-monogram-on-dark.svg" alt="" width={14} height={28} className="hidden h-7 w-auto dark:block" />
-            <span><span className="font-display font-semibold text-ink">AlwaysHome</span> · UCLA Anderson MSBA Vibathon 2026</span>
+            <span><span className="font-display font-semibold text-ink">AlwaysHome</span> · UCLA Anderson MSBA Vibathon 2026 · <Link href="/credits" className="underline hover:text-brand-600">Credits</Link></span>
           </div>
           <p className="max-w-md text-xs">
             Data: CAL FIRE hazard zones, fire perimeters and 2025 damage inspections, FEMA National Risk Index, California Department of Insurance.
@@ -656,7 +658,7 @@ function PlanView({
       <Card>
         <h2 className="text-lg font-semibold text-stone-900">Gaps in your coverage</h2>
         {cur.insurance_gap.length === 0 ? <p className="mt-2 text-sm text-emerald-700">No major gaps found.</p> : (
-          <div className="mt-3 grid gap-3 md:grid-cols-2">
+          <div className="mt-3 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
             {cur.insurance_gap.map((g) => (
               <div key={g.gap} className="rounded-xl border border-stone-200 p-4">
                 <div className="flex items-start justify-between gap-2"><span className="font-medium text-stone-900">{roundMoneyText(g.gap)}</span><Badge tone={sevTone[g.severity]}>{g.severity}</Badge></div>
