@@ -1,3 +1,6 @@
+# Used by Streamlit Community Cloud (phase 1 hosting). Local development uses uv and pyproject.toml.
+streamlit
+anthropic
 pandas
 geopandas
 pyarrow

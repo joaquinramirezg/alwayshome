@@ -77,6 +77,34 @@ DEFAULTS = {
 TRANSIENT = ("result", "result_inputs", "extractions", "extraction_errors", "report")
 
 st.set_page_config(page_title="AlwaysON", page_icon="🔥", layout="wide")
+
+# ------------------------------------------------------------------ hosting: secrets, password, AI budget
+# On Streamlit Community Cloud, settings live in the app's Secrets; copy them into the environment.
+try:
+    for _k in ("ANTHROPIC_API_KEY", "APP_PASSWORD", "AI_CALLS_PER_SESSION"):
+        if _k not in os.environ and _k in st.secrets:
+            os.environ[_k] = str(st.secrets[_k])
+except Exception:  # no secrets file locally: fine
+    pass
+
+if os.environ.get("APP_PASSWORD") and not st.session_state.get("authed"):
+    st.title("AlwaysON")
+    if st.text_input("Password", type="password", key="password_input") == os.environ["APP_PASSWORD"]:
+        st.session_state["authed"] = True
+        st.rerun()
+    st.stop()
+
+AI_LIMIT = int(os.environ.get("AI_CALLS_PER_SESSION", "10"))
+
+
+def ai_budget_left() -> int:
+    return AI_LIMIT - st.session_state.get("ai_calls", 0)
+
+
+def count_ai_call() -> None:
+    st.session_state["ai_calls"] = st.session_state.get("ai_calls", 0) + 1
+
+
 for k, v in DEFAULTS.items():
     st.session_state.setdefault(k, v)
 
@@ -311,8 +339,13 @@ with tab_pdf:
         results, errors = [], []
         for name, data in files:
             try:
+                if ai_budget_left() <= 0:
+                    raise ExtractionUnavailable(f"AI limit for this session reached ({AI_LIMIT} calls).")
                 with st.spinner(f"Reading {name}..."):
-                    results.append((name, extract(data)))
+                    res_one = extract(data)
+                if res_one["source"] != "cache":
+                    count_ai_call()
+                results.append((name, res_one))
             except ExtractionUnavailable as e:
                 errors.append(f"{name}: {e}")
         st.session_state["extraction_errors"] = errors
@@ -491,9 +524,13 @@ if res:
         c1, c2 = st.columns(2)
         if c1.button("Write report"):
             st.session_state["report"] = (template_report(inputs["address"], res), "template")
-        if c2.button("Rewrite with AI", disabled=not has_key, help=None if has_key else "Needs ANTHROPIC_API_KEY"):
+        ai_ok = has_key and ai_budget_left() > 0
+        if c2.button("Rewrite with AI", disabled=not ai_ok,
+                     help=None if ai_ok else ("AI limit for this session reached" if has_key else "Needs ANTHROPIC_API_KEY")):
             with st.spinner("Rewriting..."):
                 st.session_state["report"] = ai_report(inputs["address"], res)
+                if st.session_state["report"][1] == "ai":
+                    count_ai_call()
         if "report" in st.session_state:
             text, source = st.session_state["report"]
             st.caption("Written by Claude from the plan's numbers" if source == "ai" else "Template report")

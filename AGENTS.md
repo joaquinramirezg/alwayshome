@@ -16,6 +16,7 @@ Read first:
 - `docs/data_dictionary.md`: every processed table, its columns, join keys and limitations
 - `docs/validation_report.md`: data checks and known data problems
 - `docs/TESTING.md`: setup, running the app, the test scripts
+- `docs/DEPLOYMENT.md`: hosting plan (Streamlit Cloud now; Next.js on Vercel + API container later)
 - `docs/coverage_handoff_for_agents.md`: read this before connecting the ROI and plan-comparison model to the coverage module
 
 ## Rules
@@ -47,7 +48,9 @@ src/msba_vibathon_2026/  app logic:
   report.py              plain-language plan (template, optional AI rewrite)
   scenarios.py           sample homeowners -> assess() inputs
   assess_stub.py         placeholder assess() until the model replaces it (contract in docs/inputs_and_contract.md)
-app.py                   Streamlit app
+app.py                   Streamlit app (phase 1 hosting: Streamlit Community Cloud)
+api/main.py              FastAPI backend for the phase 2 React frontend (Dockerfile at repo root)
+web/                     phase 2 frontend (Next.js, not started)
 data/demo/               cached lookups and extractions so the demo runs offline
 data/samples/policies/   synthetic declarations pages + answer_key.json
 data/samples/scenarios.json  sample homeowners with expected results

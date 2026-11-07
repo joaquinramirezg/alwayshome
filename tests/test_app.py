@@ -177,3 +177,23 @@ def test_plan_shows_real_wildfire_score(no_key):
     assert m["Wildfire exposure of your area"] == "73 / 100"
     assert m["Tract in Very High zone"] == "52%"
     assert any("house damage score is a placeholder" in w.value for w in at.warning)
+
+
+def test_password_gate(no_key, monkeypatch):
+    monkeypatch.setenv("APP_PASSWORD", "fire123")
+    at = AppTest.from_file(APP, default_timeout=180).run()
+    assert not any(h.value == "1. Your home's location" for h in at.header), "form must be hidden"
+    at.text_input[0].input("wrong").run()
+    assert not any(h.value == "1. Your home's location" for h in at.header)
+    at.text_input[0].input("fire123").run()
+    assert any(h.value == "1. Your home's location" for h in at.header)
+
+
+def test_ai_budget_per_session(fake_claude, monkeypatch):
+    monkeypatch.setenv("AI_CALLS_PER_SESSION", "1")
+    at = start()
+    select(at, "Or use a sample policy", "FAIR Plan only (Altadena)")
+    click(at, "Read policy")
+    assert not at.error and at.session_state["ai_calls"] == 1
+    click(at, "Read policy")
+    assert at.error and "AI limit" in at.error[0].value
