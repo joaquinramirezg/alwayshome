@@ -230,16 +230,17 @@ export default function Wizard() {
   // ---------------------------------------------------------------- render
   const wf = area?.wildfire;
   return (
-    <div className="min-h-screen bg-stone-50">
-      <header className="border-b border-stone-200 bg-white">
-        <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-3 px-4 py-4">
-          <div className="flex items-center gap-2">
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-orange-600 text-lg text-white">🔥</span>
+    <div className="min-h-screen bg-sand">
+      <header className="sticky top-0 z-20 border-b border-stone-200/80 bg-white/85 backdrop-blur">
+        <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-3 px-4 py-3">
+          <button type="button" onClick={() => setStep(0)} className="flex items-center gap-3 text-left" aria-label="AlwaysHome, back to start">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/brand/alwayshome-mark.svg" alt="" width={45} height={36} className="h-9 w-auto" />
             <div>
-              <div className="text-lg font-bold text-stone-900">AlwaysON</div>
-              <div className="text-xs text-stone-500">From the FAIR Plan back to private insurance</div>
+              <div className="font-display text-xl font-semibold leading-none text-ink">Always<span className="text-brand-600">Home</span></div>
+              <div className="mt-1 text-xs text-stone-500">From the FAIR Plan back to private insurance</div>
             </div>
-          </div>
+          </button>
           {Object.keys(scenarios).length > 0 && (
             <label className="flex items-center gap-2 text-sm text-stone-600">
               <Badge>Demo</Badge>
@@ -254,14 +255,44 @@ export default function Wizard() {
       </header>
 
       <main className="mx-auto max-w-5xl px-4 py-8">
-        {apiDown && <div className="mb-6"><ErrorNote>The AlwaysON API is not reachable. Start it with <code>uv run uvicorn api.main:app --port 8000</code>.</ErrorNote></div>}
+        {apiDown && <div className="mb-6"><ErrorNote>The AlwaysHome API is not reachable. Start it with <code>uv run uvicorn api.main:app --port 8000</code>.</ErrorNote></div>}
+
+        {step === 0 && !area && (
+          <section className="relative mb-10 overflow-hidden rounded-3xl bg-ink px-6 py-10 text-white sm:px-10 sm:py-14">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/brand/alwayshome-mark-on-dark.svg" alt="" aria-hidden className="pointer-events-none absolute -right-24 -top-6 w-64 opacity-[0.12] sm:w-80" />
+            <div className="relative max-w-2xl">
+              <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs text-white/80">
+                <span className="h-1.5 w-1.5 rounded-full bg-brand-500" /> For California homeowners on the FAIR Plan
+              </div>
+              <h1 className="font-display text-4xl font-semibold leading-tight sm:text-5xl">
+                Get your home back to <span className="text-brand-400">private insurance.</span>
+              </h1>
+              <p className="mt-4 text-lg text-white/75">
+                See your real wildfire exposure, what your policy would actually pay, and the fire-safety fixes that give you the most for your money.
+              </p>
+            </div>
+            <dl className="relative mt-8 grid max-w-3xl grid-cols-1 gap-4 sm:grid-cols-3">
+              {[
+                ["+29.1%", "FAIR Plan rate increase on October 15"],
+                ["41%", "of homes in the riskiest ZIP codes are on the FAIR Plan"],
+                ["+84%", "average California premiums since 2020"],
+              ].map(([v, l]) => (
+                <div key={v} className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                  <dt className="font-display text-3xl font-semibold text-brand-400">{v}</dt>
+                  <dd className="mt-1 text-sm text-white/70">{l}</dd>
+                </div>
+              ))}
+            </dl>
+          </section>
+        )}
 
         <ol className="mb-8 grid grid-cols-2 gap-2 sm:grid-cols-5">
           {STEPS.map((s, i) => (
             <li key={s}>
               <button type="button" onClick={() => setStep(i)}
                 className={`w-full rounded-xl px-3 py-2 text-left text-sm ${
-                  i === step ? "bg-orange-600 text-white" : i < step ? "bg-orange-100 text-orange-900" : "bg-white text-stone-500 border border-stone-200"
+                  i === step ? "bg-brand-600 text-white" : i < step ? "bg-brand-100 text-brand-900" : "bg-white text-stone-500 border border-stone-200"
                 }`}>
                 <span className="block text-xs opacity-80">Step {i + 1}</span>
                 <span className="font-semibold">{s}</span>
@@ -277,7 +308,7 @@ export default function Wizard() {
             <p className="mt-1 text-stone-600">We look up your wildfire exposure, fire history and the local insurance market. Los Angeles County only for now.</p>
             <form className="mt-5 flex flex-col gap-3 sm:flex-row" onSubmit={(e) => { e.preventDefault(); lookUp(address); }}>
               <input value={address} onChange={(e) => setAddress(e.target.value)} placeholder="Street address, city, ZIP"
-                className="flex-1 rounded-xl border border-stone-300 px-4 py-3 text-stone-900 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-100" />
+                className="flex-1 rounded-xl border border-stone-300 px-4 py-3 text-stone-900 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100" />
               <Button type="submit" disabled={!address.trim() || areaState.loading}>Look up</Button>
             </form>
             <div className="mt-2 flex flex-wrap gap-2 text-xs text-stone-500">
@@ -292,8 +323,8 @@ export default function Wizard() {
               {areaState.error && <ErrorNote>We could not find that address ({areaState.error}). Check the spelling, or try a nearby address.</ErrorNote>}
               {area && (
                 <div className="grid gap-6 md:grid-cols-[220px_1fr]">
-                  <div className="flex flex-col items-center rounded-xl bg-orange-50 p-4 text-center">
-                    <div className="text-xs font-medium uppercase tracking-wide text-orange-800">Wildfire exposure</div>
+                  <div className="flex flex-col items-center rounded-xl bg-brand-50 p-4 text-center">
+                    <div className="text-xs font-medium uppercase tracking-wide text-brand-800">Wildfire exposure</div>
                     <Gauge value={wf?.score ?? null} label="Wildfire exposure score" />
                     <div className="text-lg font-semibold text-stone-900">{wf?.rating}</div>
                     <div className="mt-1 text-xs text-stone-600">Your neighborhood compared with the rest of LA County</div>
@@ -342,7 +373,7 @@ export default function Wizard() {
               <div className="mt-2 grid gap-2 sm:grid-cols-2">
                 {Object.entries(EXTRA_MEASURES).map(([k, label]) => (
                   <label key={k} className="flex items-center gap-3 rounded-xl border border-stone-200 p-3 text-sm text-stone-800">
-                    <input type="checkbox" className="h-4 w-4 accent-orange-600" checked={done.includes(k)}
+                    <input type="checkbox" className="h-4 w-4 accent-brand-600" checked={done.includes(k)}
                       onChange={(e) => setDone((d) => (e.target.checked ? [...d, k] : d.filter((x) => x !== k)))} />
                     {label}
                   </label>
@@ -360,7 +391,7 @@ export default function Wizard() {
               <h1 className="text-2xl font-bold text-stone-900">Your insurance</h1>
               <p className="mt-1 text-stone-600">Upload your declarations page and our AI fills in the form, showing the exact line it read for every value. Or type the numbers yourself.</p>
               <div className="mt-5 grid gap-4 md:grid-cols-2">
-                <label className={`flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed p-6 text-center ${health?.ai_enabled ? "border-orange-300 bg-orange-50/50 hover:bg-orange-50" : "border-stone-200 bg-stone-50 opacity-60"}`}>
+                <label className={`flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed p-6 text-center ${health?.ai_enabled ? "border-brand-300 bg-brand-50/50 hover:bg-brand-50" : "border-stone-200 bg-stone-50 opacity-60"}`}>
                   <span className="text-3xl">📄</span>
                   <span className="mt-2 font-medium text-stone-900">Upload policy PDFs</span>
                   <span className="text-xs text-stone-500">FAIR Plan, plus your DIC policy if you have one. Max 2 files. Not stored.</span>
@@ -411,9 +442,9 @@ export default function Wizard() {
                   onChange={(v) => setIns({ ...ins, dwelling_settlement: v })} />
               </div>
               <div className="mt-5 flex flex-wrap gap-6 text-sm text-stone-800">
-                <label className="flex items-center gap-2"><input type="checkbox" className="h-4 w-4 accent-orange-600" checked={ins.code_upgrade}
+                <label className="flex items-center gap-2"><input type="checkbox" className="h-4 w-4 accent-brand-600" checked={ins.code_upgrade}
                   onChange={(e) => setIns({ ...ins, code_upgrade: e.target.checked })} />Building code upgrade coverage</label>
-                <label className="flex items-center gap-2"><input type="checkbox" className="h-4 w-4 accent-orange-600" checked={ins.debris_removal}
+                <label className="flex items-center gap-2"><input type="checkbox" className="h-4 w-4 accent-brand-600" checked={ins.debris_removal}
                   onChange={(e) => setIns({ ...ins, debris_removal: e.target.checked })} />Debris removal coverage</label>
               </div>
               <StepFooter missing={missing[2]} onBack={() => setStep(1)} onNext={next} nextLabel="See my situation" />
@@ -438,8 +469,18 @@ export default function Wizard() {
           />
         )}
       </main>
-      <footer className="mx-auto max-w-5xl px-4 pb-10 text-xs text-stone-500">
-        Prototype built for the UCLA Anderson MSBA Vibathon 2026. Not insurance advice. Fix costs and discounts are estimates.
+      <footer className="mt-8 border-t border-stone-200 bg-white">
+        <div className="mx-auto flex max-w-5xl flex-col gap-4 px-4 py-8 text-sm text-stone-500 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center gap-3">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/brand/alwayshome-monogram.svg" alt="" width={14} height={28} className="h-7 w-auto" />
+            <span><span className="font-display font-semibold text-ink">AlwaysHome</span> · UCLA Anderson MSBA Vibathon 2026</span>
+          </div>
+          <p className="max-w-md text-xs">
+            Data: CAL FIRE hazard zones, fire perimeters and 2025 damage inspections, FEMA National Risk Index, California Department of Insurance.
+            Not insurance advice. Fix costs and discounts are estimates.
+          </p>
+        </div>
       </footer>
     </div>
   );
@@ -489,7 +530,7 @@ function ExtractionReview({ extraction }: { extraction: Extraction }) {
               <tbody>
                 {d.fields.filter((f) => f.value !== null || f.must_have).map((f) => (
                   <tr key={f.field} className="border-t border-stone-100">
-                    <td className="px-3 py-2 text-stone-700">{f.label}{f.must_have && <span className="text-orange-600"> *</span>}</td>
+                    <td className="px-3 py-2 text-stone-700">{f.label}{f.must_have && <span className="text-brand-600"> *</span>}</td>
                     <td className="px-3 py-2 font-medium text-stone-900">{fmtValue(f.value)}</td>
                     <td className="px-3 py-2 text-stone-600">{f.source_text ? <><q className="italic">{f.source_text}</q> <span className="text-xs text-stone-400">p.{f.page}</span></> : <span className="text-stone-400">not on the page</span>}</td>
                     <td className="px-3 py-2">
@@ -576,7 +617,7 @@ function PlanView({
   function download() {
     if (!report) return;
     const url = URL.createObjectURL(new Blob([report.markdown], { type: "text/markdown" }));
-    const a = Object.assign(document.createElement("a"), { href: url, download: "alwayson_plan.md" });
+    const a = Object.assign(document.createElement("a"), { href: url, download: "alwayshome_plan.md" });
     a.click();
     URL.revokeObjectURL(url);
   }
@@ -591,8 +632,8 @@ function PlanView({
         <h1 className="text-2xl font-bold text-stone-900">Your situation today</h1>
         <p className="mt-1 text-stone-600">How exposed your area is, how likely your home is to survive a fire, and what your insurance would really pay.</p>
         <div className="mt-5 grid gap-4 md:grid-cols-2">
-          <div className="flex flex-col items-center rounded-xl bg-orange-50 p-4 text-center">
-            <div className="text-xs font-medium uppercase tracking-wide text-orange-800">Wildfire exposure</div>
+          <div className="flex flex-col items-center rounded-xl bg-brand-50 p-4 text-center">
+            <div className="text-xs font-medium uppercase tracking-wide text-brand-800">Wildfire exposure</div>
             <Gauge value={cur.wildfire.score} label="Wildfire exposure" />
             <div className="font-semibold text-stone-900">{cur.wildfire.rating}</div>
           </div>
@@ -643,14 +684,14 @@ function PlanView({
           <label className="w-full max-w-xs text-sm text-stone-700">
             Budget: <span className="font-semibold text-stone-900">{money(budget)}</span>
             <input type="range" min={0} max={60000} step={1000} value={budget} onChange={(e) => setBudget(Number(e.target.value))}
-              className="mt-1 w-full accent-orange-600" />
+              className="mt-1 w-full accent-brand-600" />
           </label>
         </div>
         {assessState.loading && <div className="mt-2"><Spinner label="Updating…" /></div>}
         {fut.fixes.length === 0 ? <p className="mt-4 text-emerald-700">Your home already meets every measure we check.</p> : (
           <ol className="mt-4 space-y-3">
             {fut.fixes.map((f, i) => (
-              <li key={f.measure_id} className={`rounded-xl border p-4 ${f.within_budget ? "border-orange-300 bg-orange-50/40" : "border-stone-200"}`}>
+              <li key={f.measure_id} className={`rounded-xl border p-4 ${f.within_budget ? "border-brand-300 bg-brand-50/40" : "border-stone-200"}`}>
                 <div className="flex flex-wrap items-start justify-between gap-2">
                   <div className="flex items-start gap-3">
                     <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-stone-900 text-sm font-semibold text-white">{i + 1}</span>

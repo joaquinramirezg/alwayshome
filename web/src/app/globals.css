@@ -1,26 +1,37 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* AlwaysHome brand: ember orange #D2602A, ink #111111, warm sand background */
+@theme {
+  --color-brand-50: #fcf3ee;
+  --color-brand-100: #f8e3d6;
+  --color-brand-200: #f0c5ab;
+  --color-brand-300: #e6a07a;
+  --color-brand-400: #dc7d4e;
+  --color-brand-500: #d66b37;
+  --color-brand-600: #d2602a;
+  --color-brand-700: #ad4c1f;
+  --color-brand-800: #873c1a;
+  --color-brand-900: #5e2c16;
+  --color-ink: #111111;
+  --color-sand: #faf7f2;
+  --font-display: var(--font-display), Georgia, serif;
+  --font-sans: var(--font-sans-brand), ui-sans-serif, system-ui, sans-serif;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  background: var(--color-sand);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+h1, h2, .font-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.01em;
 }
 
 /* report markdown */
-.report h1 { font-size: 1.35rem; font-weight: 700; margin: 0.25rem 0 0.75rem; }
-.report h2 { font-size: 1.05rem; font-weight: 600; margin: 1.25rem 0 0.5rem; }
+.report h1 { font-family: var(--font-display); font-size: 1.5rem; font-weight: 600; margin: 0.25rem 0 0.75rem; }
+.report h2 { font-family: var(--font-display); font-size: 1.15rem; font-weight: 600; margin: 1.25rem 0 0.5rem; }
 .report p { margin: 0.5rem 0; }
 .report ul { list-style: disc; padding-left: 1.25rem; margin: 0.5rem 0; }
 .report ol { list-style: decimal; padding-left: 1.25rem; margin: 0.5rem 0; }

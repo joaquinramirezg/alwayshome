@@ -1,28 +1,31 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Fraunces, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+const display = Fraunces({ variable: "--font-display", subsets: ["latin"], weight: ["500", "600", "700"] });
+const sans = Plus_Jakarta_Sans({ variable: "--font-sans-brand", subsets: ["latin"], weight: ["400", "500", "600", "700"] });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const title = "AlwaysHome · From the FAIR Plan back to private insurance";
+const description =
+  "Enter your address, your home and your policy. See your wildfire exposure, what your insurance would really pay, and the fire-safety fixes that move you closest to affordable private coverage.";
 
 export const metadata: Metadata = {
-  title: "AlwaysON: from the FAIR Plan back to private insurance",
-  description: "Find the fire-safety fixes that move your California home closest to affordable private insurance.",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://msba-vibathon-2026.vercel.app"),
+  title: { default: title, template: "%s · AlwaysHome" },
+  description,
+  applicationName: "AlwaysHome",
+  keywords: ["FAIR Plan", "California wildfire insurance", "home hardening", "Safer from Wildfires", "insurance gap"],
+  openGraph: { title, description, siteName: "AlwaysHome", type: "website", locale: "en_US" },
+  twitter: { card: "summary_large_image", title, description },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#111111",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
+    <html lang="en" className={`${display.variable} ${sans.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );

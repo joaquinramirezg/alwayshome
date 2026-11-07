@@ -1,4 +1,4 @@
-# AlwaysON web (Next.js)
+# AlwaysHome web (Next.js)
 
 The homeowner-facing app. It calls the Python API (`../api/main.py`) through `/api/*`, which Next.js forwards to `API_URL` (see `next.config.ts`).
 

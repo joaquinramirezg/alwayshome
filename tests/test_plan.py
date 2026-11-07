@@ -99,7 +99,7 @@ def test_report_renders_for_every_scenario(sid, no_key):
     s = SCENARIOS[sid]
     out = assess(scenario_inputs(s), cached_area(s["address"]))
     text = template_report(s["address"], out)
-    assert text.startswith("# Your AlwaysON plan") and "Please note" in text
+    assert text.startswith("# Your AlwaysHome plan") and "Please note" in text
     for f in out["future"]["fixes"]:
         assert f["name"] in text
     md, source = ai_report(s["address"], out)

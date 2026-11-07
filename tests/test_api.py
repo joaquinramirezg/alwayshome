@@ -92,7 +92,7 @@ def test_ai_quota(fake_claude, pdf_bytes, monkeypatch):
 def test_report_template(no_key):
     out = client.post("/api/assess", json={"inputs": scenario_inputs(SCENARIOS["altadena_fair_only"])}).json()
     r = client.post("/api/report", json={"address": "x", "result": out, "ai": True}).json()
-    assert r["source"] == "template" and r["markdown"].startswith("# Your AlwaysON plan")
+    assert r["source"] == "template" and r["markdown"].startswith("# Your AlwaysHome plan")
 
 
 def test_several_samples_merged(no_key, monkeypatch):

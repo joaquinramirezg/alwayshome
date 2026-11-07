@@ -106,7 +106,7 @@ def test_fill_sample_and_plan(sid, no_key):
     for g in SCENARIOS[sid]["expect"]["gaps_include"]:
         assert g.lower() in md.lower(), f"{sid}: gap {g!r} not shown"
     click(at, "Write report")
-    assert any("Your AlwaysON plan" in m.value for m in at.markdown)
+    assert any("Your AlwaysHome plan" in m.value for m in at.markdown)
 
 
 def test_changed_inputs_warn_stale_plan(no_key):

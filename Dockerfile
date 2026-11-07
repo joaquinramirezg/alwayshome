@@ -1,4 +1,4 @@
-# AlwaysON API (phase 2). Build: docker build -t alwayson-api .   Run: docker run -p 8000:8000 alwayson-api
+# AlwaysHome API (phase 2). Build: docker build -t alwayson-api .   Run: docker run -p 8000:8000 alwayson-api
 FROM python:3.14-slim
 
 COPY --from=ghcr.io/astral-sh/uv:0.13.7 /uv /bin/uv

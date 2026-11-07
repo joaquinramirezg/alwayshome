@@ -1,4 +1,4 @@
-# Render Blueprint for the AlwaysON API (phase 2). In Render: New > Blueprint > pick this repo.
+# Render Blueprint for the AlwaysHome API (phase 2). In Render: New > Blueprint > pick this repo.
 services:
   - type: web
     name: alwayson-api

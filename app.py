@@ -1,4 +1,4 @@
-"""AlwaysON - Streamlit prototype.
+"""AlwaysHome - Streamlit prototype.
 
 Run: uv run streamlit run app.py
 Optional: export ANTHROPIC_API_KEY=... to read new policy PDFs and rewrite the report with AI.
@@ -76,7 +76,11 @@ DEFAULTS = {
 }
 TRANSIENT = ("result", "result_inputs", "extractions", "extraction_errors", "report")
 
-st.set_page_config(page_title="AlwaysON", page_icon="🔥", layout="wide")
+st.set_page_config(page_title="AlwaysHome", page_icon=str(ROOT / "web" / "public" / "brand" / "favicon-32.png"), layout="wide")
+try:
+    st.logo(str(ROOT / "web" / "public" / "brand" / "alwayshome-mark.png"), size="large")
+except Exception:  # older Streamlit without st.logo
+    pass
 
 # ------------------------------------------------------------------ hosting: secrets, password, AI budget
 # On Streamlit Community Cloud, settings live in the app's Secrets; copy them into the environment.
@@ -88,7 +92,7 @@ except Exception:  # no secrets file locally: fine
     pass
 
 if os.environ.get("APP_PASSWORD") and not st.session_state.get("authed"):
-    st.title("AlwaysON")
+    st.title("AlwaysHome")
     if st.text_input("Password", type="password", key="password_input") == os.environ["APP_PASSWORD"]:
         st.session_state["authed"] = True
         st.rerun()
@@ -253,7 +257,7 @@ with st.sidebar:
     dev = st.toggle("Developer panel", value=False)
 
 # ------------------------------------------------------------------ header
-st.title("AlwaysON")
+st.title("AlwaysHome")
 st.caption("Find the fire-safety fixes that move your home closest to affordable private insurance.")
 
 # ------------------------------------------------------------------ 1. address
@@ -535,7 +539,7 @@ if res:
             text, source = st.session_state["report"]
             st.caption("Written by Claude from the plan's numbers" if source == "ai" else "Template report")
             st.markdown(text)
-            st.download_button("Download report (.md)", text, file_name="alwayson_plan.md")
+            st.download_button("Download report (.md)", text, file_name="alwayshome_plan.md")
 
 # ------------------------------------------------------------------ developer panel
 if dev:

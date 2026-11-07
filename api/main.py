@@ -1,4 +1,4 @@
-"""AlwaysON HTTP API for the hosted frontend (phase 2, see docs/DEPLOYMENT.md).
+"""AlwaysHome HTTP API for the hosted frontend (phase 2, see docs/DEPLOYMENT.md).
 
 Same logic as the Streamlit app, exposed as JSON:
   GET  /api/health                         status, AI availability, which parts are real or placeholder
@@ -42,7 +42,7 @@ AREA_CACHE = ROOT / "data" / "demo" / "area_cache.json"
 MAX_PDF_BYTES = 10 * 1024 * 1024
 MAX_FILES = 2
 
-app = FastAPI(title="AlwaysON API", version="0.1.0",
+app = FastAPI(title="AlwaysHome API", version="0.1.0",
               description="Fire-safety fixes and coverage gaps for California homeowners on the FAIR Plan.")
 app.add_middleware(
     CORSMiddleware,

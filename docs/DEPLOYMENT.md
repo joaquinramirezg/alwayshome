@@ -38,7 +38,7 @@ If the build fails on the Python version or on installing the project from `pypr
 Browser ──> Next.js app on Vercel (React, TypeScript)
                │  fetch JSON
                ▼
-            AlwaysON API: FastAPI in a Docker container (Google Cloud Run, Render or Railway)
+            AlwaysHome API: FastAPI in a Docker container (Google Cloud Run, Render or Railway)
                │  same Python modules as the Streamlit app: wildfire, gaps, assess, policy_extract, report
                ├─> data/processed/*.parquet (shipped inside the image)
                ├─> Census geocoder (address -> tract)

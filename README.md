@@ -1,4 +1,4 @@
-# AlwaysON
+# AlwaysHome
 
 UCLA Anderson MSBA Vibathon 2026, theme 04 "Uninsurable". Helps California homeowners on the FAIR Plan find the fire-safety fixes that move them closest to affordable private insurance.
 

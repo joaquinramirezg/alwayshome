@@ -5,4 +5,7 @@ maxUploadSize = 10  # MB, matches the API limit for policy PDFs
 gatherUsageStats = false
 
 [theme]
-primaryColor = "#d9480f"
+primaryColor = "#D2602A"
+textColor = "#111111"
+backgroundColor = "#FAF7F2"
+secondaryBackgroundColor = "#F3EDE4"

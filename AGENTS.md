@@ -4,7 +4,7 @@ Tool-agnostic instructions for any coding assistant (Claude, Copilot, Cursor, Ch
 
 ## What this project is
 
-**AlwaysON**, a one-day hackathon prototype (UCLA Anderson MSBA Vibathon, Fri Nov 6 2026, theme 04 "Uninsurable"). Judges review from 6:00 PM.
+**AlwaysHome**, a one-day hackathon prototype (UCLA Anderson MSBA Vibathon, Fri Nov 6 2026, theme 04 "Uninsurable"). Judges review from 6:00 PM.
 
 > We help California homeowners on the FAIR Plan find the fire-safety fixes that move them closest to affordable private insurance, ranked by cost and benefit for their home and budget.
 

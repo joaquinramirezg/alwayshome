@@ -49,7 +49,7 @@ def template_report(address: str, result: dict) -> str:
     plan = [f for f in fut["fixes"] if f["measure_id"] in plan_ids]
     later = [f for f in fut["fixes"] if f["measure_id"] not in plan_ids]
     lines = [
-        f"# Your AlwaysON plan: {address}",
+        f"# Your AlwaysHome plan: {address}",
         "",
         "## Where you are today",
         _wildfire_line(cur["wildfire"]),
