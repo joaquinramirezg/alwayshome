@@ -74,8 +74,8 @@ export default function Credits() {
           {TEAM.map((p) => (
             <article key={p.name} className="overflow-hidden rounded-2xl border border-stone-200 bg-surface shadow-sm">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={p.photo} alt={`Portrait of ${p.name}`} width={800} height={1000} loading="lazy"
-                className="aspect-[4/5] w-full object-cover object-top" />
+              <img src={p.photo} alt={`Portrait of ${p.name}`} width={900} height={600} loading="lazy"
+                className="aspect-[3/2] w-full object-cover" />
               <div className="p-6">
               <h2 className="font-display text-2xl font-semibold text-ink">{p.name}</h2>
               <p className="mt-1 text-sm font-semibold text-brand-600">{p.role}</p>
