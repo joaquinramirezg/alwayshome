@@ -110,3 +110,17 @@ def test_quota_uses_forwarded_ip(fake_claude, pdf_bytes, monkeypatch):
     assert client.post("/api/policy/extract", files=files, headers={"x-forwarded-for": "1.1.1.1"}).status_code == 200
     assert client.post("/api/policy/extract", files=files, headers={"x-forwarded-for": "2.2.2.2"}).status_code == 200
     assert client.post("/api/policy/extract", files=files, headers={"x-forwarded-for": "1.1.1.1"}).status_code == 429
+
+
+def test_report_pdf():
+    out = client.post("/api/assess", json={"inputs": scenario_inputs(SCENARIOS["altadena_fair_only"])}).json()
+    md = client.post("/api/report", json={"address": "x", "result": out, "ai": False}).json()["markdown"]
+    md += "\n\n- Typography “quotes” – dash ▼ → arrows and emoji 🔥"
+    r = client.post("/api/report/pdf", json={"markdown": md})
+    assert r.status_code == 200 and r.headers["content-type"] == "application/pdf"
+    assert r.content.startswith(b"%PDF") and len(r.content) > 3000
+    assert "alwayshome_plan.pdf" in r.headers["content-disposition"]
+
+
+def test_report_pdf_rejects_empty():
+    assert client.post("/api/report/pdf", json={"markdown": "  "}).status_code == 422

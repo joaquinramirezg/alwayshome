@@ -35,6 +35,11 @@ export const api = {
     files.forEach((f) => form.append("files", f));
     return call<Extraction>("/api/policy/extract", { method: "POST", body: form }, true);
   },
+  reportPdf: async (markdown: string): Promise<Blob> => {
+    const res = await fetch("/api/report/pdf", json({ markdown }));
+    if (!res.ok) throw new Error(`PDF failed (${res.status})`);
+    return res.blob();
+  },
   report: (address: string, result: Result, ai: boolean) =>
     call<{ markdown: string; source: string }>("/api/report", json({ address, result, ai }), ai),
 };

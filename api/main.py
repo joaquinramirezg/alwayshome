@@ -9,6 +9,7 @@ Same logic as the Streamlit app, exposed as JSON:
   GET  /api/policy/sample/{name}           same, for a bundled sample PDF (cached, works without a key)
   GET  /api/policy/samples?names=a&names=b same for several samples together (e.g. FAIR Plan + DIC)
   POST /api/report                         plan -> Markdown report (template, or AI rewrite when allowed)
+  POST /api/report/pdf                     report Markdown -> branded PDF (download)
 
 Run locally:  uv run uvicorn api.main:app --reload --port 8000   (docs at http://localhost:8000/docs)
 Env: ANTHROPIC_API_KEY (optional), ALLOWED_ORIGINS (comma-separated, for the frontend),
@@ -23,7 +24,7 @@ import time
 from collections import defaultdict, deque
 from pathlib import Path
 
-from fastapi import FastAPI, File, HTTPException, Query, Request, UploadFile
+from fastapi import FastAPI, File, HTTPException, Query, Request, Response, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
@@ -34,6 +35,7 @@ from msba_vibathon_2026.assess_stub import SOURCES, assess  # noqa: E402
 from msba_vibathon_2026.contract import validate_inputs, validate_output  # noqa: E402
 from msba_vibathon_2026.policy_extract import FIELDS, ExtractionUnavailable, extract, merge_policies  # noqa: E402
 from msba_vibathon_2026.report import ai_report, template_report  # noqa: E402
+from msba_vibathon_2026.report_pdf import report_pdf  # noqa: E402
 from msba_vibathon_2026.scenarios import load_scenarios  # noqa: E402
 from msba_vibathon_2026.wildfire import wildfire_analysis  # noqa: E402
 
@@ -197,3 +199,15 @@ def report(req: ReportRequest, request: Request) -> dict:
     else:
         text, source = template_report(req.address, req.result), "template"
     return {"markdown": text, "source": source}
+
+
+class PdfRequest(BaseModel):
+    markdown: str
+
+
+@app.post("/api/report/pdf")
+def report_as_pdf(req: PdfRequest) -> Response:
+    if not req.markdown.strip() or len(req.markdown) > 100_000:
+        raise HTTPException(422, "markdown is empty or too long")
+    return Response(report_pdf(req.markdown), media_type="application/pdf",
+                    headers={"Content-Disposition": 'attachment; filename="alwayshome_plan.pdf"'})

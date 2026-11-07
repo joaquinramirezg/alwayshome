@@ -731,6 +731,7 @@ function PlanView({
   budget: number; setBudget: (b: number) => void; report: { markdown: string; source: string } | null;
   reportLoading: boolean; aiEnabled: boolean; onReport: () => void; onEdit: (step: number) => void;
 }) {
+  const [pdfState, setPdfState] = useState<"idle" | "loading" | "error">("idle");
   if (missing.length) {
     return <Card><ErrorNote>Please complete the earlier steps first. Still needed: {missing.join(", ")}.</ErrorNote>
       <div className="mt-4"><Button variant="secondary" onClick={() => onEdit(0)}>Go to step 1</Button></div></Card>;
@@ -741,12 +742,21 @@ function PlanView({
   const drop = cur.house.impact - fut.house_after_plan.impact;
   const pts = (x: number) => `${Math.round(x * 100)} points`;
 
-  function download() {
+  async function download() {
     if (!report) return;
-    const url = URL.createObjectURL(new Blob([report.markdown], { type: "text/markdown" }));
-    const a = Object.assign(document.createElement("a"), { href: url, download: "alwayshome_plan.md" });
-    a.click();
-    URL.revokeObjectURL(url);
+    setPdfState("loading");
+    try {
+      const blob = await api.reportPdf(roundMoneyText(report.markdown));
+      const url = URL.createObjectURL(blob);
+      const a = Object.assign(document.createElement("a"), { href: url, download: "alwayshome_plan.pdf" });
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      setPdfState("idle");
+    } catch {
+      setPdfState("error");
+    }
   }
 
   return (
@@ -851,10 +861,15 @@ function PlanView({
           <h2 className="text-lg font-semibold text-stone-900">Your report</h2>
           <div className="flex flex-wrap gap-2">
             <Button onClick={onReport} disabled={reportLoading}>{report ? "Generate again" : "Generate report"}</Button>
-            {report && <Button variant="secondary" onClick={download}>Download</Button>}
+            {report && report.source !== "error" && (
+              <Button variant="secondary" onClick={download} disabled={pdfState === "loading"}>
+                {pdfState === "loading" ? "Preparing PDF…" : "Download PDF"}
+              </Button>
+            )}
           </div>
         </div>
         {!report && !reportLoading && <p className="mt-2 text-sm text-stone-600">A plain-language summary of your situation and plan{aiEnabled ? ", written by AI from your numbers" : ""}, ready to download or share with a broker.</p>}
+        {pdfState === "error" && <div className="mt-3"><ErrorNote>We couldn&rsquo;t create the PDF right now. Please try again.</ErrorNote></div>}
         {reportLoading && <div className="mt-3"><Spinner label={aiEnabled ? "Writing your report… about 20 seconds" : "Writing your report…"} /></div>}
         {report && (
           <article className="report mt-4 rounded-xl bg-stone-50 p-5 text-stone-800">

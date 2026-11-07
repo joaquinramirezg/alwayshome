@@ -103,12 +103,14 @@ await check("budget slider updates the plan", async () => {
 });
 await check("Generate report and Download", async () => {
   await btn("Generate report").click();
-  await btn("Download").waitFor({ timeout: 150_000 });
+  await btn("Download PDF").waitFor({ timeout: 150_000 });
   const body = await page.locator("article.report").innerText();
   console.log("      report starts: " + body.split("\n").slice(0, 2).join(" | ").slice(0, 120));
   if (body.includes("couldn't write")) throw new Error("report failed");
-  const [dl] = await Promise.all([page.waitForEvent("download"), btn("Download").click()]);
-  if (!dl.suggestedFilename().endsWith(".md")) throw new Error(dl.suggestedFilename());
+  const [dl] = await Promise.all([page.waitForEvent("download", { timeout: T }), btn("Download PDF").click()]);
+  if (dl.suggestedFilename() !== "alwayshome_plan.pdf") throw new Error(dl.suggestedFilename());
+  const head = (await (await import("node:fs/promises")).readFile(await dl.path())).subarray(0, 4).toString();
+  if (head !== "%PDF") throw new Error("not a PDF: " + head);
 });
 await check("Back buttons and stepper", async () => {
   await btn("Back").last().click();
