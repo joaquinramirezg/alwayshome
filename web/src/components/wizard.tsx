@@ -4,7 +4,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { api } from "@/lib/api";
 import type { Area, Extraction, Health, Inputs, Insurance, Result, Scenario } from "@/lib/types";
-import { Badge, Button, Card, Choice, ErrorNote, Gauge, Note, NumberField, Spinner, Stat, money, pct } from "./ui";
+import { Badge, Button, Card, Choice, ErrorNote, Gauge, Note, NumberField, Spinner, Stat, money, pct, roundMoneyText } from "./ui";
+import ThemeToggle from "./theme-toggle";
 
 // ---------------------------------------------------------------- questions (CAL FIRE inspection options)
 const UNKNOWN = "Unknown";
@@ -231,26 +232,31 @@ export default function Wizard() {
   const wf = area?.wildfire;
   return (
     <div className="min-h-screen bg-sand">
-      <header className="sticky top-0 z-20 border-b border-stone-200/80 bg-white/85 backdrop-blur">
+      <header className="sticky top-0 z-20 border-b border-stone-200/80 bg-surface/85 backdrop-blur">
         <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-3 px-4 py-3">
           <button type="button" onClick={() => setStep(0)} className="flex items-center gap-3 text-left" aria-label="AlwaysHome, back to start">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/brand/alwayshome-mark.svg" alt="" width={45} height={36} className="h-9 w-auto" />
+            <img src="/brand/alwayshome-mark.svg" alt="" width={45} height={36} className="h-9 w-auto dark:hidden" />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/brand/alwayshome-mark-on-dark.svg" alt="" width={45} height={36} className="hidden h-9 w-auto dark:block" />
             <div>
               <div className="font-display text-xl font-semibold leading-none text-ink">Always<span className="text-brand-600">Home</span></div>
               <div className="mt-1 text-xs text-stone-500">From the FAIR Plan back to private insurance</div>
             </div>
           </button>
+          <div className="flex flex-wrap items-center gap-3">
+          <ThemeToggle />
           {Object.keys(scenarios).length > 0 && (
             <label className="flex items-center gap-2 text-sm text-stone-600">
               <Badge>Demo</Badge>
-              <select className="rounded-lg border border-stone-300 bg-white px-2 py-1.5 text-sm" defaultValue=""
+              <select className="rounded-lg border border-stone-300 bg-surface px-2 py-1.5 text-sm" defaultValue=""
                 onChange={(e) => e.target.value && scenarios[e.target.value] && fillSample(scenarios[e.target.value])}>
                 <option value="">Fill with a sample homeowner…</option>
                 {Object.entries(scenarios).map(([id, s]) => <option key={id} value={id}>{s.title}</option>)}
               </select>
             </label>
           )}
+          </div>
         </div>
       </header>
 
@@ -258,11 +264,11 @@ export default function Wizard() {
         {apiDown && <div className="mb-6"><ErrorNote>The AlwaysHome API is not reachable. Start it with <code>uv run uvicorn api.main:app --port 8000</code>.</ErrorNote></div>}
 
         {step === 0 && !area && (
-          <section className="relative mb-10 overflow-hidden rounded-3xl bg-ink px-6 py-10 text-white sm:px-10 sm:py-14">
+          <section className="relative mb-10 overflow-hidden rounded-3xl bg-night px-6 py-10 text-white sm:px-10 sm:py-14">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/brand/alwayshome-mark-on-dark.svg" alt="" aria-hidden className="pointer-events-none absolute -right-24 -top-6 w-64 opacity-[0.12] sm:w-80" />
             <div className="relative max-w-2xl">
-              <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs text-white/80">
+              <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/15 bg-surface/5 px-3 py-1 text-xs text-white/80">
                 <span className="h-1.5 w-1.5 rounded-full bg-brand-500" /> For California homeowners on the FAIR Plan
               </div>
               <h1 className="font-display text-4xl font-semibold leading-tight sm:text-5xl">
@@ -278,7 +284,7 @@ export default function Wizard() {
                 ["41%", "of homes in the riskiest ZIP codes are on the FAIR Plan"],
                 ["+84%", "average California premiums since 2020"],
               ].map(([v, l]) => (
-                <div key={v} className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                <div key={v} className="rounded-2xl border border-white/10 bg-surface/5 p-4">
                   <dt className="font-display text-3xl font-semibold text-brand-400">{v}</dt>
                   <dd className="mt-1 text-sm text-white/70">{l}</dd>
                 </div>
@@ -292,7 +298,7 @@ export default function Wizard() {
             <li key={s}>
               <button type="button" onClick={() => setStep(i)}
                 className={`w-full rounded-xl px-3 py-2 text-left text-sm ${
-                  i === step ? "bg-brand-600 text-white" : i < step ? "bg-brand-100 text-brand-900" : "bg-white text-stone-500 border border-stone-200"
+                  i === step ? "bg-brand-600 text-white" : i < step ? "bg-brand-100 text-brand-900" : "bg-surface text-stone-500 border border-stone-200"
                 }`}>
                 <span className="block text-xs opacity-80">Step {i + 1}</span>
                 <span className="font-semibold">{s}</span>
@@ -402,7 +408,7 @@ export default function Wizard() {
                 <div className="rounded-xl border border-stone-200 p-6">
                   <div className="font-medium text-stone-900">Or try a sample policy</div>
                   <div className="mb-3 text-xs text-stone-500">Fictional declarations pages, read by the AI ahead of time.</div>
-                  <select className="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm" defaultValue=""
+                  <select className="w-full rounded-lg border border-stone-300 bg-surface px-3 py-2 text-sm" defaultValue=""
                     onChange={(e) => e.target.value && readPolicies(() => api.samplePolicies(SAMPLE_POLICIES[e.target.value]))}>
                     <option value="">Choose a sample…</option>
                     {Object.keys(SAMPLE_POLICIES).map((k) => <option key={k}>{k}</option>)}
@@ -469,11 +475,13 @@ export default function Wizard() {
           />
         )}
       </main>
-      <footer className="mt-8 border-t border-stone-200 bg-white">
+      <footer className="mt-8 border-t border-stone-200 bg-surface">
         <div className="mx-auto flex max-w-5xl flex-col gap-4 px-4 py-8 text-sm text-stone-500 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-3">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/brand/alwayshome-monogram.svg" alt="" width={14} height={28} className="h-7 w-auto" />
+            <img src="/brand/alwayshome-monogram.svg" alt="" width={14} height={28} className="h-7 w-auto dark:hidden" />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/brand/alwayshome-monogram-on-dark.svg" alt="" width={14} height={28} className="hidden h-7 w-auto dark:block" />
             <span><span className="font-display font-semibold text-ink">AlwaysHome</span> · UCLA Anderson MSBA Vibathon 2026</span>
           </div>
           <p className="max-w-md text-xs">
@@ -651,8 +659,8 @@ function PlanView({
           <div className="mt-3 grid gap-3 md:grid-cols-2">
             {cur.insurance_gap.map((g) => (
               <div key={g.gap} className="rounded-xl border border-stone-200 p-4">
-                <div className="flex items-start justify-between gap-2"><span className="font-medium text-stone-900">{g.gap}</span><Badge tone={sevTone[g.severity]}>{g.severity}</Badge></div>
-                <p className="mt-1 text-sm text-stone-600">{g.why}</p>
+                <div className="flex items-start justify-between gap-2"><span className="font-medium text-stone-900">{roundMoneyText(g.gap)}</span><Badge tone={sevTone[g.severity]}>{g.severity}</Badge></div>
+                <p className="mt-1 text-sm text-stone-600">{roundMoneyText(g.why)}</p>
               </div>
             ))}
           </div>
@@ -732,12 +740,12 @@ function PlanView({
         {report && (
           <article className="report mt-4 rounded-xl bg-stone-50 p-5 text-stone-800">
             <p className="mb-2 text-xs text-stone-500">{report.source === "ai" ? "Written by AI from your plan's numbers; every figure comes from the analysis above" : "Standard report"}</p>
-            <ReactMarkdown>{report.markdown}</ReactMarkdown>
+            <ReactMarkdown>{roundMoneyText(report.markdown)}</ReactMarkdown>
           </article>
         )}
       </Card>
 
-      <details className="rounded-2xl border border-stone-200 bg-white p-5 text-sm text-stone-600">
+      <details className="rounded-2xl border border-stone-200 bg-surface p-5 text-sm text-stone-600">
         <summary className="cursor-pointer font-medium text-stone-800">Assumptions and limits</summary>
         <ul className="mt-2 list-disc space-y-1 pl-5">{result.caveats.map((c) => <li key={c}>{c}</li>)}</ul>
       </details>

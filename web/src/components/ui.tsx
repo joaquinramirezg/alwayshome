@@ -2,13 +2,26 @@
 
 import type { ReactNode } from "react";
 
-export const money = (x: number | null | undefined) =>
-  x === null || x === undefined ? "n/a" : `$${Math.round(x).toLocaleString("en-US")}`;
+/** Executive money format: $380, $5.6K, $255K, $1.5M (rounded to readable steps). */
+export const money = (x: number | null | undefined) => {
+  if (x === null || x === undefined || Number.isNaN(x)) return "n/a";
+  const sign = x < 0 ? "-" : "";
+  const v = Math.abs(x);
+  if (v < 1_000) return `${sign}$${Math.round(v / 10) * 10}`;
+  if (v < 10_000) return `${sign}$${(Math.round(v / 100) / 10).toFixed(1).replace(/\.0$/, "")}K`;
+  if (v < 100_000) return `${sign}$${Math.round(v / 1_000)}K`;
+  if (Math.round(v / 5_000) * 5 < 1_000) return `${sign}$${Math.round(v / 5_000) * 5}K`;
+  return `${sign}$${(Math.round(v / 100_000) / 10).toFixed(1).replace(/\.0$/, "")}M`;
+};
+/** Round every "$123,456" inside a sentence to the same executive format. */
+export const roundMoneyText = (t: string) =>
+  t.replace(/\$\d{1,3}(?:,\d{3})+(?:\.\d+)?|\$\d{4,}(?:\.\d+)?/g, (m) => money(Number(m.replace(/[$,]/g, ""))));
+
 export const pct = (x: number | null | undefined, digits = 0) =>
   x === null || x === undefined ? "n/a" : `${(x * 100).toFixed(digits)}%`;
 
 export function Card({ children, className = "" }: { children: ReactNode; className?: string }) {
-  return <div className={`rounded-2xl border border-stone-200 bg-white p-6 shadow-sm ${className}`}>{children}</div>;
+  return <div className={`rounded-2xl border border-stone-200 bg-surface p-6 shadow-sm ${className}`}>{children}</div>;
 }
 
 export function Badge({ children, tone = "stone" }: { children: ReactNode; tone?: "stone" | "red" | "amber" | "green" | "orange" }) {
@@ -29,7 +42,7 @@ export function Button({
 }) {
   const styles = {
     primary: "bg-brand-600 text-white hover:bg-brand-700 disabled:bg-stone-300",
-    secondary: "border border-stone-300 bg-white text-stone-800 hover:bg-stone-50 disabled:text-stone-400",
+    secondary: "border border-stone-300 bg-surface text-stone-800 hover:bg-stone-50 disabled:text-stone-400",
     ghost: "text-stone-600 hover:text-stone-900",
   };
   return (
@@ -77,7 +90,7 @@ export function Gauge({ value, max = 100, label, color = "#D2602A" }: { value: n
   const large = 0;
   return (
     <svg viewBox="0 0 120 70" className="w-full max-w-[180px]" role="img" aria-label={label}>
-      <path d="M10 60 A50 50 0 0 1 110 60" fill="none" stroke="#efe7dc" strokeWidth="10" strokeLinecap="round" />
+      <path d="M10 60 A50 50 0 0 1 110 60" fill="none" stroke="var(--gauge-track)" strokeWidth="10" strokeLinecap="round" />
       {value !== null && v > 0 && (
         <path d={`M10 60 A50 50 0 ${large} 1 ${x.toFixed(2)} ${y.toFixed(2)}`} fill="none" stroke={color} strokeWidth="10" strokeLinecap="round" />
       )}
@@ -99,7 +112,7 @@ export function NumberField({
   return (
     <label className="block">
       <span className="text-sm font-medium text-stone-800">{label}</span>
-      <div className="mt-1 flex items-center rounded-xl border border-stone-300 bg-white focus-within:border-brand-500 focus-within:ring-2 focus-within:ring-brand-100">
+      <div className="mt-1 flex items-center rounded-xl border border-stone-300 bg-surface focus-within:border-brand-500 focus-within:ring-2 focus-within:ring-brand-100">
         {prefix && <span className="pl-3 text-stone-500">{prefix}</span>}
         <input
           type="number" inputMode="numeric" min={0}
@@ -123,7 +136,7 @@ export function Choice<T extends string>({
       {options.map((o) => (
         <button key={o} type="button" onClick={() => onChange(o)}
           className={`rounded-xl border px-3 py-2 text-sm transition ${
-            value === o ? "border-brand-600 bg-brand-50 font-semibold text-brand-800" : "border-stone-300 bg-white text-stone-700 hover:border-stone-400"
+            value === o ? "border-brand-600 bg-brand-50 font-semibold text-brand-800" : "border-stone-300 bg-surface text-stone-700 hover:border-stone-400"
           }`}>
           {labels?.[o] ?? o}
         </button>

@@ -217,7 +217,7 @@ def test_contract_flags_a_broken_coverage_block():
 def test_report_has_the_loss_scenario():
     text = template_report("x", run_scenario("altadena_fair_only"))
     assert "## If your home is destroyed" in text
-    assert "$354,490 to $902,985" in text
+    assert "$355K to $905K" in text  # report rounds to executive format ($354,490 to $902,985)
     assert "Total-loss scenario only" in text
 
 

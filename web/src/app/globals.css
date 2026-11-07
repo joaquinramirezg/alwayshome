@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* AlwaysHome brand: ember orange #D2602A, ink #111111, warm sand background */
 @theme {
   --color-brand-50: #fcf3ee;
@@ -14,8 +16,52 @@
   --color-brand-900: #5e2c16;
   --color-ink: #111111;
   --color-sand: #faf7f2;
+  --color-surface: #ffffff;
+  --color-night: #111111;
   --font-display: var(--font-display), Georgia, serif;
   --font-sans: var(--font-sans-brand), ui-sans-serif, system-ui, sans-serif;
+}
+
+:root { --gauge-track: #efe7dc; color-scheme: light; }
+
+/* Dark mode: remap the neutral and tint palettes so every component follows without per-element classes. */
+.dark {
+  color-scheme: dark;
+  --gauge-track: #2e2924;
+  --color-ink: #f4efe8;
+  --color-sand: #0e0c0a;
+  --color-surface: #171411;
+  --color-night: #1d1915;
+  --color-stone-50: #1f1b17;
+  --color-stone-100: #29241f;
+  --color-stone-200: #36302a;
+  --color-stone-300: #4a433c;
+  --color-stone-400: #6f675f;
+  --color-stone-500: #9d958c;
+  --color-stone-600: #bbb3a9;
+  --color-stone-700: #d6cfc6;
+  --color-stone-800: #e8e2da;
+  --color-stone-900: #f6f2ec;
+  --color-brand-50: #2a1910;
+  --color-brand-100: #3b2114;
+  --color-brand-200: #5c311b;
+  --color-brand-300: #8b4a26;
+  --color-brand-800: #f2b48f;
+  --color-brand-900: #f8d2bb;
+  --color-red-50: #2b1414;
+  --color-red-100: #3c1919;
+  --color-red-200: #5c2424;
+  --color-red-700: #f29b9b;
+  --color-red-800: #f6b3b3;
+  --color-emerald-50: #0f241a;
+  --color-emerald-100: #133121;
+  --color-emerald-700: #72d8aa;
+  --color-emerald-800: #93e4be;
+  --color-amber-50: #29210f;
+  --color-amber-100: #3a2e12;
+  --color-amber-200: #5b471a;
+  --color-amber-800: #f1cf7c;
+  --color-amber-900: #f6dd99;
 }
 
 body {

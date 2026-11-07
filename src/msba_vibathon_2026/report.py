@@ -16,7 +16,19 @@ discount or claim; keep the caveats; plain English, short paragraphs, Markdown h
 
 
 def _money(x) -> str:
-    return "n/a" if x is None else f"${x:,.0f}"
+    """Executive format, same as the web app: $380, $5.6K, $255K, $1.5M."""
+    if x is None:
+        return "n/a"
+    sign, v = ("-" if x < 0 else ""), abs(x)
+    if v < 1_000:
+        return f"{sign}${round(v / 10) * 10:.0f}"
+    if v < 10_000:
+        return f"{sign}${round(v / 100) / 10:g}K"
+    if v < 100_000:
+        return f"{sign}${round(v / 1_000):.0f}K"
+    if round(v / 5_000) * 5 < 1_000:
+        return f"{sign}${round(v / 5_000) * 5:.0f}K"
+    return f"{sign}${round(v / 100_000) / 10:g}M"
 
 
 def _wildfire_line(wf: dict) -> str:
