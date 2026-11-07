@@ -18,6 +18,9 @@ Demo shortcut: http://localhost:3000/?demo=altadena_fair_only&step=4 fills a sam
 
 1. Deploy the API first (Render Blueprint `render.yaml`, or Cloud Run; see `docs/DEPLOYMENT.md`) and copy its URL.
 2. vercel.com > Add New Project > import the GitHub repo > **Root Directory: `web`**.
-3. Environment variable: `API_URL` = the API URL (for example `https://alwayson-api.onrender.com`). Deploy.
+3. Environment variables (both = the API URL, e.g. `https://alwayson-api.onrender.com`, no trailing slash):
+   - `API_URL`: used by the `/api/*` forwarding.
+   - `NEXT_PUBLIC_DIRECT_API_URL`: the slow AI calls (policy reading, AI report) go straight to the API so a proxy timeout can't cut them off.
+4. Deploy.
 
 Checks before pushing: `npm run lint && npm run build`.

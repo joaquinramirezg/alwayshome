@@ -1,7 +1,11 @@
 import type { Area, Extraction, Health, Inputs, Result, Scenario } from "./types";
 
-async function call<T>(path: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(path, init);
+// Slow AI calls (10-60 s) go straight to the API so a hosting proxy timeout can't cut them off.
+// Set NEXT_PUBLIC_DIRECT_API_URL (e.g. https://alwayson-api.onrender.com) on Vercel; empty = same origin.
+const DIRECT = (process.env.NEXT_PUBLIC_DIRECT_API_URL ?? "").replace(/\/$/, "");
+
+async function call<T>(path: string, init?: RequestInit, direct = false): Promise<T> {
+  const res = await fetch((direct ? DIRECT : "") + path, init);
   if (!res.ok) {
     let detail = `${res.status} ${res.statusText}`;
     try {
@@ -29,8 +33,8 @@ export const api = {
   extract: (files: File[]) => {
     const form = new FormData();
     files.forEach((f) => form.append("files", f));
-    return call<Extraction>("/api/policy/extract", { method: "POST", body: form });
+    return call<Extraction>("/api/policy/extract", { method: "POST", body: form }, true);
   },
   report: (address: string, result: Result, ai: boolean) =>
-    call<{ markdown: string; source: string }>("/api/report", json({ address, result, ai })),
+    call<{ markdown: string; source: string }>("/api/report", json({ address, result, ai }), ai),
 };
