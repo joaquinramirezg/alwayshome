@@ -1,0 +1,194 @@
+[
+  {
+    "cost_id": "he_eave_vent",
+    "project_id": "ember_resistant_vents",
+    "source_id": "headwaters_2024",
+    "low_usd": "106",
+    "high_usd": "106",
+    "unit": "USD_per_vent",
+    "county_fips": [],
+    "jurisdiction": null,
+    "geography": "Northern California (Redding/Bay Area)",
+    "price_date": null,
+    "price_basis": "Summer/fall 2023",
+    "publication_date": "2024-Spring",
+    "scope_description": "Soffit vent installed",
+    "page": "Eaves & Gutters / Example Retrofitting Costs",
+    "scope_reviewed": false,
+    "scope_tags": [
+      "ember_resistant_vents"
+    ],
+    "confidence": "Historical context only",
+    "verification_status": "verified_historical_benchmark",
+    "pricing_status": "context_only_not_la_project_price",
+    "range_kind": "point_estimate_not_uncertainty_range",
+    "includes": [
+      "Vent material",
+      "Labor",
+      "Installation"
+    ],
+    "excludes": [
+      "Unforeseen work",
+      "LA recalibration"
+    ],
+    "limitations": "Not eligible for automatic project totals."
+  },
+  {
+    "cost_id": "he_gable_vent",
+    "project_id": "ember_resistant_vents",
+    "source_id": "headwaters_2024",
+    "low_usd": "420",
+    "high_usd": "420",
+    "unit": "USD_per_vent",
+    "county_fips": [],
+    "jurisdiction": null,
+    "geography": "Northern California (Redding/Bay Area)",
+    "price_date": null,
+    "price_basis": "Summer/fall 2023",
+    "publication_date": "2024-Spring",
+    "scope_description": "Gable vent replacement",
+    "page": "Exterior Walls / Example Retrofitting Costs",
+    "scope_reviewed": false,
+    "scope_tags": [
+      "ember_resistant_vents"
+    ],
+    "confidence": "Historical context only",
+    "verification_status": "verified_historical_benchmark",
+    "pricing_status": "context_only_not_la_project_price",
+    "range_kind": "point_estimate_not_uncertainty_range",
+    "includes": [
+      "Demolition",
+      "Vent",
+      "Installation"
+    ],
+    "excludes": [
+      "Unforeseen work",
+      "LA recalibration"
+    ],
+    "limitations": "Not eligible for automatic project totals."
+  },
+  {
+    "cost_id": "he_gutter_example",
+    "project_id": "gutter_protection",
+    "source_id": "headwaters_2024",
+    "low_usd": "930",
+    "high_usd": "930",
+    "unit": "USD_per_40ft_example",
+    "county_fips": [],
+    "jurisdiction": null,
+    "geography": "Northern California (Redding/Bay Area)",
+    "price_date": null,
+    "price_basis": "Summer/fall 2023",
+    "publication_date": "2024-Spring",
+    "scope_description": "Metal gutter plus guard",
+    "page": "Eaves & Gutters / Example Retrofitting Costs",
+    "scope_reviewed": false,
+    "scope_tags": [
+      "gutter_protection"
+    ],
+    "confidence": "Historical context only",
+    "verification_status": "verified_historical_benchmark",
+    "pricing_status": "context_only_not_la_project_price",
+    "range_kind": "point_estimate_not_uncertainty_range",
+    "includes": [
+      "Metal gutter",
+      "Gutter guard"
+    ],
+    "excludes": [
+      "Unforeseen work",
+      "LA recalibration"
+    ],
+    "limitations": "Not eligible for automatic project totals."
+  },
+  {
+    "cost_id": "he_drip_edge",
+    "project_id": "gutter_protection",
+    "source_id": "headwaters_2024",
+    "low_usd": "100",
+    "high_usd": "200",
+    "unit": "USD_per_roof_side",
+    "county_fips": [],
+    "jurisdiction": null,
+    "geography": "Northern California (Redding/Bay Area)",
+    "price_date": null,
+    "price_basis": "Summer/fall 2023",
+    "publication_date": "2024-Spring",
+    "scope_description": "Additional drip edge",
+    "page": "Eaves & Gutters / Example Retrofitting Costs",
+    "scope_reviewed": false,
+    "scope_tags": [
+      "gutter_protection"
+    ],
+    "confidence": "Historical context only",
+    "verification_status": "verified_historical_benchmark",
+    "pricing_status": "context_only_not_la_project_price",
+    "range_kind": "published_range",
+    "includes": [
+      "Incremental drip-edge work"
+    ],
+    "excludes": [
+      "Unforeseen work",
+      "LA recalibration"
+    ],
+    "limitations": "Not eligible for automatic project totals."
+  },
+  {
+    "cost_id": "he_roof_example",
+    "project_id": "class_a_roof",
+    "source_id": "headwaters_2024",
+    "low_usd": "6300",
+    "high_usd": "6300",
+    "unit": "USD_per_1000sqft_roof_example",
+    "county_fips": [],
+    "jurisdiction": null,
+    "geography": "Northern California (Redding/Bay Area)",
+    "price_date": null,
+    "price_basis": "Summer/fall 2023",
+    "publication_date": "2024-Spring",
+    "scope_description": "Shake-to-asphalt with underlayment",
+    "page": "Roof / Example Retrofitting Costs",
+    "scope_reviewed": false,
+    "scope_tags": [
+      "class_a_roof"
+    ],
+    "confidence": "Historical context only",
+    "verification_status": "verified_historical_benchmark",
+    "pricing_status": "context_only_not_la_project_price",
+    "range_kind": "point_estimate_not_uncertainty_range",
+    "includes": [
+      "Replacement asphalt roofing",
+      "Synthetic underlayment"
+    ],
+    "excludes": [
+      "Drip edge",
+      "Ridge vent",
+      "Unforeseen repairs",
+      "LA recalibration"
+    ],
+    "limitations": "Not eligible for automatic project totals."
+  },
+  {
+    "cost_id": "vegetation_price_gap",
+    "project_id": "defensible_space",
+    "source_id": "headwaters_2024",
+    "low_usd": null,
+    "high_usd": null,
+    "unit": "USD_per_project",
+    "county_fips": [
+      "06037"
+    ],
+    "jurisdiction": null,
+    "price_date": null,
+    "scope_reviewed": false,
+    "scope_tags": [
+      "defensible_space"
+    ],
+    "scope_description": "Site-specific vegetation work",
+    "verification_status": "pricing_not_verified",
+    "pricing_status": "pricing_unavailable",
+    "geography": "LA pricing unresolved",
+    "includes": [],
+    "excludes": [],
+    "confidence": "No price evidence"
+  }
+]

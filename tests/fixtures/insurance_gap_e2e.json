@@ -1,0 +1,975 @@
+[
+  {
+    "scenario_id": "synthetic_underinsured",
+    "synthetic_test_only": true,
+    "description": "Fictional 1,800 ft\u00b2 Altadena-area home; several confirmed mitigation gaps",
+    "rebuilding_request": {
+      "mode": "documented",
+      "address": "synthetic_underinsured (fictional address)",
+      "location": {
+        "county_fips": "06037",
+        "permitting_jurisdiction": "Unincorporated Los Angeles County",
+        "jurisdiction_verified": true
+      },
+      "home": {
+        "living_area_sqft": 1800,
+        "area_definition": "finished_living_area",
+        "area_confirmed": true,
+        "area_source": "Synthetic plans",
+        "stories": 1,
+        "year_built": 1965,
+        "dwelling_type": "detached_site_built_single_family",
+        "unit_count": 1,
+        "construction_type": "wood_frame",
+        "foundation_type": "slab",
+        "features_reviewed": true,
+        "materials": {
+          "roof": "composition",
+          "exterior": "stucco"
+        },
+        "quality": {
+          "source_category": "synthetic_standard",
+          "description": "Synthetic ordinary finishes",
+          "homeowner_confirmed": true
+        }
+      },
+      "site": {
+        "screening_complete": true,
+        "requires_specialist": false
+      },
+      "estimate_context": {
+        "estimate_as_of": "2026-11-06",
+        "target_price_date": "2026-11-06",
+        "permit_date_assumption": "2026-11-06",
+        "currency": "USD",
+        "market_scenario": "ordinary_current",
+        "rebuild_scope": "equivalent_size_quality"
+      },
+      "cost_evidence": {
+        "evidence_id": "SYNTHETIC-PLANNING-NOT-A-QUOTE",
+        "source_id": "TEST-ONLY",
+        "source_url_or_document_ref": "fixture://synthetic-planning-basis-not-real-quote",
+        "scope_description": "Synthetic scoped planning input, no contractor bid obtained",
+        "reviewer": "Fictional test reviewer",
+        "publication_date": "2026-11-06",
+        "price_base_date": "2026-11-06",
+        "reviewed_at": "2026-11-06",
+        "valid_through": "2026-11-06",
+        "year": 2026,
+        "verification_status": "full_document_verified",
+        "parameter_status": "approved_for_this_scope",
+        "quoted_address": "synthetic_underinsured (fictional address)",
+        "quoted_living_area_sqft": 1800,
+        "county_fips": "06037",
+        "permitting_jurisdiction": "Unincorporated Los Angeles County",
+        "quality": "synthetic_standard",
+        "construction_type": "wood_frame",
+        "stories": 1,
+        "area_definition": "finished_living_area",
+        "property_scope": "detached_site_built_single_family",
+        "currency": "USD",
+        "market_scenario": "ordinary_current",
+        "rebuild_scope": "equivalent_size_quality",
+        "building_scope_confirmed": true,
+        "unit": "USD_per_finished_sqft",
+        "includes": [
+          "construction",
+          "contractor_overhead_profit"
+        ],
+        "excludes": [
+          "demolition_debris",
+          "professional_services",
+          "permits_agency_fees",
+          "incremental_code",
+          "extraordinary_site_utilities",
+          "incremental_disaster_pressure",
+          "contingency"
+        ],
+        "scenarios": {
+          "central": {
+            "base_value": "400",
+            "rationale": "Synthetic planning case, not observed local pricing or an insurer quote",
+            "assumptions": [
+              "Every monetary amount is synthetic; do not use as a price benchmark."
+            ],
+            "items": [
+              {
+                "category": "demolition_debris",
+                "scope_state": "separately_priced",
+                "amount_usd": "30000",
+                "documentation": "Synthetic non-overlapping cost allocation"
+              },
+              {
+                "category": "professional_services",
+                "scope_state": "separately_priced",
+                "amount_usd": "45000",
+                "documentation": "Synthetic non-overlapping cost allocation"
+              },
+              {
+                "category": "permits_agency_fees",
+                "scope_state": "separately_priced",
+                "amount_usd": "10000",
+                "documentation": "Synthetic non-overlapping cost allocation"
+              },
+              {
+                "category": "incremental_code",
+                "scope_state": "separately_priced",
+                "amount_usd": "45000",
+                "documentation": "Synthetic non-overlapping cost allocation"
+              },
+              {
+                "category": "extraordinary_site_utilities",
+                "scope_state": "separately_priced",
+                "amount_usd": "10000",
+                "documentation": "Synthetic non-overlapping cost allocation"
+              },
+              {
+                "category": "incremental_disaster_pressure",
+                "scope_state": "not_applicable_verified",
+                "documentation": "Synthetic case expressly does not model this allowance"
+              },
+              {
+                "category": "contingency",
+                "scope_state": "not_applicable_verified",
+                "documentation": "Synthetic case expressly does not model this allowance"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "payload": {
+      "schema_version": "gap-v1",
+      "as_of": "2026-11-06",
+      "currency": "USD",
+      "subject_id": "synthetic_underinsured",
+      "property": {
+        "subject_id": "synthetic_underinsured",
+        "county_fips": "06037",
+        "jurisdiction": "Unincorporated Los Angeles County",
+        "facts": {
+          "roof_class_a": {
+            "value": false,
+            "status": "confirmed",
+            "source": {
+              "reference": "fixture://SYNTHETIC-ONLY/property-roof_class_a",
+              "verified": true,
+              "valid_from": "2026-11-06",
+              "valid_through": "2026-11-06"
+            }
+          },
+          "ember_zone_5ft": {
+            "value": false,
+            "status": "confirmed",
+            "source": {
+              "reference": "fixture://SYNTHETIC-ONLY/property-ember_zone_5ft",
+              "verified": true,
+              "valid_from": "2026-11-06",
+              "valid_through": "2026-11-06"
+            }
+          },
+          "ember_resistant_vents": {
+            "value": false,
+            "status": "confirmed",
+            "source": {
+              "reference": "fixture://SYNTHETIC-ONLY/property-ember_resistant_vents",
+              "verified": true,
+              "valid_from": "2026-11-06",
+              "valid_through": "2026-11-06"
+            }
+          },
+          "calfire_listed_vents_airflow_confirmed": {
+            "value": false,
+            "status": "confirmed",
+            "source": {
+              "reference": "fixture://SYNTHETIC-ONLY/property-calfire_listed_vents_airflow_confirmed",
+              "verified": true,
+              "valid_from": "2026-11-06",
+              "valid_through": "2026-11-06"
+            }
+          },
+          "enclosed_eaves": {
+            "value": false,
+            "status": "confirmed",
+            "source": {
+              "reference": "fixture://SYNTHETIC-ONLY/property-enclosed_eaves",
+              "verified": true,
+              "valid_from": "2026-11-06",
+              "valid_through": "2026-11-06"
+            }
+          },
+          "under_deck_clear": {
+            "value": false,
+            "status": "confirmed",
+            "source": {
+              "reference": "fixture://SYNTHETIC-ONLY/property-under_deck_clear",
+              "verified": true,
+              "valid_from": "2026-11-06",
+              "valid_through": "2026-11-06"
+            }
+          },
+          "defensible_space_compliant": {
+            "value": false,
+            "status": "confirmed",
+            "source": {
+              "reference": "fixture://SYNTHETIC-ONLY/property-defensible_space_compliant",
+              "verified": true,
+              "valid_from": "2026-11-06",
+              "valid_through": "2026-11-06"
+            }
+          },
+          "gutters_clear": {
+            "value": false,
+            "status": "confirmed",
+            "source": {
+              "reference": "fixture://SYNTHETIC-ONLY/property-gutters_clear",
+              "verified": true,
+              "valid_from": "2026-11-06",
+              "valid_through": "2026-11-06"
+            }
+          },
+          "noncombustible_gutter_covers": {
+            "value": false,
+            "status": "confirmed",
+            "source": {
+              "reference": "fixture://SYNTHETIC-ONLY/property-noncombustible_gutter_covers",
+              "verified": true,
+              "valid_from": "2026-11-06",
+              "valid_through": "2026-11-06"
+            }
+          },
+          "defensible_space_legal_applicability_confirmed": {
+            "value": true,
+            "status": "confirmed",
+            "source": {
+              "reference": "fixture://SYNTHETIC-ONLY/synthetic-applicability-review",
+              "verified": true,
+              "valid_from": "2026-11-06",
+              "valid_through": "2026-11-06"
+            }
+          }
+        }
+      },
+      "needs": {
+        "dwelling": {
+          "amount_usd": null,
+          "scope_id": "synthetic_underinsured:dwelling",
+          "source": {
+            "reference": "fixture://SYNTHETIC-ONLY/need-dwelling",
+            "verified": true,
+            "valid_from": "2026-11-06",
+            "valid_through": "2026-11-06"
+          }
+        },
+        "ale": {
+          "amount_usd": "72000",
+          "scope_id": "synthetic_underinsured:ale",
+          "source": {
+            "reference": "fixture://SYNTHETIC-ONLY/need-ale",
+            "verified": true,
+            "valid_from": "2026-11-06",
+            "valid_through": "2026-11-06"
+          },
+          "duration_months": "24"
+        },
+        "ordinance_law": {
+          "amount_usd": "45000",
+          "scope_id": "synthetic_underinsured:ordinance_law",
+          "source": {
+            "reference": "fixture://SYNTHETIC-ONLY/need-ordinance_law",
+            "verified": true,
+            "valid_from": "2026-11-06",
+            "valid_through": "2026-11-06"
+          }
+        },
+        "debris": {
+          "amount_usd": "30000",
+          "scope_id": "synthetic_underinsured:debris",
+          "source": {
+            "reference": "fixture://SYNTHETIC-ONLY/need-debris",
+            "verified": true,
+            "valid_from": "2026-11-06",
+            "valid_through": "2026-11-06"
+          }
+        }
+      },
+      "selected_product_ids": [],
+      "policy": {
+        "subject_id": "synthetic_underinsured",
+        "description": "Synthetic policy terms only; no actual insurer quote or premium",
+        "source": {
+          "reference": "fixture://SYNTHETIC-ONLY/reviewed-policy",
+          "verified": true,
+          "valid_from": "2026-11-06",
+          "valid_through": "2026-11-06"
+        },
+        "terms_reviewed": true,
+        "exclusions_reviewed": true,
+        "coverages": {
+          "dwelling": {
+            "status": "present",
+            "limit_usd": "600000",
+            "scope_id": "synthetic_underinsured:dwelling",
+            "source": {
+              "reference": "fixture://SYNTHETIC-ONLY/policy-dwelling",
+              "verified": true,
+              "valid_from": "2026-11-06",
+              "valid_through": "2026-11-06"
+            },
+            "limit_basis": "standalone",
+            "settlement": "replacement_cost"
+          },
+          "ale": {
+            "status": "present",
+            "limit_usd": "48000",
+            "scope_id": "synthetic_underinsured:ale",
+            "source": {
+              "reference": "fixture://SYNTHETIC-ONLY/policy-ale",
+              "verified": true,
+              "valid_from": "2026-11-06",
+              "valid_through": "2026-11-06"
+            },
+            "limit_basis": "standalone",
+            "duration_months": "18"
+          },
+          "ordinance_law": {
+            "status": "present",
+            "limit_usd": "20000",
+            "scope_id": "synthetic_underinsured:ordinance_law",
+            "source": {
+              "reference": "fixture://SYNTHETIC-ONLY/policy-ordinance_law",
+              "verified": true,
+              "valid_from": "2026-11-06",
+              "valid_through": "2026-11-06"
+            },
+            "limit_basis": "standalone"
+          },
+          "debris": {
+            "status": "present",
+            "limit_usd": "15000",
+            "scope_id": "synthetic_underinsured:debris",
+            "source": {
+              "reference": "fixture://SYNTHETIC-ONLY/policy-debris",
+              "verified": true,
+              "valid_from": "2026-11-06",
+              "valid_through": "2026-11-06"
+            },
+            "limit_basis": "standalone"
+          }
+        },
+        "exclusions": [],
+        "endorsements": [],
+        "extended_replacement": {
+          "kind": "percentage",
+          "value": "25",
+          "conditions_verified": true,
+          "scope_id": "synthetic_underinsured:dwelling",
+          "source": {
+            "reference": "fixture://SYNTHETIC-ONLY/erc",
+            "verified": true,
+            "valid_from": "2026-11-06",
+            "valid_through": "2026-11-06"
+          }
+        },
+        "deductible": {
+          "kind": "fixed",
+          "amount_usd": "2500",
+          "source": {
+            "reference": "fixture://SYNTHETIC-ONLY/deductible",
+            "verified": true,
+            "valid_from": "2026-11-06",
+            "valid_through": "2026-11-06"
+          }
+        }
+      }
+    },
+    "reviewed_dwelling_allocation_usd": "785000",
+    "allocation_review_is_synthetic_test_only": true
+  },
+  {
+    "scenario_id": "synthetic_adequate_unknown_property",
+    "synthetic_test_only": true,
+    "description": "Fictional 2,000 ft\u00b2 home with sufficient supplied limits but unconfirmed mitigation information",
+    "rebuilding_request": {
+      "mode": "documented",
+      "address": "synthetic_adequate_unknown_property (fictional address)",
+      "location": {
+        "county_fips": "06037",
+        "permitting_jurisdiction": "Unincorporated Los Angeles County",
+        "jurisdiction_verified": true
+      },
+      "home": {
+        "living_area_sqft": 2000,
+        "area_definition": "finished_living_area",
+        "area_confirmed": true,
+        "area_source": "Synthetic plans",
+        "stories": 1,
+        "year_built": 1965,
+        "dwelling_type": "detached_site_built_single_family",
+        "unit_count": 1,
+        "construction_type": "wood_frame",
+        "foundation_type": "slab",
+        "features_reviewed": true,
+        "materials": {
+          "roof": "composition",
+          "exterior": "stucco"
+        },
+        "quality": {
+          "source_category": "synthetic_standard",
+          "description": "Synthetic ordinary finishes",
+          "homeowner_confirmed": true
+        }
+      },
+      "site": {
+        "screening_complete": true,
+        "requires_specialist": false
+      },
+      "estimate_context": {
+        "estimate_as_of": "2026-11-06",
+        "target_price_date": "2026-11-06",
+        "permit_date_assumption": "2026-11-06",
+        "currency": "USD",
+        "market_scenario": "ordinary_current",
+        "rebuild_scope": "equivalent_size_quality"
+      },
+      "cost_evidence": {
+        "evidence_id": "SYNTHETIC-PLANNING-NOT-A-QUOTE",
+        "source_id": "TEST-ONLY",
+        "source_url_or_document_ref": "fixture://synthetic-planning-basis-not-real-quote",
+        "scope_description": "Synthetic scoped planning input, no contractor bid obtained",
+        "reviewer": "Fictional test reviewer",
+        "publication_date": "2026-11-06",
+        "price_base_date": "2026-11-06",
+        "reviewed_at": "2026-11-06",
+        "valid_through": "2026-11-06",
+        "year": 2026,
+        "verification_status": "full_document_verified",
+        "parameter_status": "approved_for_this_scope",
+        "quoted_address": "synthetic_adequate_unknown_property (fictional address)",
+        "quoted_living_area_sqft": 2000,
+        "county_fips": "06037",
+        "permitting_jurisdiction": "Unincorporated Los Angeles County",
+        "quality": "synthetic_standard",
+        "construction_type": "wood_frame",
+        "stories": 1,
+        "area_definition": "finished_living_area",
+        "property_scope": "detached_site_built_single_family",
+        "currency": "USD",
+        "market_scenario": "ordinary_current",
+        "rebuild_scope": "equivalent_size_quality",
+        "building_scope_confirmed": true,
+        "unit": "USD_per_finished_sqft",
+        "includes": [
+          "construction",
+          "contractor_overhead_profit"
+        ],
+        "excludes": [
+          "demolition_debris",
+          "professional_services",
+          "permits_agency_fees",
+          "incremental_code",
+          "extraordinary_site_utilities",
+          "incremental_disaster_pressure",
+          "contingency"
+        ],
+        "scenarios": {
+          "central": {
+            "base_value": "400",
+            "rationale": "Synthetic planning case, not observed local pricing or an insurer quote",
+            "assumptions": [
+              "Every monetary amount is synthetic; do not use as a price benchmark."
+            ],
+            "items": [
+              {
+                "category": "demolition_debris",
+                "scope_state": "separately_priced",
+                "amount_usd": "30000",
+                "documentation": "Synthetic non-overlapping cost allocation"
+              },
+              {
+                "category": "professional_services",
+                "scope_state": "separately_priced",
+                "amount_usd": "50000",
+                "documentation": "Synthetic non-overlapping cost allocation"
+              },
+              {
+                "category": "permits_agency_fees",
+                "scope_state": "separately_priced",
+                "amount_usd": "10000",
+                "documentation": "Synthetic non-overlapping cost allocation"
+              },
+              {
+                "category": "incremental_code",
+                "scope_state": "separately_priced",
+                "amount_usd": "40000",
+                "documentation": "Synthetic non-overlapping cost allocation"
+              },
+              {
+                "category": "extraordinary_site_utilities",
+                "scope_state": "separately_priced",
+                "amount_usd": "20000",
+                "documentation": "Synthetic non-overlapping cost allocation"
+              },
+              {
+                "category": "incremental_disaster_pressure",
+                "scope_state": "not_applicable_verified",
+                "documentation": "Synthetic case expressly does not model this allowance"
+              },
+              {
+                "category": "contingency",
+                "scope_state": "not_applicable_verified",
+                "documentation": "Synthetic case expressly does not model this allowance"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "payload": {
+      "schema_version": "gap-v1",
+      "as_of": "2026-11-06",
+      "currency": "USD",
+      "subject_id": "synthetic_adequate_unknown_property",
+      "property": {
+        "subject_id": "synthetic_adequate_unknown_property",
+        "county_fips": "06037",
+        "jurisdiction": "Unincorporated Los Angeles County",
+        "facts": {}
+      },
+      "needs": {
+        "dwelling": {
+          "amount_usd": null,
+          "scope_id": "synthetic_adequate_unknown_property:dwelling",
+          "source": {
+            "reference": "fixture://SYNTHETIC-ONLY/need-dwelling",
+            "verified": true,
+            "valid_from": "2026-11-06",
+            "valid_through": "2026-11-06"
+          }
+        },
+        "ale": {
+          "amount_usd": "72000",
+          "scope_id": "synthetic_adequate_unknown_property:ale",
+          "source": {
+            "reference": "fixture://SYNTHETIC-ONLY/need-ale",
+            "verified": true,
+            "valid_from": "2026-11-06",
+            "valid_through": "2026-11-06"
+          },
+          "duration_months": "24"
+        },
+        "ordinance_law": {
+          "amount_usd": "40000",
+          "scope_id": "synthetic_adequate_unknown_property:ordinance_law",
+          "source": {
+            "reference": "fixture://SYNTHETIC-ONLY/need-ordinance_law",
+            "verified": true,
+            "valid_from": "2026-11-06",
+            "valid_through": "2026-11-06"
+          }
+        },
+        "debris": {
+          "amount_usd": "30000",
+          "scope_id": "synthetic_adequate_unknown_property:debris",
+          "source": {
+            "reference": "fixture://SYNTHETIC-ONLY/need-debris",
+            "verified": true,
+            "valid_from": "2026-11-06",
+            "valid_through": "2026-11-06"
+          }
+        }
+      },
+      "selected_product_ids": [],
+      "policy": {
+        "subject_id": "synthetic_adequate_unknown_property",
+        "description": "Synthetic policy terms only; no actual insurer quote or premium",
+        "source": {
+          "reference": "fixture://SYNTHETIC-ONLY/reviewed-policy",
+          "verified": true,
+          "valid_from": "2026-11-06",
+          "valid_through": "2026-11-06"
+        },
+        "terms_reviewed": true,
+        "exclusions_reviewed": true,
+        "coverages": {
+          "dwelling": {
+            "status": "present",
+            "limit_usd": "1000000",
+            "scope_id": "synthetic_adequate_unknown_property:dwelling",
+            "source": {
+              "reference": "fixture://SYNTHETIC-ONLY/policy-dwelling",
+              "verified": true,
+              "valid_from": "2026-11-06",
+              "valid_through": "2026-11-06"
+            },
+            "limit_basis": "standalone",
+            "settlement": "replacement_cost"
+          },
+          "ale": {
+            "status": "present",
+            "limit_usd": "100000",
+            "scope_id": "synthetic_adequate_unknown_property:ale",
+            "source": {
+              "reference": "fixture://SYNTHETIC-ONLY/policy-ale",
+              "verified": true,
+              "valid_from": "2026-11-06",
+              "valid_through": "2026-11-06"
+            },
+            "limit_basis": "standalone",
+            "duration_months": "24"
+          },
+          "ordinance_law": {
+            "status": "present",
+            "limit_usd": "50000",
+            "scope_id": "synthetic_adequate_unknown_property:ordinance_law",
+            "source": {
+              "reference": "fixture://SYNTHETIC-ONLY/policy-ordinance_law",
+              "verified": true,
+              "valid_from": "2026-11-06",
+              "valid_through": "2026-11-06"
+            },
+            "limit_basis": "standalone"
+          },
+          "debris": {
+            "status": "present",
+            "limit_usd": "40000",
+            "scope_id": "synthetic_adequate_unknown_property:debris",
+            "source": {
+              "reference": "fixture://SYNTHETIC-ONLY/policy-debris",
+              "verified": true,
+              "valid_from": "2026-11-06",
+              "valid_through": "2026-11-06"
+            },
+            "limit_basis": "standalone"
+          }
+        },
+        "exclusions": [],
+        "endorsements": [],
+        "extended_replacement": {
+          "kind": "percentage",
+          "value": "25",
+          "conditions_verified": true,
+          "scope_id": "synthetic_adequate_unknown_property:dwelling",
+          "source": {
+            "reference": "fixture://SYNTHETIC-ONLY/erc",
+            "verified": true,
+            "valid_from": "2026-11-06",
+            "valid_through": "2026-11-06"
+          }
+        },
+        "deductible": {
+          "kind": "percentage",
+          "percent": "2",
+          "basis_usd": "1000000",
+          "basis_verified": true,
+          "source": {
+            "reference": "fixture://SYNTHETIC-ONLY/deductible",
+            "verified": true,
+            "valid_from": "2026-11-06",
+            "valid_through": "2026-11-06"
+          }
+        }
+      }
+    },
+    "reviewed_dwelling_allocation_usd": "880000",
+    "allocation_review_is_synthetic_test_only": true
+  },
+  {
+    "scenario_id": "synthetic_limited_fair_uncertain",
+    "synthetic_test_only": true,
+    "description": "Fictional FAIR-type dwelling cover, ACV settlement, shared debris and unknown reconstruction pricing",
+    "rebuilding_request": {
+      "mode": "documented",
+      "address": "synthetic_limited_fair_uncertain (fictional address)",
+      "location": {
+        "county_fips": "06037",
+        "permitting_jurisdiction": "Unincorporated Los Angeles County",
+        "jurisdiction_verified": true
+      },
+      "home": {
+        "living_area_sqft": 1500,
+        "area_definition": "finished_living_area",
+        "area_confirmed": true,
+        "area_source": "Synthetic plans",
+        "stories": 1,
+        "year_built": 1965,
+        "dwelling_type": "detached_site_built_single_family",
+        "unit_count": 1,
+        "construction_type": "wood_frame",
+        "foundation_type": "slab",
+        "features_reviewed": true,
+        "materials": {
+          "roof": "composition",
+          "exterior": "stucco"
+        },
+        "quality": {
+          "source_category": "synthetic_standard",
+          "description": "Synthetic ordinary finishes",
+          "homeowner_confirmed": true
+        }
+      },
+      "site": {
+        "screening_complete": true,
+        "requires_specialist": false
+      },
+      "estimate_context": {
+        "estimate_as_of": "2026-11-06",
+        "target_price_date": "2026-11-06",
+        "permit_date_assumption": "2026-11-06",
+        "currency": "USD",
+        "market_scenario": "ordinary_current",
+        "rebuild_scope": "equivalent_size_quality"
+      },
+      "cost_evidence": {
+        "evidence_id": "SYNTHETIC-PLANNING-NOT-A-QUOTE",
+        "source_id": "TEST-ONLY",
+        "source_url_or_document_ref": "fixture://synthetic-planning-basis-not-real-quote",
+        "scope_description": "Synthetic scoped planning input, no contractor bid obtained",
+        "reviewer": "Fictional test reviewer",
+        "publication_date": "2026-11-06",
+        "price_base_date": "2026-11-06",
+        "reviewed_at": "2026-11-06",
+        "valid_through": "2026-11-06",
+        "year": 2026,
+        "verification_status": "full_document_verified",
+        "parameter_status": "approved_for_this_scope",
+        "quoted_address": "synthetic_limited_fair_uncertain (fictional address)",
+        "quoted_living_area_sqft": 1500,
+        "county_fips": "06037",
+        "permitting_jurisdiction": "Unincorporated Los Angeles County",
+        "quality": "synthetic_standard",
+        "construction_type": "wood_frame",
+        "stories": 1,
+        "area_definition": "finished_living_area",
+        "property_scope": "detached_site_built_single_family",
+        "currency": "USD",
+        "market_scenario": "ordinary_current",
+        "rebuild_scope": "equivalent_size_quality",
+        "building_scope_confirmed": true,
+        "unit": "USD_per_finished_sqft",
+        "includes": [
+          "construction",
+          "contractor_overhead_profit"
+        ],
+        "excludes": [
+          "demolition_debris",
+          "professional_services",
+          "permits_agency_fees",
+          "incremental_code",
+          "extraordinary_site_utilities",
+          "incremental_disaster_pressure",
+          "contingency"
+        ],
+        "scenarios": {
+          "central": {
+            "base_value": null,
+            "rationale": "Synthetic planning case, not observed local pricing or an insurer quote",
+            "assumptions": [
+              "Every monetary amount is synthetic; do not use as a price benchmark."
+            ],
+            "items": [
+              {
+                "category": "demolition_debris",
+                "scope_state": "separately_priced",
+                "amount_usd": "30000",
+                "documentation": "Synthetic non-overlapping cost allocation"
+              },
+              {
+                "category": "professional_services",
+                "scope_state": "separately_priced",
+                "amount_usd": "40000",
+                "documentation": "Synthetic non-overlapping cost allocation"
+              },
+              {
+                "category": "permits_agency_fees",
+                "scope_state": "separately_priced",
+                "amount_usd": "10000",
+                "documentation": "Synthetic non-overlapping cost allocation"
+              },
+              {
+                "category": "incremental_code",
+                "scope_state": "separately_priced",
+                "amount_usd": "30000",
+                "documentation": "Synthetic non-overlapping cost allocation"
+              },
+              {
+                "category": "extraordinary_site_utilities",
+                "scope_state": "separately_priced",
+                "amount_usd": "10000",
+                "documentation": "Synthetic non-overlapping cost allocation"
+              },
+              {
+                "category": "incremental_disaster_pressure",
+                "scope_state": "not_applicable_verified",
+                "documentation": "Synthetic case expressly does not model this allowance"
+              },
+              {
+                "category": "contingency",
+                "scope_state": "not_applicable_verified",
+                "documentation": "Synthetic case expressly does not model this allowance"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "payload": {
+      "schema_version": "gap-v1",
+      "as_of": "2026-11-06",
+      "currency": "USD",
+      "subject_id": "synthetic_limited_fair_uncertain",
+      "property": {
+        "subject_id": "synthetic_limited_fair_uncertain",
+        "county_fips": "06037",
+        "jurisdiction": "Unincorporated Los Angeles County",
+        "facts": {
+          "fair_enclosed_eaves": {
+            "value": false,
+            "status": "confirmed",
+            "source": {
+              "reference": "fixture://SYNTHETIC-ONLY/fair-eaves",
+              "verified": true,
+              "valid_from": "2026-11-06",
+              "valid_through": "2026-11-06"
+            }
+          }
+        }
+      },
+      "needs": {
+        "dwelling": {
+          "amount_usd": null,
+          "scope_id": "synthetic_limited_fair_uncertain:dwelling",
+          "source": {
+            "reference": "fixture://SYNTHETIC-ONLY/need-dwelling",
+            "verified": true,
+            "valid_from": "2026-11-06",
+            "valid_through": "2026-11-06"
+          }
+        },
+        "ale": {
+          "amount_usd": null,
+          "scope_id": "synthetic_limited_fair_uncertain:ale",
+          "source": {
+            "reference": "fixture://SYNTHETIC-ONLY/need-ale",
+            "verified": true,
+            "valid_from": "2026-11-06",
+            "valid_through": "2026-11-06"
+          },
+          "duration_months": "24"
+        },
+        "ordinance_law": {
+          "amount_usd": null,
+          "scope_id": "synthetic_limited_fair_uncertain:ordinance_law",
+          "source": {
+            "reference": "fixture://SYNTHETIC-ONLY/need-ordinance_law",
+            "verified": true,
+            "valid_from": "2026-11-06",
+            "valid_through": "2026-11-06"
+          }
+        },
+        "debris": {
+          "amount_usd": null,
+          "scope_id": "synthetic_limited_fair_uncertain:debris",
+          "source": {
+            "reference": "fixture://SYNTHETIC-ONLY/need-debris",
+            "verified": true,
+            "valid_from": "2026-11-06",
+            "valid_through": "2026-11-06"
+          }
+        }
+      },
+      "selected_product_ids": [
+        "ca_fair_dwelling"
+      ],
+      "policy": {
+        "subject_id": "synthetic_limited_fair_uncertain",
+        "description": "Synthetic policy terms only; no actual insurer quote or premium",
+        "source": {
+          "reference": "fixture://SYNTHETIC-ONLY/reviewed-policy",
+          "verified": true,
+          "valid_from": "2026-11-06",
+          "valid_through": "2026-11-06"
+        },
+        "terms_reviewed": true,
+        "exclusions_reviewed": true,
+        "coverages": {
+          "dwelling": {
+            "status": "present",
+            "limit_usd": "450000",
+            "scope_id": "synthetic_limited_fair_uncertain:dwelling",
+            "source": {
+              "reference": "fixture://SYNTHETIC-ONLY/policy-dwelling",
+              "verified": true,
+              "valid_from": "2026-11-06",
+              "valid_through": "2026-11-06"
+            },
+            "limit_basis": "standalone",
+            "settlement": "actual_cash_value"
+          },
+          "ale": {
+            "status": "unknown",
+            "limit_usd": null,
+            "scope_id": "synthetic_limited_fair_uncertain:ale",
+            "source": {
+              "reference": "fixture://SYNTHETIC-ONLY/policy-ale",
+              "verified": true,
+              "valid_from": "2026-11-06",
+              "valid_through": "2026-11-06"
+            },
+            "limit_basis": "standalone",
+            "duration_months": null,
+            "note": "Only fair-rental-value terminology was available; not interpreted as ALE."
+          },
+          "ordinance_law": {
+            "status": "absent",
+            "limit_usd": null,
+            "scope_id": "synthetic_limited_fair_uncertain:ordinance_law",
+            "source": {
+              "reference": "fixture://SYNTHETIC-ONLY/policy-ordinance_law",
+              "verified": true,
+              "valid_from": "2026-11-06",
+              "valid_through": "2026-11-06"
+            },
+            "limit_basis": "standalone"
+          },
+          "debris": {
+            "status": "present",
+            "limit_usd": null,
+            "scope_id": "synthetic_limited_fair_uncertain:debris",
+            "source": {
+              "reference": "fixture://SYNTHETIC-ONLY/policy-debris",
+              "verified": true,
+              "valid_from": "2026-11-06",
+              "valid_through": "2026-11-06"
+            },
+            "limit_basis": "within_dwelling"
+          }
+        },
+        "exclusions": [],
+        "endorsements": [],
+        "extended_replacement": {
+          "kind": "none",
+          "source": {
+            "reference": "fixture://SYNTHETIC-ONLY/no-extension",
+            "verified": true,
+            "valid_from": "2026-11-06",
+            "valid_through": "2026-11-06"
+          }
+        },
+        "deductible": {
+          "kind": "fixed",
+          "amount_usd": "1000",
+          "source": {
+            "reference": "fixture://SYNTHETIC-ONLY/deductible",
+            "verified": true,
+            "valid_from": "2026-11-06",
+            "valid_through": "2026-11-06"
+          }
+        },
+        "document_type": "fair_plan"
+      }
+    },
+    "reviewed_dwelling_allocation_usd": null,
+    "allocation_review_is_synthetic_test_only": true
+  }
+]

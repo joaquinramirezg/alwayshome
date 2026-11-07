@@ -1,0 +1,1770 @@
+{
+  "synthetic_test_only": true,
+  "scenario_id": "synthetic_adequate_unknown_property",
+  "description": "Fictional 2,000 ft\u00b2 home with sufficient supplied limits but unconfirmed mitigation information",
+  "warning": "All household amounts/conditions are synthetic. No actual quote or premium is represented.",
+  "rebuilding_result": {
+    "method_version": "rebuild-v1",
+    "status": "complete_planning_estimate",
+    "estimated_rebuilding_cost_usd": "950000",
+    "scenarios": {
+      "low": null,
+      "central": {
+        "reconstruction_total_usd": "950000",
+        "known_cost_subtotal_usd": "950000",
+        "construction_subtotal_usd": "800000",
+        "component_totals": {
+          "construction": {
+            "scope_state": "separately_priced",
+            "amount_usd": "800000",
+            "evidence_id": "SYNTHETIC-PLANNING-NOT-A-QUOTE"
+          },
+          "demolition_debris": {
+            "category": "demolition_debris",
+            "scope_state": "separately_priced",
+            "amount_usd": "30000",
+            "documentation": "Synthetic non-overlapping cost allocation",
+            "evidence_id": "SYNTHETIC-PLANNING-NOT-A-QUOTE"
+          },
+          "professional_services": {
+            "category": "professional_services",
+            "scope_state": "separately_priced",
+            "amount_usd": "50000",
+            "documentation": "Synthetic non-overlapping cost allocation",
+            "evidence_id": "SYNTHETIC-PLANNING-NOT-A-QUOTE"
+          },
+          "permits_agency_fees": {
+            "category": "permits_agency_fees",
+            "scope_state": "separately_priced",
+            "amount_usd": "10000",
+            "documentation": "Synthetic non-overlapping cost allocation",
+            "evidence_id": "SYNTHETIC-PLANNING-NOT-A-QUOTE"
+          },
+          "incremental_code": {
+            "category": "incremental_code",
+            "scope_state": "separately_priced",
+            "amount_usd": "40000",
+            "documentation": "Synthetic non-overlapping cost allocation",
+            "evidence_id": "SYNTHETIC-PLANNING-NOT-A-QUOTE"
+          },
+          "extraordinary_site_utilities": {
+            "category": "extraordinary_site_utilities",
+            "scope_state": "separately_priced",
+            "amount_usd": "20000",
+            "documentation": "Synthetic non-overlapping cost allocation",
+            "evidence_id": "SYNTHETIC-PLANNING-NOT-A-QUOTE"
+          },
+          "incremental_disaster_pressure": {
+            "category": "incremental_disaster_pressure",
+            "scope_state": "not_applicable_verified",
+            "documentation": "Synthetic case expressly does not model this allowance",
+            "evidence_id": "SYNTHETIC-PLANNING-NOT-A-QUOTE"
+          },
+          "contingency": {
+            "category": "contingency",
+            "scope_state": "not_applicable_verified",
+            "documentation": "Synthetic case expressly does not model this allowance",
+            "evidence_id": "SYNTHETIC-PLANNING-NOT-A-QUOTE"
+          },
+          "contractor_overhead_profit": {
+            "scope_state": "included_in_base",
+            "amount_usd": null,
+            "evidence_id": "SYNTHETIC-PLANNING-NOT-A-QUOTE"
+          }
+        },
+        "unresolved_categories": [],
+        "completeness": "complete",
+        "price_basis": {
+          "evidence_id": "SYNTHETIC-PLANNING-NOT-A-QUOTE",
+          "source_id": "TEST-ONLY",
+          "source_url_or_document_ref": "fixture://synthetic-planning-basis-not-real-quote",
+          "scope_description": "Synthetic scoped planning input, no contractor bid obtained",
+          "reviewer": "Fictional test reviewer",
+          "publication_date": "2026-11-06",
+          "price_base_date": "2026-11-06",
+          "reviewed_at": "2026-11-06",
+          "valid_through": "2026-11-06",
+          "year": 2026,
+          "verification_status": "full_document_verified",
+          "parameter_status": "approved_for_this_scope",
+          "quoted_address": "synthetic_adequate_unknown_property (fictional address)",
+          "quoted_living_area_sqft": 2000,
+          "county_fips": "06037",
+          "permitting_jurisdiction": "Unincorporated Los Angeles County",
+          "quality": "synthetic_standard",
+          "construction_type": "wood_frame",
+          "stories": 1,
+          "area_definition": "finished_living_area",
+          "property_scope": "detached_site_built_single_family",
+          "currency": "USD",
+          "market_scenario": "ordinary_current",
+          "rebuild_scope": "equivalent_size_quality",
+          "building_scope_confirmed": true,
+          "unit": "USD_per_finished_sqft",
+          "includes": [
+            "construction",
+            "contractor_overhead_profit"
+          ],
+          "excludes": [
+            "demolition_debris",
+            "professional_services",
+            "permits_agency_fees",
+            "incremental_code",
+            "extraordinary_site_utilities",
+            "incremental_disaster_pressure",
+            "contingency"
+          ],
+          "scenarios": {
+            "central": {
+              "base_value": "400",
+              "rationale": "Synthetic planning case, not observed local pricing or an insurer quote",
+              "assumptions": [
+                "Every monetary amount is synthetic; do not use as a price benchmark."
+              ],
+              "items": [
+                {
+                  "category": "demolition_debris",
+                  "scope_state": "separately_priced",
+                  "amount_usd": "30000",
+                  "documentation": "Synthetic non-overlapping cost allocation"
+                },
+                {
+                  "category": "professional_services",
+                  "scope_state": "separately_priced",
+                  "amount_usd": "50000",
+                  "documentation": "Synthetic non-overlapping cost allocation"
+                },
+                {
+                  "category": "permits_agency_fees",
+                  "scope_state": "separately_priced",
+                  "amount_usd": "10000",
+                  "documentation": "Synthetic non-overlapping cost allocation"
+                },
+                {
+                  "category": "incremental_code",
+                  "scope_state": "separately_priced",
+                  "amount_usd": "40000",
+                  "documentation": "Synthetic non-overlapping cost allocation"
+                },
+                {
+                  "category": "extraordinary_site_utilities",
+                  "scope_state": "separately_priced",
+                  "amount_usd": "20000",
+                  "documentation": "Synthetic non-overlapping cost allocation"
+                },
+                {
+                  "category": "incremental_disaster_pressure",
+                  "scope_state": "not_applicable_verified",
+                  "documentation": "Synthetic case expressly does not model this allowance"
+                },
+                {
+                  "category": "contingency",
+                  "scope_state": "not_applicable_verified",
+                  "documentation": "Synthetic case expressly does not model this allowance"
+                }
+              ]
+            }
+          }
+        },
+        "rationale": "Synthetic planning case, not observed local pricing or an insurer quote",
+        "assumptions": [
+          "Every monetary amount is synthetic; do not use as a price benchmark."
+        ],
+        "adjustments": {
+          "location_factor": "1",
+          "time_factor": "1"
+        }
+      },
+      "high": null
+    },
+    "missing_inputs": [],
+    "review_flags": [],
+    "excluded_costs": [
+      "land",
+      "mortgage",
+      "sale_commissions",
+      "movable_contents",
+      "temporary_accommodation",
+      "landscaping",
+      "optional_betterments",
+      "detached_structures",
+      "financing_carrying_costs"
+    ],
+    "included_cost_components": [
+      "construction",
+      "contractor_overhead_profit"
+    ],
+    "assumptions": [
+      "Every monetary amount is synthetic; do not use as a price benchmark."
+    ],
+    "limitations": [
+      "Planning estimate of reconstruction cost excluding land; not an insurer-certified replacement-cost valuation.",
+      "Evidence authenticity and scope require human review.",
+      "Scenario bounds are planning cases, not statistical confidence intervals.",
+      "No automatic geographic, age, disaster, or future inflation adjustments."
+    ],
+    "coverage_comparison_ready": false,
+    "display_note": "Planning estimate of reconstruction cost excluding land; not an insurer-certified replacement-cost valuation.",
+    "confirmed_inputs": {
+      "mode": "documented",
+      "address": "synthetic_adequate_unknown_property (fictional address)",
+      "location": {
+        "county_fips": "06037",
+        "permitting_jurisdiction": "Unincorporated Los Angeles County",
+        "jurisdiction_verified": true
+      },
+      "home": {
+        "living_area_sqft": 2000,
+        "area_definition": "finished_living_area",
+        "area_confirmed": true,
+        "area_source": "Synthetic plans",
+        "stories": 1,
+        "year_built": 1965,
+        "dwelling_type": "detached_site_built_single_family",
+        "unit_count": 1,
+        "construction_type": "wood_frame",
+        "foundation_type": "slab",
+        "features_reviewed": true,
+        "materials": {
+          "roof": "composition",
+          "exterior": "stucco"
+        },
+        "quality": {
+          "source_category": "synthetic_standard",
+          "description": "Synthetic ordinary finishes",
+          "homeowner_confirmed": true
+        }
+      },
+      "site": {
+        "screening_complete": true,
+        "requires_specialist": false
+      },
+      "estimate_context": {
+        "estimate_as_of": "2026-11-06",
+        "target_price_date": "2026-11-06",
+        "permit_date_assumption": "2026-11-06",
+        "currency": "USD",
+        "market_scenario": "ordinary_current",
+        "rebuild_scope": "equivalent_size_quality"
+      },
+      "cost_evidence": {
+        "evidence_id": "SYNTHETIC-PLANNING-NOT-A-QUOTE",
+        "source_id": "TEST-ONLY",
+        "source_url_or_document_ref": "fixture://synthetic-planning-basis-not-real-quote",
+        "scope_description": "Synthetic scoped planning input, no contractor bid obtained",
+        "reviewer": "Fictional test reviewer",
+        "publication_date": "2026-11-06",
+        "price_base_date": "2026-11-06",
+        "reviewed_at": "2026-11-06",
+        "valid_through": "2026-11-06",
+        "year": 2026,
+        "verification_status": "full_document_verified",
+        "parameter_status": "approved_for_this_scope",
+        "quoted_address": "synthetic_adequate_unknown_property (fictional address)",
+        "quoted_living_area_sqft": 2000,
+        "county_fips": "06037",
+        "permitting_jurisdiction": "Unincorporated Los Angeles County",
+        "quality": "synthetic_standard",
+        "construction_type": "wood_frame",
+        "stories": 1,
+        "area_definition": "finished_living_area",
+        "property_scope": "detached_site_built_single_family",
+        "currency": "USD",
+        "market_scenario": "ordinary_current",
+        "rebuild_scope": "equivalent_size_quality",
+        "building_scope_confirmed": true,
+        "unit": "USD_per_finished_sqft",
+        "includes": [
+          "construction",
+          "contractor_overhead_profit"
+        ],
+        "excludes": [
+          "demolition_debris",
+          "professional_services",
+          "permits_agency_fees",
+          "incremental_code",
+          "extraordinary_site_utilities",
+          "incremental_disaster_pressure",
+          "contingency"
+        ],
+        "scenarios": {
+          "central": {
+            "base_value": "400",
+            "rationale": "Synthetic planning case, not observed local pricing or an insurer quote",
+            "assumptions": [
+              "Every monetary amount is synthetic; do not use as a price benchmark."
+            ],
+            "items": [
+              {
+                "category": "demolition_debris",
+                "scope_state": "separately_priced",
+                "amount_usd": "30000",
+                "documentation": "Synthetic non-overlapping cost allocation"
+              },
+              {
+                "category": "professional_services",
+                "scope_state": "separately_priced",
+                "amount_usd": "50000",
+                "documentation": "Synthetic non-overlapping cost allocation"
+              },
+              {
+                "category": "permits_agency_fees",
+                "scope_state": "separately_priced",
+                "amount_usd": "10000",
+                "documentation": "Synthetic non-overlapping cost allocation"
+              },
+              {
+                "category": "incremental_code",
+                "scope_state": "separately_priced",
+                "amount_usd": "40000",
+                "documentation": "Synthetic non-overlapping cost allocation"
+              },
+              {
+                "category": "extraordinary_site_utilities",
+                "scope_state": "separately_priced",
+                "amount_usd": "20000",
+                "documentation": "Synthetic non-overlapping cost allocation"
+              },
+              {
+                "category": "incremental_disaster_pressure",
+                "scope_state": "not_applicable_verified",
+                "documentation": "Synthetic case expressly does not model this allowance"
+              },
+              {
+                "category": "contingency",
+                "scope_state": "not_applicable_verified",
+                "documentation": "Synthetic case expressly does not model this allowance"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "estimate_as_of": "2026-11-06",
+    "currency": "USD",
+    "target_price_date": "2026-11-06",
+    "source": {
+      "evidence_id": "SYNTHETIC-PLANNING-NOT-A-QUOTE",
+      "source_id": "TEST-ONLY",
+      "source_url_or_document_ref": "fixture://synthetic-planning-basis-not-real-quote",
+      "publication_date": "2026-11-06",
+      "price_base_date": "2026-11-06"
+    }
+  },
+  "gap_input": {
+    "schema_version": "gap-v1",
+    "as_of": "2026-11-06",
+    "currency": "USD",
+    "subject_id": "synthetic_adequate_unknown_property",
+    "property": {
+      "subject_id": "synthetic_adequate_unknown_property",
+      "county_fips": "06037",
+      "jurisdiction": "Unincorporated Los Angeles County",
+      "facts": {}
+    },
+    "needs": {
+      "dwelling": {
+        "amount_usd": "880000",
+        "scope_id": "synthetic_adequate_unknown_property:dwelling",
+        "source": {
+          "reference": "fixture://SYNTHETIC-ONLY/need-dwelling",
+          "verified": true,
+          "valid_from": "2026-11-06",
+          "valid_through": "2026-11-06"
+        },
+        "rebuild_scenario": "central",
+        "allocation_review_required": false
+      },
+      "ale": {
+        "amount_usd": "72000",
+        "scope_id": "synthetic_adequate_unknown_property:ale",
+        "source": {
+          "reference": "fixture://SYNTHETIC-ONLY/need-ale",
+          "verified": true,
+          "valid_from": "2026-11-06",
+          "valid_through": "2026-11-06"
+        },
+        "duration_months": "24"
+      },
+      "ordinance_law": {
+        "amount_usd": "40000",
+        "scope_id": "synthetic_adequate_unknown_property:ordinance_law",
+        "source": {
+          "reference": "fixture://SYNTHETIC-ONLY/need-ordinance_law",
+          "verified": true,
+          "valid_from": "2026-11-06",
+          "valid_through": "2026-11-06"
+        }
+      },
+      "debris": {
+        "amount_usd": "30000",
+        "scope_id": "synthetic_adequate_unknown_property:debris",
+        "source": {
+          "reference": "fixture://SYNTHETIC-ONLY/need-debris",
+          "verified": true,
+          "valid_from": "2026-11-06",
+          "valid_through": "2026-11-06"
+        }
+      }
+    },
+    "selected_product_ids": [],
+    "policy": {
+      "subject_id": "synthetic_adequate_unknown_property",
+      "description": "Synthetic policy terms only; no actual insurer quote or premium",
+      "source": {
+        "reference": "fixture://SYNTHETIC-ONLY/reviewed-policy",
+        "verified": true,
+        "valid_from": "2026-11-06",
+        "valid_through": "2026-11-06"
+      },
+      "terms_reviewed": true,
+      "exclusions_reviewed": true,
+      "coverages": {
+        "dwelling": {
+          "status": "present",
+          "limit_usd": "1000000",
+          "scope_id": "synthetic_adequate_unknown_property:dwelling",
+          "source": {
+            "reference": "fixture://SYNTHETIC-ONLY/policy-dwelling",
+            "verified": true,
+            "valid_from": "2026-11-06",
+            "valid_through": "2026-11-06"
+          },
+          "limit_basis": "standalone",
+          "settlement": "replacement_cost"
+        },
+        "ale": {
+          "status": "present",
+          "limit_usd": "100000",
+          "scope_id": "synthetic_adequate_unknown_property:ale",
+          "source": {
+            "reference": "fixture://SYNTHETIC-ONLY/policy-ale",
+            "verified": true,
+            "valid_from": "2026-11-06",
+            "valid_through": "2026-11-06"
+          },
+          "limit_basis": "standalone",
+          "duration_months": "24"
+        },
+        "ordinance_law": {
+          "status": "present",
+          "limit_usd": "50000",
+          "scope_id": "synthetic_adequate_unknown_property:ordinance_law",
+          "source": {
+            "reference": "fixture://SYNTHETIC-ONLY/policy-ordinance_law",
+            "verified": true,
+            "valid_from": "2026-11-06",
+            "valid_through": "2026-11-06"
+          },
+          "limit_basis": "standalone"
+        },
+        "debris": {
+          "status": "present",
+          "limit_usd": "40000",
+          "scope_id": "synthetic_adequate_unknown_property:debris",
+          "source": {
+            "reference": "fixture://SYNTHETIC-ONLY/policy-debris",
+            "verified": true,
+            "valid_from": "2026-11-06",
+            "valid_through": "2026-11-06"
+          },
+          "limit_basis": "standalone"
+        }
+      },
+      "exclusions": [],
+      "endorsements": [],
+      "extended_replacement": {
+        "kind": "percentage",
+        "value": "25",
+        "conditions_verified": true,
+        "scope_id": "synthetic_adequate_unknown_property:dwelling",
+        "source": {
+          "reference": "fixture://SYNTHETIC-ONLY/erc",
+          "verified": true,
+          "valid_from": "2026-11-06",
+          "valid_through": "2026-11-06"
+        }
+      },
+      "deductible": {
+        "kind": "percentage",
+        "percent": "2",
+        "basis_usd": "1000000",
+        "basis_verified": true,
+        "source": {
+          "reference": "fixture://SYNTHETIC-ONLY/deductible",
+          "verified": true,
+          "valid_from": "2026-11-06",
+          "valid_through": "2026-11-06"
+        }
+      }
+    }
+  },
+  "gap_report": {
+    "schema_version": "gap-report-v1",
+    "status": "incomplete",
+    "subject_id": "synthetic_adequate_unknown_property",
+    "as_of": "2026-11-06",
+    "currency": "USD",
+    "coverage": {
+      "status": "screened",
+      "findings": [
+        {
+          "category": "dwelling",
+          "status": "no_shortfall_identified",
+          "gap_usd": "0",
+          "need_usd": "880000",
+          "available_limit_usd": "1000000",
+          "action": "Confirm terms remain applicable at renewal.",
+          "source": {
+            "reference": "fixture://SYNTHETIC-ONLY/policy-dwelling",
+            "verified": true,
+            "valid_from": "2026-11-06",
+            "valid_through": "2026-11-06"
+          },
+          "need_source": {
+            "reference": "fixture://SYNTHETIC-ONLY/need-dwelling",
+            "verified": true,
+            "valid_from": "2026-11-06",
+            "valid_through": "2026-11-06"
+          }
+        },
+        {
+          "category": "ale",
+          "status": "no_shortfall_identified",
+          "gap_usd": "0",
+          "need_usd": "72000",
+          "available_limit_usd": "100000",
+          "action": "Confirm terms remain applicable at renewal.",
+          "source": {
+            "reference": "fixture://SYNTHETIC-ONLY/policy-ale",
+            "verified": true,
+            "valid_from": "2026-11-06",
+            "valid_through": "2026-11-06"
+          },
+          "need_source": {
+            "reference": "fixture://SYNTHETIC-ONLY/need-ale",
+            "verified": true,
+            "valid_from": "2026-11-06",
+            "valid_through": "2026-11-06"
+          },
+          "duration_gap_months": "0"
+        },
+        {
+          "category": "ordinance_law",
+          "status": "no_shortfall_identified",
+          "gap_usd": "0",
+          "need_usd": "40000",
+          "available_limit_usd": "50000",
+          "action": "Confirm terms remain applicable at renewal.",
+          "source": {
+            "reference": "fixture://SYNTHETIC-ONLY/policy-ordinance_law",
+            "verified": true,
+            "valid_from": "2026-11-06",
+            "valid_through": "2026-11-06"
+          },
+          "need_source": {
+            "reference": "fixture://SYNTHETIC-ONLY/need-ordinance_law",
+            "verified": true,
+            "valid_from": "2026-11-06",
+            "valid_through": "2026-11-06"
+          }
+        },
+        {
+          "category": "debris",
+          "status": "no_shortfall_identified",
+          "gap_usd": "0",
+          "need_usd": "30000",
+          "available_limit_usd": "40000",
+          "action": "Confirm terms remain applicable at renewal.",
+          "source": {
+            "reference": "fixture://SYNTHETIC-ONLY/policy-debris",
+            "verified": true,
+            "valid_from": "2026-11-06",
+            "valid_through": "2026-11-06"
+          },
+          "need_source": {
+            "reference": "fixture://SYNTHETIC-ONLY/need-debris",
+            "verified": true,
+            "valid_from": "2026-11-06",
+            "valid_through": "2026-11-06"
+          }
+        },
+        {
+          "category": "extended_replacement",
+          "status": "conditional_no_shortfall_identified",
+          "gap_usd": "0",
+          "conditional_limit_usd": "1250000",
+          "source": {
+            "reference": "fixture://SYNTHETIC-ONLY/erc",
+            "verified": true,
+            "valid_from": "2026-11-06",
+            "valid_through": "2026-11-06"
+          },
+          "action": "Verify extension, triggers, maintenance conditions and covered cost scope."
+        },
+        {
+          "category": "deductible",
+          "status": "known_exposure",
+          "exposure_usd": "20000",
+          "gap_usd": null,
+          "source": {
+            "reference": "fixture://SYNTHETIC-ONLY/deductible",
+            "verified": true,
+            "valid_from": "2026-11-06",
+            "valid_through": "2026-11-06"
+          },
+          "action": "Plan for the applicable deductible; it is not an additional coverage limit."
+        }
+      ],
+      "aggregate_gap_usd": null,
+      "limitations": [
+        "No aggregate gap: limits may overlap; extensions are conditional, not guaranteed proceeds.",
+        "No-shortfall findings apply only to supplied scope and scenarios, not overall insurance adequacy."
+      ]
+    },
+    "alternatives": {
+      "status": "compared",
+      "products": [
+        {
+          "product_id": "ca_fair_dwelling",
+          "name": "Dwelling Property Policy",
+          "status": "description_only",
+          "eligibility": "not_determined",
+          "annual_premium_usd": null,
+          "premium_difference_usd": null,
+          "source": {
+            "source_id": "fair_form",
+            "reference": "https://www.cfpnet.com/wp-content/uploads/2026/01/Dwelling-Fire-Policy_effective-3-17-26.pdf",
+            "title": "FAIR Plan dwelling form",
+            "verified": true,
+            "verification_status": "full_document_read",
+            "publication_date": null,
+            "effective_date": null,
+            "accessed_date": "2026-11-06",
+            "valid_from": "2026-11-06",
+            "valid_through": "2026-11-06",
+            "validity_basis": "One-day research snapshot, not legal effective dates or future availability.",
+            "limitations": "Form label 05/2026 conflicts with URL date; effective date unresolved. Declarations govern."
+          },
+          "features": [
+            {
+              "feature": "debris_limit_basis",
+              "current": null,
+              "alternative": "Shared base; optional additional cover",
+              "comparison": "unknown",
+              "source": {
+                "source_id": "fair_form",
+                "reference": "https://www.cfpnet.com/wp-content/uploads/2026/01/Dwelling-Fire-Policy_effective-3-17-26.pdf",
+                "title": "FAIR Plan dwelling form",
+                "verified": true,
+                "verification_status": "full_document_read",
+                "publication_date": null,
+                "effective_date": null,
+                "accessed_date": "2026-11-06",
+                "valid_from": "2026-11-06",
+                "valid_through": "2026-11-06",
+                "validity_basis": "One-day research snapshot, not legal effective dates or future availability.",
+                "limitations": "Form label 05/2026 conflicts with URL date; effective date unresolved. Declarations govern."
+              }
+            },
+            {
+              "feature": "dwelling_replacement_cost",
+              "current": null,
+              "alternative": "Optional, subject to settlement conditions",
+              "comparison": "unknown",
+              "source": {
+                "source_id": "fair_form",
+                "reference": "https://www.cfpnet.com/wp-content/uploads/2026/01/Dwelling-Fire-Policy_effective-3-17-26.pdf",
+                "title": "FAIR Plan dwelling form",
+                "verified": true,
+                "verification_status": "full_document_read",
+                "publication_date": null,
+                "effective_date": null,
+                "accessed_date": "2026-11-06",
+                "valid_from": "2026-11-06",
+                "valid_through": "2026-11-06",
+                "validity_basis": "One-day research snapshot, not legal effective dates or future availability.",
+                "limitations": "Form label 05/2026 conflicts with URL date; effective date unresolved. Declarations govern."
+              }
+            }
+          ],
+          "limitations": [
+            "Public descriptions are not offers, acceptance decisions, or binding coverage."
+          ],
+          "current_coverage_terms": {
+            "dwelling": {
+              "status": "present",
+              "limit_usd": "1000000",
+              "scope_id": "synthetic_adequate_unknown_property:dwelling",
+              "source": {
+                "reference": "fixture://SYNTHETIC-ONLY/policy-dwelling",
+                "verified": true,
+                "valid_from": "2026-11-06",
+                "valid_through": "2026-11-06"
+              },
+              "limit_basis": "standalone",
+              "settlement": "replacement_cost"
+            },
+            "ale": {
+              "status": "present",
+              "limit_usd": "100000",
+              "scope_id": "synthetic_adequate_unknown_property:ale",
+              "source": {
+                "reference": "fixture://SYNTHETIC-ONLY/policy-ale",
+                "verified": true,
+                "valid_from": "2026-11-06",
+                "valid_through": "2026-11-06"
+              },
+              "limit_basis": "standalone",
+              "duration_months": "24"
+            },
+            "ordinance_law": {
+              "status": "present",
+              "limit_usd": "50000",
+              "scope_id": "synthetic_adequate_unknown_property:ordinance_law",
+              "source": {
+                "reference": "fixture://SYNTHETIC-ONLY/policy-ordinance_law",
+                "verified": true,
+                "valid_from": "2026-11-06",
+                "valid_through": "2026-11-06"
+              },
+              "limit_basis": "standalone"
+            },
+            "debris": {
+              "status": "present",
+              "limit_usd": "40000",
+              "scope_id": "synthetic_adequate_unknown_property:debris",
+              "source": {
+                "reference": "fixture://SYNTHETIC-ONLY/policy-debris",
+                "verified": true,
+                "valid_from": "2026-11-06",
+                "valid_through": "2026-11-06"
+              },
+              "limit_basis": "standalone"
+            }
+          },
+          "current_deductible": {
+            "kind": "percentage",
+            "percent": "2",
+            "basis_usd": "1000000",
+            "basis_verified": true,
+            "source": {
+              "reference": "fixture://SYNTHETIC-ONLY/deductible",
+              "verified": true,
+              "valid_from": "2026-11-06",
+              "valid_through": "2026-11-06"
+            }
+          },
+          "current_exclusions": [],
+          "reference_metadata": {
+            "insurer": "California FAIR Plan Association",
+            "verification_status": "verified_public_description_only",
+            "geographic_applicability": "California description; LA property acceptance unknown",
+            "availability_status": "not_verified"
+          },
+          "coverage_terms": {
+            "dwelling": "Replacement-cost settlement requires declarations election and conditions.",
+            "extended_replacement": null,
+            "ale": "Fair rental value is specified; do not equate it to comprehensive ALE.",
+            "ordinance_law": "Optional declarations election and limits; damaged-property conditions apply.",
+            "debris": "Base removal uses damaged-property limits; optional additional coverage has exclusions.",
+            "limits_usd": null,
+            "effective_date": null,
+            "form_edition": "05/2026"
+          },
+          "deductibles": [
+            {
+              "structure": "Declarations amount per occurrence; specified exceptions",
+              "amount_usd": null
+            }
+          ],
+          "exclusions": [
+            "Water/earth-movement limitations; review form.",
+            "Optional debris excludes hazardous-material abatement."
+          ],
+          "requirements_pending": []
+        },
+        {
+          "product_id": "farmers_ca_smart",
+          "name": "Smart Plan Home (California overview)",
+          "status": "description_only",
+          "eligibility": "not_determined",
+          "annual_premium_usd": null,
+          "premium_difference_usd": null,
+          "source": {
+            "source_id": "farmers_ca",
+            "reference": "https://www.farmers.com/california/home-insurance/",
+            "title": "Farmers California homeowners",
+            "verified": true,
+            "verification_status": "full_document_read",
+            "publication_date": null,
+            "effective_date": null,
+            "accessed_date": "2026-11-06",
+            "valid_from": "2026-11-06",
+            "valid_through": "2026-11-06",
+            "validity_basis": "One-day research snapshot, not legal effective dates or future availability.",
+            "limitations": "Marketing overview, not a quote or complete policy form."
+          },
+          "features": [
+            {
+              "feature": "ale",
+              "current": null,
+              "alternative": "Described for covered loss",
+              "comparison": "unknown",
+              "source": {
+                "source_id": "farmers_ca",
+                "reference": "https://www.farmers.com/california/home-insurance/",
+                "title": "Farmers California homeowners",
+                "verified": true,
+                "verification_status": "full_document_read",
+                "publication_date": null,
+                "effective_date": null,
+                "accessed_date": "2026-11-06",
+                "valid_from": "2026-11-06",
+                "valid_through": "2026-11-06",
+                "validity_basis": "One-day research snapshot, not legal effective dates or future availability.",
+                "limitations": "Marketing overview, not a quote or complete policy form."
+              }
+            },
+            {
+              "feature": "extended_replacement_cost",
+              "current": null,
+              "alternative": "Option advertised",
+              "comparison": "unknown",
+              "source": {
+                "source_id": "farmers_ca",
+                "reference": "https://www.farmers.com/california/home-insurance/",
+                "title": "Farmers California homeowners",
+                "verified": true,
+                "verification_status": "full_document_read",
+                "publication_date": null,
+                "effective_date": null,
+                "accessed_date": "2026-11-06",
+                "valid_from": "2026-11-06",
+                "valid_through": "2026-11-06",
+                "validity_basis": "One-day research snapshot, not legal effective dates or future availability.",
+                "limitations": "Marketing overview, not a quote or complete policy form."
+              }
+            }
+          ],
+          "limitations": [
+            "Public descriptions are not offers, acceptance decisions, or binding coverage."
+          ],
+          "current_coverage_terms": {
+            "dwelling": {
+              "status": "present",
+              "limit_usd": "1000000",
+              "scope_id": "synthetic_adequate_unknown_property:dwelling",
+              "source": {
+                "reference": "fixture://SYNTHETIC-ONLY/policy-dwelling",
+                "verified": true,
+                "valid_from": "2026-11-06",
+                "valid_through": "2026-11-06"
+              },
+              "limit_basis": "standalone",
+              "settlement": "replacement_cost"
+            },
+            "ale": {
+              "status": "present",
+              "limit_usd": "100000",
+              "scope_id": "synthetic_adequate_unknown_property:ale",
+              "source": {
+                "reference": "fixture://SYNTHETIC-ONLY/policy-ale",
+                "verified": true,
+                "valid_from": "2026-11-06",
+                "valid_through": "2026-11-06"
+              },
+              "limit_basis": "standalone",
+              "duration_months": "24"
+            },
+            "ordinance_law": {
+              "status": "present",
+              "limit_usd": "50000",
+              "scope_id": "synthetic_adequate_unknown_property:ordinance_law",
+              "source": {
+                "reference": "fixture://SYNTHETIC-ONLY/policy-ordinance_law",
+                "verified": true,
+                "valid_from": "2026-11-06",
+                "valid_through": "2026-11-06"
+              },
+              "limit_basis": "standalone"
+            },
+            "debris": {
+              "status": "present",
+              "limit_usd": "40000",
+              "scope_id": "synthetic_adequate_unknown_property:debris",
+              "source": {
+                "reference": "fixture://SYNTHETIC-ONLY/policy-debris",
+                "verified": true,
+                "valid_from": "2026-11-06",
+                "valid_through": "2026-11-06"
+              },
+              "limit_basis": "standalone"
+            }
+          },
+          "current_deductible": {
+            "kind": "percentage",
+            "percent": "2",
+            "basis_usd": "1000000",
+            "basis_verified": true,
+            "source": {
+              "reference": "fixture://SYNTHETIC-ONLY/deductible",
+              "verified": true,
+              "valid_from": "2026-11-06",
+              "valid_through": "2026-11-06"
+            }
+          },
+          "current_exclusions": [],
+          "reference_metadata": {
+            "insurer": "Farmers",
+            "verification_status": "verified_public_description_only",
+            "geographic_applicability": "California description; LA property acceptance unknown",
+            "availability_status": "not_verified"
+          },
+          "coverage_terms": {
+            "dwelling": "Covered-event protection described.",
+            "extended_replacement": "Option advertised; extent unspecified.",
+            "ale": "Covered uninhabitability described; amount/duration unknown.",
+            "ordinance_law": null,
+            "debris": null,
+            "limits_usd": null
+          },
+          "deductibles": [
+            {
+              "structure": "Declining Deductibles option advertised; actual terms/amount unknown",
+              "amount_usd": null
+            }
+          ],
+          "exclusions": [
+            "Flood and earthquake require separate coverage."
+          ],
+          "requirements_pending": []
+        },
+        {
+          "product_id": "mercury_home_overview",
+          "name": "Homeowners (multistate overview)",
+          "status": "description_only",
+          "eligibility": "not_determined",
+          "annual_premium_usd": null,
+          "premium_difference_usd": null,
+          "source": {
+            "source_id": "mercury_home",
+            "reference": "https://www.mercuryinsurance.com/insurance/homeowners/",
+            "title": "Mercury homeowners",
+            "verified": true,
+            "verification_status": "full_document_read",
+            "publication_date": null,
+            "effective_date": null,
+            "accessed_date": "2026-11-06",
+            "valid_from": "2026-11-06",
+            "valid_through": "2026-11-06",
+            "validity_basis": "One-day research snapshot, not legal effective dates or future availability.",
+            "limitations": "Multistate overview; individual features may not apply in California."
+          },
+          "features": [
+            {
+              "feature": "ale",
+              "current": null,
+              "alternative": null,
+              "comparison": "unknown",
+              "source": {
+                "source_id": "mercury_home",
+                "reference": "https://www.mercuryinsurance.com/insurance/homeowners/",
+                "title": "Mercury homeowners",
+                "verified": true,
+                "verification_status": "full_document_read",
+                "publication_date": null,
+                "effective_date": null,
+                "accessed_date": "2026-11-06",
+                "valid_from": "2026-11-06",
+                "valid_through": "2026-11-06",
+                "validity_basis": "One-day research snapshot, not legal effective dates or future availability.",
+                "limitations": "Multistate overview; individual features may not apply in California."
+              }
+            },
+            {
+              "feature": "extended_replacement_cost",
+              "current": null,
+              "alternative": null,
+              "comparison": "unknown",
+              "source": {
+                "source_id": "mercury_home",
+                "reference": "https://www.mercuryinsurance.com/insurance/homeowners/",
+                "title": "Mercury homeowners",
+                "verified": true,
+                "verification_status": "full_document_read",
+                "publication_date": null,
+                "effective_date": null,
+                "accessed_date": "2026-11-06",
+                "valid_from": "2026-11-06",
+                "valid_through": "2026-11-06",
+                "validity_basis": "One-day research snapshot, not legal effective dates or future availability.",
+                "limitations": "Multistate overview; individual features may not apply in California."
+              }
+            }
+          ],
+          "limitations": [
+            "Public descriptions are not offers, acceptance decisions, or binding coverage."
+          ],
+          "current_coverage_terms": {
+            "dwelling": {
+              "status": "present",
+              "limit_usd": "1000000",
+              "scope_id": "synthetic_adequate_unknown_property:dwelling",
+              "source": {
+                "reference": "fixture://SYNTHETIC-ONLY/policy-dwelling",
+                "verified": true,
+                "valid_from": "2026-11-06",
+                "valid_through": "2026-11-06"
+              },
+              "limit_basis": "standalone",
+              "settlement": "replacement_cost"
+            },
+            "ale": {
+              "status": "present",
+              "limit_usd": "100000",
+              "scope_id": "synthetic_adequate_unknown_property:ale",
+              "source": {
+                "reference": "fixture://SYNTHETIC-ONLY/policy-ale",
+                "verified": true,
+                "valid_from": "2026-11-06",
+                "valid_through": "2026-11-06"
+              },
+              "limit_basis": "standalone",
+              "duration_months": "24"
+            },
+            "ordinance_law": {
+              "status": "present",
+              "limit_usd": "50000",
+              "scope_id": "synthetic_adequate_unknown_property:ordinance_law",
+              "source": {
+                "reference": "fixture://SYNTHETIC-ONLY/policy-ordinance_law",
+                "verified": true,
+                "valid_from": "2026-11-06",
+                "valid_through": "2026-11-06"
+              },
+              "limit_basis": "standalone"
+            },
+            "debris": {
+              "status": "present",
+              "limit_usd": "40000",
+              "scope_id": "synthetic_adequate_unknown_property:debris",
+              "source": {
+                "reference": "fixture://SYNTHETIC-ONLY/policy-debris",
+                "verified": true,
+                "valid_from": "2026-11-06",
+                "valid_through": "2026-11-06"
+              },
+              "limit_basis": "standalone"
+            }
+          },
+          "current_deductible": {
+            "kind": "percentage",
+            "percent": "2",
+            "basis_usd": "1000000",
+            "basis_verified": true,
+            "source": {
+              "reference": "fixture://SYNTHETIC-ONLY/deductible",
+              "verified": true,
+              "valid_from": "2026-11-06",
+              "valid_through": "2026-11-06"
+            }
+          },
+          "current_exclusions": [],
+          "reference_metadata": {
+            "insurer": "Mercury Insurance",
+            "verification_status": "verified_public_description_only",
+            "geographic_applicability": "California description; LA property acceptance unknown",
+            "availability_status": "not_verified"
+          },
+          "coverage_terms": {
+            "dwelling": "Fire-related protection described.",
+            "extended_replacement": "Advertised total up to 150% of dwelling limit; CA applicability unverified.",
+            "ale": "Covered uninhabitability described; CA terms require confirmation.",
+            "ordinance_law": null,
+            "debris": null,
+            "limits_usd": null
+          },
+          "deductibles": [
+            {
+              "structure": "Unspecified in reviewed overview",
+              "amount_usd": null
+            }
+          ],
+          "exclusions": [
+            "Some features unavailable in some states; obtain CA form."
+          ],
+          "requirements_pending": []
+        }
+      ],
+      "ranking": null,
+      "limitations": [
+        "No universal best product or automatic eligibility ranking.",
+        "Premium differences require documented quotes and matching comparison periods/basis."
+      ]
+    },
+    "property_requirements": {
+      "status": "incomplete",
+      "findings": [
+        {
+          "requirement_id": "cdi_roof_class_a",
+          "classification": "potential_discount_condition",
+          "product_ids": [],
+          "existing_condition": null,
+          "target_condition": true,
+          "field": "roof_class_a",
+          "status": "unknown",
+          "verification_status": "documented_rule",
+          "required_improvement": "Confirm Class A roof",
+          "project_id": "class_a_roof",
+          "source": {
+            "source_id": "cdi_sfw",
+            "reference": "https://www.insurance.ca.gov/01-consumers/200-wrr/Safer-from-Wildfires.cfm",
+            "title": "CDI Safer from Wildfires",
+            "verified": true,
+            "verification_status": "full_document_read",
+            "publication_date": null,
+            "effective_date": null,
+            "accessed_date": "2026-11-06",
+            "valid_from": "2026-11-06",
+            "valid_through": "2026-11-06",
+            "validity_basis": "One-day research snapshot, not legal effective dates or future availability.",
+            "limitations": "Live framework; discount application needs insurer confirmation."
+          },
+          "property_source": null,
+          "practical_impact": "unspecified",
+          "target_details": "Class A fire-rated roof, confirmed rating rather than inferred material.",
+          "applicability": "Existing LA homes; confirm source-specific conditions and local authority."
+        },
+        {
+          "requirement_id": "cdi_ember_zone_5ft",
+          "classification": "potential_discount_condition",
+          "product_ids": [],
+          "existing_condition": null,
+          "target_condition": true,
+          "field": "ember_zone_5ft",
+          "status": "unknown",
+          "verification_status": "documented_rule",
+          "required_improvement": "Clear five-foot ember zone",
+          "project_id": "ember_zone_5ft",
+          "source": {
+            "source_id": "cdi_sfw",
+            "reference": "https://www.insurance.ca.gov/01-consumers/200-wrr/Safer-from-Wildfires.cfm",
+            "title": "CDI Safer from Wildfires",
+            "verified": true,
+            "verification_status": "full_document_read",
+            "publication_date": null,
+            "effective_date": null,
+            "accessed_date": "2026-11-06",
+            "valid_from": "2026-11-06",
+            "valid_through": "2026-11-06",
+            "validity_basis": "One-day research snapshot, not legal effective dates or future availability.",
+            "limitations": "Live framework; discount application needs insurer confirmation."
+          },
+          "property_source": null,
+          "practical_impact": "unspecified",
+          "target_details": "Vegetation and combustible debris cleared within five feet; evaluate attached fencing separately.",
+          "applicability": "Existing LA homes; confirm source-specific conditions and local authority."
+        },
+        {
+          "requirement_id": "cdi_ember_resistant_vents",
+          "classification": "potential_discount_condition",
+          "product_ids": [],
+          "existing_condition": null,
+          "target_condition": true,
+          "field": "ember_resistant_vents",
+          "status": "unknown",
+          "verification_status": "documented_rule",
+          "required_improvement": "Upgrade ember-resistant vents",
+          "project_id": "ember_resistant_vents",
+          "source": {
+            "source_id": "cdi_sfw",
+            "reference": "https://www.insurance.ca.gov/01-consumers/200-wrr/Safer-from-Wildfires.cfm",
+            "title": "CDI Safer from Wildfires",
+            "verified": true,
+            "verification_status": "full_document_read",
+            "publication_date": null,
+            "effective_date": null,
+            "accessed_date": "2026-11-06",
+            "valid_from": "2026-11-06",
+            "valid_through": "2026-11-06",
+            "validity_basis": "One-day research snapshot, not legal effective dates or future availability.",
+            "limitations": "Live framework; discount application needs insurer confirmation."
+          },
+          "property_source": null,
+          "practical_impact": "unspecified",
+          "target_details": "Ember/fire-resistant vents or source-accepted approved mesh; not necessarily tested vent assemblies.",
+          "applicability": "Existing LA homes; confirm source-specific conditions and local authority."
+        },
+        {
+          "requirement_id": "cdi_noncombustible_wall_base_6in",
+          "classification": "potential_discount_condition",
+          "product_ids": [],
+          "existing_condition": null,
+          "target_condition": true,
+          "field": "noncombustible_wall_base_6in",
+          "status": "unknown",
+          "verification_status": "documented_rule",
+          "required_improvement": "Protect six-inch wall base",
+          "project_id": "noncombustible_6in_walls",
+          "source": {
+            "source_id": "cdi_sfw",
+            "reference": "https://www.insurance.ca.gov/01-consumers/200-wrr/Safer-from-Wildfires.cfm",
+            "title": "CDI Safer from Wildfires",
+            "verified": true,
+            "verification_status": "full_document_read",
+            "publication_date": null,
+            "effective_date": null,
+            "accessed_date": "2026-11-06",
+            "valid_from": "2026-11-06",
+            "valid_through": "2026-11-06",
+            "validity_basis": "One-day research snapshot, not legal effective dates or future availability.",
+            "limitations": "Live framework; discount application needs insurer confirmation."
+          },
+          "property_source": null,
+          "practical_impact": "unspecified",
+          "target_details": "Six vertical inches of noncombustible wall base.",
+          "applicability": "Existing LA homes; confirm source-specific conditions and local authority."
+        },
+        {
+          "requirement_id": "cdi_enclosed_eaves",
+          "classification": "potential_discount_condition",
+          "product_ids": [],
+          "existing_condition": null,
+          "target_condition": true,
+          "field": "enclosed_eaves",
+          "status": "unknown",
+          "verification_status": "documented_rule",
+          "required_improvement": "Enclose eaves",
+          "project_id": "enclosed_eaves",
+          "source": {
+            "source_id": "cdi_sfw",
+            "reference": "https://www.insurance.ca.gov/01-consumers/200-wrr/Safer-from-Wildfires.cfm",
+            "title": "CDI Safer from Wildfires",
+            "verified": true,
+            "verification_status": "full_document_read",
+            "publication_date": null,
+            "effective_date": null,
+            "accessed_date": "2026-11-06",
+            "valid_from": "2026-11-06",
+            "valid_through": "2026-11-06",
+            "validity_basis": "One-day research snapshot, not legal effective dates or future availability.",
+            "limitations": "Live framework; discount application needs insurer confirmation."
+          },
+          "property_source": null,
+          "practical_impact": "unspecified",
+          "target_details": "Enclosed eaves.",
+          "applicability": "Existing LA homes; confirm source-specific conditions and local authority."
+        },
+        {
+          "requirement_id": "cdi_upgraded_windows",
+          "classification": "potential_discount_condition",
+          "product_ids": [],
+          "existing_condition": null,
+          "target_condition": true,
+          "field": "upgraded_windows",
+          "status": "unknown",
+          "verification_status": "documented_rule",
+          "required_improvement": "Upgrade windows or shutters",
+          "project_id": "upgraded_windows",
+          "source": {
+            "source_id": "cdi_sfw",
+            "reference": "https://www.insurance.ca.gov/01-consumers/200-wrr/Safer-from-Wildfires.cfm",
+            "title": "CDI Safer from Wildfires",
+            "verified": true,
+            "verification_status": "full_document_read",
+            "publication_date": null,
+            "effective_date": null,
+            "accessed_date": "2026-11-06",
+            "valid_from": "2026-11-06",
+            "valid_through": "2026-11-06",
+            "validity_basis": "One-day research snapshot, not legal effective dates or future availability.",
+            "limitations": "Live framework; discount application needs insurer confirmation."
+          },
+          "property_source": null,
+          "practical_impact": "unspecified",
+          "target_details": "Multi-pane windows or qualifying shutters.",
+          "applicability": "Existing LA homes; confirm source-specific conditions and local authority."
+        },
+        {
+          "requirement_id": "cdi_under_deck_clear",
+          "classification": "potential_discount_condition",
+          "product_ids": [],
+          "existing_condition": null,
+          "target_condition": true,
+          "field": "under_deck_clear",
+          "status": "unknown",
+          "verification_status": "documented_rule",
+          "required_improvement": "Clear under-deck combustibles",
+          "project_id": "under_deck_clearance",
+          "source": {
+            "source_id": "cdi_sfw",
+            "reference": "https://www.insurance.ca.gov/01-consumers/200-wrr/Safer-from-Wildfires.cfm",
+            "title": "CDI Safer from Wildfires",
+            "verified": true,
+            "verification_status": "full_document_read",
+            "publication_date": null,
+            "effective_date": null,
+            "accessed_date": "2026-11-06",
+            "valid_from": "2026-11-06",
+            "valid_through": "2026-11-06",
+            "validity_basis": "One-day research snapshot, not legal effective dates or future availability.",
+            "limitations": "Live framework; discount application needs insurer confirmation."
+          },
+          "property_source": null,
+          "practical_impact": "unspecified",
+          "target_details": "Vegetation and combustible debris cleared below decks.",
+          "applicability": "Existing LA homes; confirm source-specific conditions and local authority."
+        },
+        {
+          "requirement_id": "cdi_outbuildings_separation_confirmed",
+          "classification": "potential_discount_condition",
+          "product_ids": [],
+          "existing_condition": null,
+          "target_condition": true,
+          "field": "outbuildings_separation_confirmed",
+          "status": "unknown",
+          "verification_status": "documented_rule",
+          "required_improvement": "Review outbuilding separation",
+          "project_id": "outbuilding_separation",
+          "source": {
+            "source_id": "cdi_sfw",
+            "reference": "https://www.insurance.ca.gov/01-consumers/200-wrr/Safer-from-Wildfires.cfm",
+            "title": "CDI Safer from Wildfires",
+            "verified": true,
+            "verification_status": "full_document_read",
+            "publication_date": null,
+            "effective_date": null,
+            "accessed_date": "2026-11-06",
+            "valid_from": "2026-11-06",
+            "valid_through": "2026-11-06",
+            "validity_basis": "One-day research snapshot, not legal effective dates or future availability.",
+            "limitations": "Live framework; discount application needs insurer confirmation."
+          },
+          "property_source": null,
+          "practical_impact": "unspecified",
+          "target_details": "Combustible outbuildings separated at least 30 feet; evaluate actual control and local constraints.",
+          "applicability": "Existing LA homes; confirm source-specific conditions and local authority."
+        },
+        {
+          "requirement_id": "cdi_defensible_space_compliant",
+          "classification": "potential_discount_condition",
+          "product_ids": [],
+          "existing_condition": null,
+          "target_condition": true,
+          "field": "defensible_space_compliant",
+          "status": "unknown",
+          "verification_status": "documented_rule",
+          "required_improvement": "Meet applicable defensible-space rules",
+          "project_id": "defensible_space",
+          "source": {
+            "source_id": "cdi_sfw",
+            "reference": "https://www.insurance.ca.gov/01-consumers/200-wrr/Safer-from-Wildfires.cfm",
+            "title": "CDI Safer from Wildfires",
+            "verified": true,
+            "verification_status": "full_document_read",
+            "publication_date": null,
+            "effective_date": null,
+            "accessed_date": "2026-11-06",
+            "valid_from": "2026-11-06",
+            "valid_through": "2026-11-06",
+            "validity_basis": "One-day research snapshot, not legal effective dates or future availability.",
+            "limitations": "Live framework; discount application needs insurer confirmation."
+          },
+          "property_source": null,
+          "practical_impact": "unspecified",
+          "target_details": "Site compliance under applicable state/local rules; inspect rather than infer from a hazard score.",
+          "applicability": "Existing LA homes; confirm source-specific conditions and local authority."
+        },
+        {
+          "requirement_id": "cdi_recognized_community",
+          "classification": "potential_discount_condition",
+          "product_ids": [],
+          "existing_condition": null,
+          "target_condition": true,
+          "field": "recognized_community",
+          "status": "unknown",
+          "verification_status": "documented_rule",
+          "required_improvement": "Review community recognition",
+          "project_id": "community_recognition",
+          "source": {
+            "source_id": "cdi_sfw",
+            "reference": "https://www.insurance.ca.gov/01-consumers/200-wrr/Safer-from-Wildfires.cfm",
+            "title": "CDI Safer from Wildfires",
+            "verified": true,
+            "verification_status": "full_document_read",
+            "publication_date": null,
+            "effective_date": null,
+            "accessed_date": "2026-11-06",
+            "valid_from": "2026-11-06",
+            "valid_through": "2026-11-06",
+            "validity_basis": "One-day research snapshot, not legal effective dates or future availability.",
+            "limitations": "Live framework; discount application needs insurer confirmation."
+          },
+          "property_source": null,
+          "practical_impact": "unspecified",
+          "target_details": "Firewise USA or Fire Risk Reduction Community recognition confirmed.",
+          "applicability": "Existing LA homes; confirm source-specific conditions and local authority."
+        },
+        {
+          "requirement_id": "calfire_vents",
+          "classification": "recommendation",
+          "product_ids": [],
+          "existing_condition": null,
+          "target_condition": true,
+          "field": "calfire_listed_vents_airflow_confirmed",
+          "status": "unknown",
+          "verification_status": "documented_rule",
+          "required_improvement": "Install suitable listed vents; check airflow",
+          "project_id": "ember_resistant_vents",
+          "source": {
+            "source_id": "calfire_retrofit",
+            "reference": "https://readyforwildfire.org/wp-content/uploads/2025/04/Low-Cost-Retrofit-Flyer-Handout-.pdf",
+            "title": "CAL FIRE retrofit guide",
+            "verified": true,
+            "verification_status": "full_document_read",
+            "publication_date": "2025-04",
+            "effective_date": null,
+            "accessed_date": "2026-11-06",
+            "valid_from": "2026-11-06",
+            "valid_through": "2026-11-06",
+            "validity_basis": "One-day research snapshot, not legal effective dates or future availability.",
+            "limitations": "Best practices, not retrofit mandates."
+          },
+          "property_source": null,
+          "practical_impact": "unspecified",
+          "target_details": "Suitable ember/flame-resistant listed vent retrofit, with building-official/airflow review.",
+          "applicability": "Existing LA homes; confirm source-specific conditions and local authority."
+        },
+        {
+          "requirement_id": "calfire_gutters",
+          "classification": "recommendation",
+          "product_ids": [],
+          "existing_condition": null,
+          "target_condition": true,
+          "field": "noncombustible_gutter_covers",
+          "status": "unknown",
+          "verification_status": "documented_rule",
+          "required_improvement": "Fit noncombustible gutter covers",
+          "project_id": "gutter_protection",
+          "source": {
+            "source_id": "calfire_retrofit",
+            "reference": "https://readyforwildfire.org/wp-content/uploads/2025/04/Low-Cost-Retrofit-Flyer-Handout-.pdf",
+            "title": "CAL FIRE retrofit guide",
+            "verified": true,
+            "verification_status": "full_document_read",
+            "publication_date": "2025-04",
+            "effective_date": null,
+            "accessed_date": "2026-11-06",
+            "valid_from": "2026-11-06",
+            "valid_through": "2026-11-06",
+            "validity_basis": "One-day research snapshot, not legal effective dates or future availability.",
+            "limitations": "Best practices, not retrofit mandates."
+          },
+          "property_source": null,
+          "practical_impact": "unspecified",
+          "target_details": "Noncombustible gutter covers; maintenance still needed.",
+          "applicability": "Existing LA homes; confirm source-specific conditions and local authority."
+        },
+        {
+          "requirement_id": "calfire_roof",
+          "classification": "recommendation",
+          "product_ids": [],
+          "existing_condition": null,
+          "target_condition": true,
+          "field": "roof_class_a",
+          "status": "unknown",
+          "verification_status": "documented_rule",
+          "required_improvement": "Use Class A at roof replacement",
+          "project_id": "class_a_roof",
+          "source": {
+            "source_id": "calfire_retrofit",
+            "reference": "https://readyforwildfire.org/wp-content/uploads/2025/04/Low-Cost-Retrofit-Flyer-Handout-.pdf",
+            "title": "CAL FIRE retrofit guide",
+            "verified": true,
+            "verification_status": "full_document_read",
+            "publication_date": "2025-04",
+            "effective_date": null,
+            "accessed_date": "2026-11-06",
+            "valid_from": "2026-11-06",
+            "valid_through": "2026-11-06",
+            "validity_basis": "One-day research snapshot, not legal effective dates or future availability.",
+            "limitations": "Best practices, not retrofit mandates."
+          },
+          "property_source": null,
+          "practical_impact": "unspecified",
+          "target_details": "Class A fire-rated roof, confirmed rating rather than inferred material.",
+          "applicability": "Existing LA homes; confirm source-specific conditions and local authority."
+        },
+        {
+          "requirement_id": "la_gutter_debris",
+          "classification": "recommendation",
+          "product_ids": [],
+          "existing_condition": null,
+          "target_condition": true,
+          "field": "gutters_clear",
+          "status": "unknown",
+          "verification_status": "documented_rule",
+          "required_improvement": "Keep gutters free of plant debris",
+          "project_id": "gutter_cleaning",
+          "source": {
+            "source_id": "la_fire",
+            "reference": "https://fire.lacounty.gov/fire-hazard-reduction-programs/",
+            "title": "LA County Fire defensible space",
+            "verified": true,
+            "verification_status": "full_document_read",
+            "publication_date": null,
+            "effective_date": null,
+            "accessed_date": "2026-11-06",
+            "valid_from": "2026-11-06",
+            "valid_through": "2026-11-06",
+            "validity_basis": "One-day research snapshot, not legal effective dates or future availability.",
+            "limitations": "Local site orders may differ."
+          },
+          "property_source": null,
+          "practical_impact": "unspecified",
+          "target_details": "Gutters clear of plant debris.",
+          "applicability": "Existing LA homes; confirm source-specific conditions and local authority."
+        },
+        {
+          "requirement_id": "calfire_zone2",
+          "classification": "recommendation",
+          "product_ids": [],
+          "existing_condition": null,
+          "target_condition": true,
+          "field": "zone2_fuel_management_confirmed",
+          "status": "unknown",
+          "verification_status": "documented_rule",
+          "required_improvement": "Manage fuel to 100 feet/property line",
+          "project_id": "defensible_space",
+          "source": {
+            "source_id": "calfire_space",
+            "reference": "https://www.fire.ca.gov/dspace/",
+            "title": "CAL FIRE defensible space",
+            "verified": true,
+            "verification_status": "full_document_read",
+            "publication_date": null,
+            "effective_date": null,
+            "accessed_date": "2026-11-06",
+            "valid_from": "2026-11-06",
+            "valid_through": "2026-11-06",
+            "validity_basis": "One-day research snapshot, not legal effective dates or future availability.",
+            "limitations": "Jurisdiction and legal applicability require confirmation."
+          },
+          "property_source": null,
+          "practical_impact": "unspecified",
+          "target_details": "Fuel management to 100 feet or property line, including site-specific spacing.",
+          "applicability": "Existing LA homes; confirm source-specific conditions and local authority."
+        },
+        {
+          "requirement_id": "calfire_applicable_dspace",
+          "classification": "verified_requirement",
+          "product_ids": [],
+          "existing_condition": null,
+          "target_condition": true,
+          "field": "defensible_space_compliant",
+          "status": "unknown",
+          "verification_status": "documented_rule",
+          "required_improvement": "Resolve applicable defensible-space compliance",
+          "project_id": "defensible_space",
+          "source": {
+            "source_id": "calfire_space",
+            "reference": "https://www.fire.ca.gov/dspace/",
+            "title": "CAL FIRE defensible space",
+            "verified": true,
+            "verification_status": "full_document_read",
+            "publication_date": null,
+            "effective_date": null,
+            "accessed_date": "2026-11-06",
+            "valid_from": "2026-11-06",
+            "valid_through": "2026-11-06",
+            "validity_basis": "One-day research snapshot, not legal effective dates or future availability.",
+            "limitations": "Jurisdiction and legal applicability require confirmation."
+          },
+          "property_source": null,
+          "practical_impact": "unspecified",
+          "target_details": "Site compliance under applicable state/local rules; inspect rather than infer from a hazard score.",
+          "applicability": "Only when upstream evidence confirms this site is subject to applicable defensible-space law; not an insurer underwriting mandate.",
+          "applicability_status": "unknown"
+        }
+      ],
+      "limitations": [
+        "A matched rule does not establish complete underwriting eligibility or a guaranteed discount.",
+        "Product rules apply only to their named products; recommendations are not insurer requirements."
+      ]
+    },
+    "upgrades": {
+      "status": "no_identified_projects",
+      "projects": [],
+      "total_low_usd": null,
+      "total_high_usd": null,
+      "limitations": [
+        "Catalog estimates are not bids. No premium savings or eligibility improvement is quantified.",
+        "Scope tags must identify shared work consistently; overlaps require human reconciliation."
+      ]
+    },
+    "actions": [
+      {
+        "kind": "verify_property",
+        "priority_tier": 3,
+        "requirement_id": "calfire_applicable_dspace",
+        "action": "Verify defensible_space_compliant",
+        "reason": "Unknown condition or unverified rule; do not schedule work based on uncertainty.",
+        "order": 1
+      },
+      {
+        "kind": "verify_property",
+        "priority_tier": 3,
+        "requirement_id": "calfire_gutters",
+        "action": "Verify noncombustible_gutter_covers",
+        "reason": "Unknown condition or unverified rule; do not schedule work based on uncertainty.",
+        "order": 2
+      },
+      {
+        "kind": "verify_property",
+        "priority_tier": 3,
+        "requirement_id": "calfire_roof",
+        "action": "Verify roof_class_a",
+        "reason": "Unknown condition or unverified rule; do not schedule work based on uncertainty.",
+        "order": 3
+      },
+      {
+        "kind": "verify_property",
+        "priority_tier": 3,
+        "requirement_id": "calfire_vents",
+        "action": "Verify calfire_listed_vents_airflow_confirmed",
+        "reason": "Unknown condition or unverified rule; do not schedule work based on uncertainty.",
+        "order": 4
+      },
+      {
+        "kind": "verify_property",
+        "priority_tier": 3,
+        "requirement_id": "calfire_zone2",
+        "action": "Verify zone2_fuel_management_confirmed",
+        "reason": "Unknown condition or unverified rule; do not schedule work based on uncertainty.",
+        "order": 5
+      },
+      {
+        "kind": "verify_property",
+        "priority_tier": 3,
+        "requirement_id": "cdi_defensible_space_compliant",
+        "action": "Verify defensible_space_compliant",
+        "reason": "Unknown condition or unverified rule; do not schedule work based on uncertainty.",
+        "order": 6
+      },
+      {
+        "kind": "verify_property",
+        "priority_tier": 3,
+        "requirement_id": "cdi_ember_resistant_vents",
+        "action": "Verify ember_resistant_vents",
+        "reason": "Unknown condition or unverified rule; do not schedule work based on uncertainty.",
+        "order": 7
+      },
+      {
+        "kind": "verify_property",
+        "priority_tier": 3,
+        "requirement_id": "cdi_ember_zone_5ft",
+        "action": "Verify ember_zone_5ft",
+        "reason": "Unknown condition or unverified rule; do not schedule work based on uncertainty.",
+        "order": 8
+      },
+      {
+        "kind": "verify_property",
+        "priority_tier": 3,
+        "requirement_id": "cdi_enclosed_eaves",
+        "action": "Verify enclosed_eaves",
+        "reason": "Unknown condition or unverified rule; do not schedule work based on uncertainty.",
+        "order": 9
+      },
+      {
+        "kind": "verify_property",
+        "priority_tier": 3,
+        "requirement_id": "cdi_noncombustible_wall_base_6in",
+        "action": "Verify noncombustible_wall_base_6in",
+        "reason": "Unknown condition or unverified rule; do not schedule work based on uncertainty.",
+        "order": 10
+      },
+      {
+        "kind": "verify_property",
+        "priority_tier": 3,
+        "requirement_id": "cdi_outbuildings_separation_confirmed",
+        "action": "Verify outbuildings_separation_confirmed",
+        "reason": "Unknown condition or unverified rule; do not schedule work based on uncertainty.",
+        "order": 11
+      },
+      {
+        "kind": "verify_property",
+        "priority_tier": 3,
+        "requirement_id": "cdi_recognized_community",
+        "action": "Verify recognized_community",
+        "reason": "Unknown condition or unverified rule; do not schedule work based on uncertainty.",
+        "order": 12
+      },
+      {
+        "kind": "verify_property",
+        "priority_tier": 3,
+        "requirement_id": "cdi_roof_class_a",
+        "action": "Verify roof_class_a",
+        "reason": "Unknown condition or unverified rule; do not schedule work based on uncertainty.",
+        "order": 13
+      },
+      {
+        "kind": "verify_property",
+        "priority_tier": 3,
+        "requirement_id": "cdi_under_deck_clear",
+        "action": "Verify under_deck_clear",
+        "reason": "Unknown condition or unverified rule; do not schedule work based on uncertainty.",
+        "order": 14
+      },
+      {
+        "kind": "verify_property",
+        "priority_tier": 3,
+        "requirement_id": "cdi_upgraded_windows",
+        "action": "Verify upgraded_windows",
+        "reason": "Unknown condition or unverified rule; do not schedule work based on uncertainty.",
+        "order": 15
+      },
+      {
+        "kind": "policy_review",
+        "category": "deductible",
+        "priority_tier": 3,
+        "action": "Plan for the applicable deductible; it is not an additional coverage limit.",
+        "gap_usd": null,
+        "reason": "Verify terms or plan for exposure.",
+        "order": 16
+      },
+      {
+        "kind": "verify_property",
+        "priority_tier": 3,
+        "requirement_id": "la_gutter_debris",
+        "action": "Verify gutters_clear",
+        "reason": "Unknown condition or unverified rule; do not schedule work based on uncertainty.",
+        "order": 17
+      }
+    ],
+    "missing_inputs": [
+      "property_or_rule.cdi_roof_class_a",
+      "property_or_rule.cdi_ember_zone_5ft",
+      "property_or_rule.cdi_ember_resistant_vents",
+      "property_or_rule.cdi_noncombustible_wall_base_6in",
+      "property_or_rule.cdi_enclosed_eaves",
+      "property_or_rule.cdi_upgraded_windows",
+      "property_or_rule.cdi_under_deck_clear",
+      "property_or_rule.cdi_outbuildings_separation_confirmed",
+      "property_or_rule.cdi_defensible_space_compliant",
+      "property_or_rule.cdi_recognized_community",
+      "property_or_rule.calfire_vents",
+      "property_or_rule.calfire_gutters",
+      "property_or_rule.calfire_roof",
+      "property_or_rule.la_gutter_debris",
+      "property_or_rule.calfire_zone2",
+      "property_or_rule.calfire_applicable_dspace"
+    ],
+    "prioritization_assumption": "Exclusions, coverage shortfalls, named requirements, verification tasks, then recommendations; documented high/medium/low practical impact followed by known cost ascending within each tier. This ordering is a transparent product assumption, not measured loss reduction.",
+    "limitations": [
+      "Preliminary planning report, not a claim settlement or insurer-certified valuation.",
+      "No product acceptance, premium savings or underwriting outcome is promised.",
+      "Source verification flags are trusted upstream attestations; no document extraction is performed."
+    ]
+  }
+}

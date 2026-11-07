@@ -1,0 +1,266 @@
+{
+  "synthetic_test_only": true,
+  "warning": "Fictional data, products and costs; not real insurance guidance.",
+  "data": {
+    "payload": {
+      "schema_version": "gap-v1",
+      "as_of": "2026-11-06",
+      "currency": "USD",
+      "subject_id": "TEST-HOME",
+      "property": {
+        "subject_id": "TEST-HOME",
+        "county_fips": "06037",
+        "jurisdiction": "TEST-CITY",
+        "facts": {
+          "vent_type": {
+            "status": "confirmed",
+            "value": "test_old",
+            "source": {
+              "reference": "fixture://SYNTHETIC-NOT-REAL-EVIDENCE",
+              "verified": true,
+              "valid_from": "2026-01-01",
+              "valid_through": "2026-12-31"
+            }
+          }
+        }
+      },
+      "policy": {
+        "subject_id": "TEST-HOME",
+        "source": {
+          "reference": "fixture://SYNTHETIC-NOT-REAL-EVIDENCE",
+          "verified": true,
+          "valid_from": "2026-01-01",
+          "valid_through": "2026-12-31"
+        },
+        "terms_reviewed": true,
+        "exclusions_reviewed": true,
+        "coverages": {
+          "dwelling": {
+            "status": "present",
+            "limit_usd": "150000",
+            "scope_id": "dwelling-test-scope",
+            "limit_basis": "standalone",
+            "source": {
+              "reference": "fixture://SYNTHETIC-NOT-REAL-EVIDENCE",
+              "verified": true,
+              "valid_from": "2026-01-01",
+              "valid_through": "2026-12-31"
+            },
+            "settlement": "replacement_cost"
+          },
+          "ale": {
+            "status": "present",
+            "limit_usd": "20000",
+            "scope_id": "ale-test-scope",
+            "limit_basis": "standalone",
+            "source": {
+              "reference": "fixture://SYNTHETIC-NOT-REAL-EVIDENCE",
+              "verified": true,
+              "valid_from": "2026-01-01",
+              "valid_through": "2026-12-31"
+            },
+            "duration_months": "12"
+          },
+          "ordinance_law": {
+            "status": "present",
+            "limit_usd": "5000",
+            "scope_id": "ordinance_law-test-scope",
+            "limit_basis": "standalone",
+            "source": {
+              "reference": "fixture://SYNTHETIC-NOT-REAL-EVIDENCE",
+              "verified": true,
+              "valid_from": "2026-01-01",
+              "valid_through": "2026-12-31"
+            }
+          },
+          "debris": {
+            "status": "present",
+            "limit_usd": "10000",
+            "scope_id": "debris-test-scope",
+            "limit_basis": "standalone",
+            "source": {
+              "reference": "fixture://SYNTHETIC-NOT-REAL-EVIDENCE",
+              "verified": true,
+              "valid_from": "2026-01-01",
+              "valid_through": "2026-12-31"
+            }
+          }
+        },
+        "exclusions": [],
+        "endorsements": [],
+        "extended_replacement": {
+          "kind": "percentage",
+          "value": "25",
+          "conditions_verified": true,
+          "scope_id": "dwelling-test-scope",
+          "source": {
+            "reference": "fixture://SYNTHETIC-NOT-REAL-EVIDENCE",
+            "verified": true,
+            "valid_from": "2026-01-01",
+            "valid_through": "2026-12-31"
+          }
+        },
+        "deductible": {
+          "kind": "fixed",
+          "amount_usd": "1000",
+          "source": {
+            "reference": "fixture://SYNTHETIC-NOT-REAL-EVIDENCE",
+            "verified": true,
+            "valid_from": "2026-01-01",
+            "valid_through": "2026-12-31"
+          }
+        },
+        "features": {
+          "test_wildfire_feature": {
+            "value": false,
+            "source": {
+              "reference": "fixture://SYNTHETIC-NOT-REAL-EVIDENCE",
+              "verified": true,
+              "valid_from": "2026-01-01",
+              "valid_through": "2026-12-31"
+            }
+          }
+        },
+        "premium": {
+          "annual_premium_usd": "2000",
+          "currency": "USD",
+          "comparison_basis": "test-annual-period",
+          "source": {
+            "reference": "fixture://SYNTHETIC-NOT-REAL-EVIDENCE",
+            "verified": true,
+            "valid_from": "2026-01-01",
+            "valid_through": "2026-12-31"
+          }
+        }
+      },
+      "needs": {
+        "dwelling": {
+          "amount_usd": "200000",
+          "scope_id": "dwelling-test-scope",
+          "source": {
+            "reference": "fixture://SYNTHETIC-NOT-REAL-EVIDENCE",
+            "verified": true,
+            "valid_from": "2026-01-01",
+            "valid_through": "2026-12-31"
+          }
+        },
+        "ale": {
+          "amount_usd": "30000",
+          "scope_id": "ale-test-scope",
+          "source": {
+            "reference": "fixture://SYNTHETIC-NOT-REAL-EVIDENCE",
+            "verified": true,
+            "valid_from": "2026-01-01",
+            "valid_through": "2026-12-31"
+          },
+          "duration_months": "24"
+        },
+        "ordinance_law": {
+          "amount_usd": "10000",
+          "scope_id": "ordinance_law-test-scope",
+          "source": {
+            "reference": "fixture://SYNTHETIC-NOT-REAL-EVIDENCE",
+            "verified": true,
+            "valid_from": "2026-01-01",
+            "valid_through": "2026-12-31"
+          }
+        },
+        "debris": {
+          "amount_usd": "10000",
+          "scope_id": "debris-test-scope",
+          "source": {
+            "reference": "fixture://SYNTHETIC-NOT-REAL-EVIDENCE",
+            "verified": true,
+            "valid_from": "2026-01-01",
+            "valid_through": "2026-12-31"
+          }
+        }
+      },
+      "selected_product_ids": [
+        "TEST-PRODUCT"
+      ]
+    },
+    "products": [
+      {
+        "product_id": "TEST-PRODUCT",
+        "name": "SYNTHETIC product, not an insurer",
+        "evidence_type": "public_description",
+        "county_fips": [
+          "06037"
+        ],
+        "source": {
+          "reference": "fixture://SYNTHETIC-NOT-REAL-EVIDENCE",
+          "verified": true,
+          "valid_from": "2026-01-01",
+          "valid_through": "2026-12-31"
+        },
+        "features": {
+          "test_wildfire_feature": {
+            "value": true,
+            "source": {
+              "reference": "fixture://SYNTHETIC-NOT-REAL-EVIDENCE",
+              "verified": true,
+              "valid_from": "2026-01-01",
+              "valid_through": "2026-12-31"
+            }
+          }
+        },
+        "coverage_terms": {
+          "description": "Synthetic higher protection subject to terms"
+        },
+        "requirement_ids": [
+          "test-vent-rule"
+        ]
+      }
+    ],
+    "requirements": [
+      {
+        "requirement_id": "test-vent-rule",
+        "classification": "verified_requirement",
+        "product_ids": [
+          "TEST-PRODUCT"
+        ],
+        "county_fips": [
+          "06037"
+        ],
+        "source": {
+          "reference": "fixture://SYNTHETIC-NOT-REAL-EVIDENCE",
+          "verified": true,
+          "valid_from": "2026-01-01",
+          "valid_through": "2026-12-31"
+        },
+        "field": "vent_type",
+        "operator": "equals",
+        "target": "test_new",
+        "improvement": "Synthetic test vent upgrade",
+        "project_id": "test-vents",
+        "practical_impact": "high"
+      }
+    ],
+    "costs": [
+      {
+        "cost_id": "test-vent-cost",
+        "project_id": "test-vents",
+        "county_fips": [
+          "06037"
+        ],
+        "jurisdiction": "TEST-CITY",
+        "source": {
+          "reference": "fixture://SYNTHETIC-NOT-REAL-EVIDENCE",
+          "verified": true,
+          "valid_from": "2026-01-01",
+          "valid_through": "2026-12-31"
+        },
+        "scope_reviewed": true,
+        "price_date": "2026-11-01",
+        "unit": "USD_per_project",
+        "low_usd": "100",
+        "high_usd": "200",
+        "scope_tags": [
+          "all_test_vents"
+        ],
+        "scope_description": "Synthetic whole-project installed cost"
+      }
+    ]
+  }
+}
