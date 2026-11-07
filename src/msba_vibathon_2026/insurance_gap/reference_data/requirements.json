@@ -1,0 +1,455 @@
+[
+  {
+    "requirement_id": "cdi_roof_class_a",
+    "source_id": "cdi_sfw",
+    "field": "roof_class_a",
+    "operator": "equals",
+    "target": true,
+    "classification": "potential_discount_condition",
+    "product_ids": [],
+    "county_fips": [
+      "06037"
+    ],
+    "improvement": "Confirm Class A roof",
+    "project_id": "class_a_roof",
+    "practical_impact": "unspecified",
+    "applies_when": {},
+    "applicability": "Existing LA homes; confirm source-specific conditions and local authority.",
+    "verification_status": "verified_conditional_rule",
+    "target_details": "Class A fire-rated roof, confirmed rating rather than inferred material."
+  },
+  {
+    "requirement_id": "cdi_ember_zone_5ft",
+    "source_id": "cdi_sfw",
+    "field": "ember_zone_5ft",
+    "operator": "equals",
+    "target": true,
+    "classification": "potential_discount_condition",
+    "product_ids": [],
+    "county_fips": [
+      "06037"
+    ],
+    "improvement": "Clear five-foot ember zone",
+    "project_id": "ember_zone_5ft",
+    "practical_impact": "unspecified",
+    "applies_when": {},
+    "applicability": "Existing LA homes; confirm source-specific conditions and local authority.",
+    "verification_status": "verified_conditional_rule",
+    "target_details": "Vegetation and combustible debris cleared within five feet; evaluate attached fencing separately."
+  },
+  {
+    "requirement_id": "cdi_ember_resistant_vents",
+    "source_id": "cdi_sfw",
+    "field": "ember_resistant_vents",
+    "operator": "equals",
+    "target": true,
+    "classification": "potential_discount_condition",
+    "product_ids": [],
+    "county_fips": [
+      "06037"
+    ],
+    "improvement": "Upgrade ember-resistant vents",
+    "project_id": "ember_resistant_vents",
+    "practical_impact": "unspecified",
+    "applies_when": {},
+    "applicability": "Existing LA homes; confirm source-specific conditions and local authority.",
+    "verification_status": "verified_conditional_rule",
+    "target_details": "Ember/fire-resistant vents or source-accepted approved mesh; not necessarily tested vent assemblies."
+  },
+  {
+    "requirement_id": "cdi_noncombustible_wall_base_6in",
+    "source_id": "cdi_sfw",
+    "field": "noncombustible_wall_base_6in",
+    "operator": "equals",
+    "target": true,
+    "classification": "potential_discount_condition",
+    "product_ids": [],
+    "county_fips": [
+      "06037"
+    ],
+    "improvement": "Protect six-inch wall base",
+    "project_id": "noncombustible_6in_walls",
+    "practical_impact": "unspecified",
+    "applies_when": {},
+    "applicability": "Existing LA homes; confirm source-specific conditions and local authority.",
+    "verification_status": "verified_conditional_rule",
+    "target_details": "Six vertical inches of noncombustible wall base."
+  },
+  {
+    "requirement_id": "cdi_enclosed_eaves",
+    "source_id": "cdi_sfw",
+    "field": "enclosed_eaves",
+    "operator": "equals",
+    "target": true,
+    "classification": "potential_discount_condition",
+    "product_ids": [],
+    "county_fips": [
+      "06037"
+    ],
+    "improvement": "Enclose eaves",
+    "project_id": "enclosed_eaves",
+    "practical_impact": "unspecified",
+    "applies_when": {},
+    "applicability": "Existing LA homes; confirm source-specific conditions and local authority.",
+    "verification_status": "verified_conditional_rule",
+    "target_details": "Enclosed eaves."
+  },
+  {
+    "requirement_id": "cdi_upgraded_windows",
+    "source_id": "cdi_sfw",
+    "field": "upgraded_windows",
+    "operator": "equals",
+    "target": true,
+    "classification": "potential_discount_condition",
+    "product_ids": [],
+    "county_fips": [
+      "06037"
+    ],
+    "improvement": "Upgrade windows or shutters",
+    "project_id": "upgraded_windows",
+    "practical_impact": "unspecified",
+    "applies_when": {},
+    "applicability": "Existing LA homes; confirm source-specific conditions and local authority.",
+    "verification_status": "verified_conditional_rule",
+    "target_details": "Multi-pane windows or qualifying shutters."
+  },
+  {
+    "requirement_id": "cdi_under_deck_clear",
+    "source_id": "cdi_sfw",
+    "field": "under_deck_clear",
+    "operator": "equals",
+    "target": true,
+    "classification": "potential_discount_condition",
+    "product_ids": [],
+    "county_fips": [
+      "06037"
+    ],
+    "improvement": "Clear under-deck combustibles",
+    "project_id": "under_deck_clearance",
+    "practical_impact": "unspecified",
+    "applies_when": {},
+    "applicability": "Existing LA homes; confirm source-specific conditions and local authority.",
+    "verification_status": "verified_conditional_rule",
+    "target_details": "Vegetation and combustible debris cleared below decks."
+  },
+  {
+    "requirement_id": "cdi_outbuildings_separation_confirmed",
+    "source_id": "cdi_sfw",
+    "field": "outbuildings_separation_confirmed",
+    "operator": "equals",
+    "target": true,
+    "classification": "potential_discount_condition",
+    "product_ids": [],
+    "county_fips": [
+      "06037"
+    ],
+    "improvement": "Review outbuilding separation",
+    "project_id": "outbuilding_separation",
+    "practical_impact": "unspecified",
+    "applies_when": {},
+    "applicability": "Existing LA homes; confirm source-specific conditions and local authority.",
+    "verification_status": "verified_conditional_rule",
+    "target_details": "Combustible outbuildings separated at least 30 feet; evaluate actual control and local constraints."
+  },
+  {
+    "requirement_id": "cdi_defensible_space_compliant",
+    "source_id": "cdi_sfw",
+    "field": "defensible_space_compliant",
+    "operator": "equals",
+    "target": true,
+    "classification": "potential_discount_condition",
+    "product_ids": [],
+    "county_fips": [
+      "06037"
+    ],
+    "improvement": "Meet applicable defensible-space rules",
+    "project_id": "defensible_space",
+    "practical_impact": "unspecified",
+    "applies_when": {},
+    "applicability": "Existing LA homes; confirm source-specific conditions and local authority.",
+    "verification_status": "verified_conditional_rule",
+    "target_details": "Site compliance under applicable state/local rules; inspect rather than infer from a hazard score."
+  },
+  {
+    "requirement_id": "cdi_recognized_community",
+    "source_id": "cdi_sfw",
+    "field": "recognized_community",
+    "operator": "equals",
+    "target": true,
+    "classification": "potential_discount_condition",
+    "product_ids": [],
+    "county_fips": [
+      "06037"
+    ],
+    "improvement": "Review community recognition",
+    "project_id": "community_recognition",
+    "practical_impact": "unspecified",
+    "applies_when": {},
+    "applicability": "Existing LA homes; confirm source-specific conditions and local authority.",
+    "verification_status": "verified_conditional_rule",
+    "target_details": "Firewise USA or Fire Risk Reduction Community recognition confirmed."
+  },
+  {
+    "requirement_id": "fair_roof_class_a",
+    "source_id": "fair_discounts",
+    "field": "fair_roof_class_a",
+    "operator": "equals",
+    "target": true,
+    "classification": "potential_discount_condition",
+    "product_ids": [
+      "ca_fair_dwelling"
+    ],
+    "county_fips": [
+      "06037"
+    ],
+    "improvement": "Confirm Class A roof",
+    "project_id": "class_a_roof",
+    "practical_impact": "unspecified",
+    "applies_when": {},
+    "applicability": "FAIR Plan wildfire premium discount consideration only; broker confirmation required.",
+    "verification_status": "verified_conditional_rule",
+    "target_details": "Class A fire-rated roof, confirmed rating rather than inferred material."
+  },
+  {
+    "requirement_id": "fair_ember_zone_5ft",
+    "source_id": "fair_discounts",
+    "field": "fair_ember_zone_5ft",
+    "operator": "equals",
+    "target": true,
+    "classification": "potential_discount_condition",
+    "product_ids": [
+      "ca_fair_dwelling"
+    ],
+    "county_fips": [
+      "06037"
+    ],
+    "improvement": "Clear five-foot ember zone",
+    "project_id": "ember_zone_5ft",
+    "practical_impact": "unspecified",
+    "applies_when": {},
+    "applicability": "FAIR Plan wildfire premium discount consideration only; broker confirmation required.",
+    "verification_status": "verified_conditional_rule",
+    "target_details": "Vegetation and combustible debris cleared within five feet; evaluate attached fencing separately."
+  },
+  {
+    "requirement_id": "fair_ember_resistant_vents",
+    "source_id": "fair_discounts",
+    "field": "fair_ember_resistant_vents",
+    "operator": "equals",
+    "target": true,
+    "classification": "potential_discount_condition",
+    "product_ids": [
+      "ca_fair_dwelling"
+    ],
+    "county_fips": [
+      "06037"
+    ],
+    "improvement": "Upgrade ember-resistant vents",
+    "project_id": "ember_resistant_vents",
+    "practical_impact": "unspecified",
+    "applies_when": {},
+    "applicability": "FAIR Plan wildfire premium discount consideration only; broker confirmation required.",
+    "verification_status": "verified_conditional_rule",
+    "target_details": "Ember/fire-resistant vents or source-accepted approved mesh; not necessarily tested vent assemblies."
+  },
+  {
+    "requirement_id": "fair_noncombustible_wall_base_6in",
+    "source_id": "fair_discounts",
+    "field": "fair_noncombustible_wall_base_6in",
+    "operator": "equals",
+    "target": true,
+    "classification": "potential_discount_condition",
+    "product_ids": [
+      "ca_fair_dwelling"
+    ],
+    "county_fips": [
+      "06037"
+    ],
+    "improvement": "Protect six-inch wall base",
+    "project_id": "noncombustible_6in_walls",
+    "practical_impact": "unspecified",
+    "applies_when": {},
+    "applicability": "FAIR Plan wildfire premium discount consideration only; broker confirmation required.",
+    "verification_status": "verified_conditional_rule",
+    "target_details": "Six vertical inches of noncombustible wall base."
+  },
+  {
+    "requirement_id": "fair_enclosed_eaves",
+    "source_id": "fair_discounts",
+    "field": "fair_enclosed_eaves",
+    "operator": "equals",
+    "target": true,
+    "classification": "potential_discount_condition",
+    "product_ids": [
+      "ca_fair_dwelling"
+    ],
+    "county_fips": [
+      "06037"
+    ],
+    "improvement": "Enclose eaves",
+    "project_id": "enclosed_eaves",
+    "practical_impact": "unspecified",
+    "applies_when": {},
+    "applicability": "FAIR Plan wildfire premium discount consideration only; broker confirmation required.",
+    "verification_status": "verified_conditional_rule",
+    "target_details": "Enclosed eaves."
+  },
+  {
+    "requirement_id": "fair_upgraded_windows",
+    "source_id": "fair_discounts",
+    "field": "fair_upgraded_windows",
+    "operator": "equals",
+    "target": true,
+    "classification": "potential_discount_condition",
+    "product_ids": [
+      "ca_fair_dwelling"
+    ],
+    "county_fips": [
+      "06037"
+    ],
+    "improvement": "Upgrade windows or shutters",
+    "project_id": "upgraded_windows",
+    "practical_impact": "unspecified",
+    "applies_when": {},
+    "applicability": "FAIR Plan wildfire premium discount consideration only; broker confirmation required.",
+    "verification_status": "verified_conditional_rule",
+    "target_details": "Multi-pane windows or qualifying shutters."
+  },
+  {
+    "requirement_id": "fair_under_deck_clear",
+    "source_id": "fair_discounts",
+    "field": "fair_under_deck_clear",
+    "operator": "equals",
+    "target": true,
+    "classification": "potential_discount_condition",
+    "product_ids": [
+      "ca_fair_dwelling"
+    ],
+    "county_fips": [
+      "06037"
+    ],
+    "improvement": "Clear under-deck combustibles",
+    "project_id": "under_deck_clearance",
+    "practical_impact": "unspecified",
+    "applies_when": {},
+    "applicability": "FAIR Plan wildfire premium discount consideration only; broker confirmation required.",
+    "verification_status": "verified_conditional_rule",
+    "target_details": "Vegetation and combustible debris cleared below decks."
+  },
+  {
+    "requirement_id": "calfire_vents",
+    "source_id": "calfire_retrofit",
+    "field": "calfire_listed_vents_airflow_confirmed",
+    "operator": "equals",
+    "target": true,
+    "classification": "recommendation",
+    "product_ids": [],
+    "county_fips": [
+      "06037"
+    ],
+    "improvement": "Install suitable listed vents; check airflow",
+    "project_id": "ember_resistant_vents",
+    "practical_impact": "unspecified",
+    "applies_when": {},
+    "applicability": "Existing LA homes; confirm source-specific conditions and local authority.",
+    "verification_status": "verified_guidance",
+    "target_details": "Suitable ember/flame-resistant listed vent retrofit, with building-official/airflow review."
+  },
+  {
+    "requirement_id": "calfire_gutters",
+    "source_id": "calfire_retrofit",
+    "field": "noncombustible_gutter_covers",
+    "operator": "equals",
+    "target": true,
+    "classification": "recommendation",
+    "product_ids": [],
+    "county_fips": [
+      "06037"
+    ],
+    "improvement": "Fit noncombustible gutter covers",
+    "project_id": "gutter_protection",
+    "practical_impact": "unspecified",
+    "applies_when": {},
+    "applicability": "Existing LA homes; confirm source-specific conditions and local authority.",
+    "verification_status": "verified_guidance",
+    "target_details": "Noncombustible gutter covers; maintenance still needed."
+  },
+  {
+    "requirement_id": "calfire_roof",
+    "source_id": "calfire_retrofit",
+    "field": "roof_class_a",
+    "operator": "equals",
+    "target": true,
+    "classification": "recommendation",
+    "product_ids": [],
+    "county_fips": [
+      "06037"
+    ],
+    "improvement": "Use Class A at roof replacement",
+    "project_id": "class_a_roof",
+    "practical_impact": "unspecified",
+    "applies_when": {},
+    "applicability": "Existing LA homes; confirm source-specific conditions and local authority.",
+    "verification_status": "verified_guidance",
+    "target_details": "Class A fire-rated roof, confirmed rating rather than inferred material."
+  },
+  {
+    "requirement_id": "la_gutter_debris",
+    "source_id": "la_fire",
+    "field": "gutters_clear",
+    "operator": "equals",
+    "target": true,
+    "classification": "recommendation",
+    "product_ids": [],
+    "county_fips": [
+      "06037"
+    ],
+    "improvement": "Keep gutters free of plant debris",
+    "project_id": "gutter_cleaning",
+    "practical_impact": "unspecified",
+    "applies_when": {},
+    "applicability": "Existing LA homes; confirm source-specific conditions and local authority.",
+    "verification_status": "verified_guidance",
+    "target_details": "Gutters clear of plant debris."
+  },
+  {
+    "requirement_id": "calfire_zone2",
+    "source_id": "calfire_space",
+    "field": "zone2_fuel_management_confirmed",
+    "operator": "equals",
+    "target": true,
+    "classification": "recommendation",
+    "product_ids": [],
+    "county_fips": [
+      "06037"
+    ],
+    "improvement": "Manage fuel to 100 feet/property line",
+    "project_id": "defensible_space",
+    "practical_impact": "unspecified",
+    "applies_when": {},
+    "applicability": "Existing LA homes; confirm source-specific conditions and local authority.",
+    "verification_status": "verified_guidance",
+    "target_details": "Fuel management to 100 feet or property line, including site-specific spacing."
+  },
+  {
+    "requirement_id": "calfire_applicable_dspace",
+    "source_id": "calfire_space",
+    "field": "defensible_space_compliant",
+    "operator": "equals",
+    "target": true,
+    "classification": "verified_requirement",
+    "product_ids": [],
+    "county_fips": [
+      "06037"
+    ],
+    "improvement": "Resolve applicable defensible-space compliance",
+    "project_id": "defensible_space",
+    "practical_impact": "unspecified",
+    "applies_when": {
+      "defensible_space_legal_applicability_confirmed": true
+    },
+    "applicability": "Only when upstream evidence confirms this site is subject to applicable defensible-space law; not an insurer underwriting mandate.",
+    "verification_status": "verified_conditional_rule",
+    "target_details": "Site compliance under applicable state/local rules; inspect rather than infer from a hazard score."
+  }
+]

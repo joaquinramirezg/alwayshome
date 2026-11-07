@@ -1,0 +1,389 @@
+{
+  "synthetic_test_only": true,
+  "warning": "Fictional data, products and costs; not real insurance guidance.",
+  "data": {
+    "schema_version": "gap-report-v1",
+    "status": "screened",
+    "subject_id": "TEST-HOME",
+    "as_of": "2026-11-06",
+    "currency": "USD",
+    "coverage": {
+      "status": "screened",
+      "findings": [
+        {
+          "category": "dwelling",
+          "status": "shortfall",
+          "gap_usd": "50000",
+          "need_usd": "200000",
+          "available_limit_usd": "150000",
+          "action": "Discuss higher protection for this scope.",
+          "source": {
+            "reference": "fixture://SYNTHETIC-NOT-REAL-EVIDENCE",
+            "verified": true,
+            "valid_from": "2026-01-01",
+            "valid_through": "2026-12-31"
+          },
+          "need_source": {
+            "reference": "fixture://SYNTHETIC-NOT-REAL-EVIDENCE",
+            "verified": true,
+            "valid_from": "2026-01-01",
+            "valid_through": "2026-12-31"
+          }
+        },
+        {
+          "category": "ale",
+          "status": "shortfall",
+          "gap_usd": "10000",
+          "need_usd": "30000",
+          "available_limit_usd": "20000",
+          "action": "Discuss both ALE dollar limits and rebuilding-duration protection.",
+          "source": {
+            "reference": "fixture://SYNTHETIC-NOT-REAL-EVIDENCE",
+            "verified": true,
+            "valid_from": "2026-01-01",
+            "valid_through": "2026-12-31"
+          },
+          "need_source": {
+            "reference": "fixture://SYNTHETIC-NOT-REAL-EVIDENCE",
+            "verified": true,
+            "valid_from": "2026-01-01",
+            "valid_through": "2026-12-31"
+          },
+          "duration_gap_months": "12",
+          "duration_status": "shortfall"
+        },
+        {
+          "category": "ordinance_law",
+          "status": "shortfall",
+          "gap_usd": "5000",
+          "need_usd": "10000",
+          "available_limit_usd": "5000",
+          "action": "Discuss higher protection for this scope.",
+          "source": {
+            "reference": "fixture://SYNTHETIC-NOT-REAL-EVIDENCE",
+            "verified": true,
+            "valid_from": "2026-01-01",
+            "valid_through": "2026-12-31"
+          },
+          "need_source": {
+            "reference": "fixture://SYNTHETIC-NOT-REAL-EVIDENCE",
+            "verified": true,
+            "valid_from": "2026-01-01",
+            "valid_through": "2026-12-31"
+          }
+        },
+        {
+          "category": "debris",
+          "status": "no_shortfall_identified",
+          "gap_usd": "0",
+          "need_usd": "10000",
+          "available_limit_usd": "10000",
+          "action": "Confirm terms remain applicable at renewal.",
+          "source": {
+            "reference": "fixture://SYNTHETIC-NOT-REAL-EVIDENCE",
+            "verified": true,
+            "valid_from": "2026-01-01",
+            "valid_through": "2026-12-31"
+          },
+          "need_source": {
+            "reference": "fixture://SYNTHETIC-NOT-REAL-EVIDENCE",
+            "verified": true,
+            "valid_from": "2026-01-01",
+            "valid_through": "2026-12-31"
+          }
+        },
+        {
+          "category": "extended_replacement",
+          "status": "conditional_shortfall",
+          "gap_usd": "12500",
+          "conditional_limit_usd": "187500",
+          "source": {
+            "reference": "fixture://SYNTHETIC-NOT-REAL-EVIDENCE",
+            "verified": true,
+            "valid_from": "2026-01-01",
+            "valid_through": "2026-12-31"
+          },
+          "action": "Verify extension, triggers, maintenance conditions and covered cost scope."
+        },
+        {
+          "category": "deductible",
+          "status": "known_exposure",
+          "exposure_usd": "1000",
+          "gap_usd": null,
+          "source": {
+            "reference": "fixture://SYNTHETIC-NOT-REAL-EVIDENCE",
+            "verified": true,
+            "valid_from": "2026-01-01",
+            "valid_through": "2026-12-31"
+          },
+          "action": "Plan for the applicable deductible; it is not an additional coverage limit."
+        }
+      ],
+      "aggregate_gap_usd": null,
+      "limitations": [
+        "No aggregate gap: limits may overlap; extensions are conditional, not guaranteed proceeds.",
+        "No-shortfall findings apply only to supplied scope and scenarios, not overall insurance adequacy."
+      ]
+    },
+    "alternatives": {
+      "status": "compared",
+      "products": [
+        {
+          "product_id": "TEST-PRODUCT",
+          "name": "SYNTHETIC product, not an insurer",
+          "status": "description_only",
+          "eligibility": "not_determined",
+          "annual_premium_usd": null,
+          "premium_difference_usd": null,
+          "source": {
+            "reference": "fixture://SYNTHETIC-NOT-REAL-EVIDENCE",
+            "verified": true,
+            "valid_from": "2026-01-01",
+            "valid_through": "2026-12-31"
+          },
+          "features": [
+            {
+              "feature": "test_wildfire_feature",
+              "current": false,
+              "alternative": true,
+              "comparison": "different_terms_review",
+              "source": {
+                "reference": "fixture://SYNTHETIC-NOT-REAL-EVIDENCE",
+                "verified": true,
+                "valid_from": "2026-01-01",
+                "valid_through": "2026-12-31"
+              }
+            }
+          ],
+          "limitations": [
+            "Public descriptions are not offers, acceptance decisions, or binding coverage."
+          ],
+          "current_coverage_terms": {
+            "dwelling": {
+              "status": "present",
+              "limit_usd": "150000",
+              "scope_id": "dwelling-test-scope",
+              "limit_basis": "standalone",
+              "source": {
+                "reference": "fixture://SYNTHETIC-NOT-REAL-EVIDENCE",
+                "verified": true,
+                "valid_from": "2026-01-01",
+                "valid_through": "2026-12-31"
+              },
+              "settlement": "replacement_cost"
+            },
+            "ale": {
+              "status": "present",
+              "limit_usd": "20000",
+              "scope_id": "ale-test-scope",
+              "limit_basis": "standalone",
+              "source": {
+                "reference": "fixture://SYNTHETIC-NOT-REAL-EVIDENCE",
+                "verified": true,
+                "valid_from": "2026-01-01",
+                "valid_through": "2026-12-31"
+              },
+              "duration_months": "12"
+            },
+            "ordinance_law": {
+              "status": "present",
+              "limit_usd": "5000",
+              "scope_id": "ordinance_law-test-scope",
+              "limit_basis": "standalone",
+              "source": {
+                "reference": "fixture://SYNTHETIC-NOT-REAL-EVIDENCE",
+                "verified": true,
+                "valid_from": "2026-01-01",
+                "valid_through": "2026-12-31"
+              }
+            },
+            "debris": {
+              "status": "present",
+              "limit_usd": "10000",
+              "scope_id": "debris-test-scope",
+              "limit_basis": "standalone",
+              "source": {
+                "reference": "fixture://SYNTHETIC-NOT-REAL-EVIDENCE",
+                "verified": true,
+                "valid_from": "2026-01-01",
+                "valid_through": "2026-12-31"
+              }
+            }
+          },
+          "current_deductible": {
+            "kind": "fixed",
+            "amount_usd": "1000",
+            "source": {
+              "reference": "fixture://SYNTHETIC-NOT-REAL-EVIDENCE",
+              "verified": true,
+              "valid_from": "2026-01-01",
+              "valid_through": "2026-12-31"
+            }
+          },
+          "current_exclusions": [],
+          "coverage_terms": {
+            "description": "Synthetic higher protection subject to terms"
+          },
+          "deductibles": [],
+          "exclusions": [],
+          "requirements_pending": [
+            "test-vent-rule"
+          ]
+        }
+      ],
+      "ranking": null,
+      "limitations": [
+        "No universal best product or automatic eligibility ranking.",
+        "Premium differences require documented quotes and matching comparison periods/basis."
+      ]
+    },
+    "property_requirements": {
+      "status": "matched",
+      "findings": [
+        {
+          "requirement_id": "test-vent-rule",
+          "classification": "verified_requirement",
+          "product_ids": [
+            "TEST-PRODUCT"
+          ],
+          "existing_condition": "test_old",
+          "target_condition": "test_new",
+          "field": "vent_type",
+          "status": "improvement_needed",
+          "verification_status": "documented_rule",
+          "required_improvement": "Synthetic test vent upgrade",
+          "project_id": "test-vents",
+          "source": {
+            "reference": "fixture://SYNTHETIC-NOT-REAL-EVIDENCE",
+            "verified": true,
+            "valid_from": "2026-01-01",
+            "valid_through": "2026-12-31"
+          },
+          "property_source": {
+            "reference": "fixture://SYNTHETIC-NOT-REAL-EVIDENCE",
+            "verified": true,
+            "valid_from": "2026-01-01",
+            "valid_through": "2026-12-31"
+          },
+          "practical_impact": "high"
+        }
+      ],
+      "limitations": [
+        "A matched rule does not establish complete underwriting eligibility or a guaranteed discount.",
+        "Product rules apply only to their named products; recommendations are not insurer requirements."
+      ]
+    },
+    "upgrades": {
+      "status": "priced",
+      "projects": [
+        {
+          "project_id": "test-vents",
+          "requirement_ids": [
+            "test-vent-rule"
+          ],
+          "classifications": [
+            "verified_requirement"
+          ],
+          "improvements": [
+            "Synthetic test vent upgrade"
+          ],
+          "practical_impacts": [
+            "high"
+          ],
+          "status": "priced",
+          "low_usd": "100",
+          "high_usd": "200",
+          "source": {
+            "reference": "fixture://SYNTHETIC-NOT-REAL-EVIDENCE",
+            "verified": true,
+            "valid_from": "2026-01-01",
+            "valid_through": "2026-12-31"
+          },
+          "scope_tags": [
+            "all_test_vents"
+          ],
+          "cost_id": "test-vent-cost",
+          "scope_description": "Synthetic whole-project installed cost",
+          "geography": "TEST-CITY",
+          "price_date": "2026-11-01"
+        }
+      ],
+      "total_low_usd": "100",
+      "total_high_usd": "200",
+      "limitations": [
+        "Catalog estimates are not bids. No premium savings or eligibility improvement is quantified.",
+        "Scope tags must identify shared work consistently; overlaps require human reconciliation."
+      ]
+    },
+    "actions": [
+      {
+        "kind": "policy_review",
+        "category": "ale",
+        "priority_tier": 1,
+        "action": "Discuss both ALE dollar limits and rebuilding-duration protection.",
+        "gap_usd": "10000",
+        "reason": "Documented coverage shortfall/exclusion.",
+        "order": 1
+      },
+      {
+        "kind": "policy_review",
+        "category": "dwelling",
+        "priority_tier": 1,
+        "action": "Discuss higher protection for this scope.",
+        "gap_usd": "50000",
+        "reason": "Documented coverage shortfall/exclusion.",
+        "order": 2
+      },
+      {
+        "kind": "policy_review",
+        "category": "extended_replacement",
+        "priority_tier": 1,
+        "action": "Verify extension, triggers, maintenance conditions and covered cost scope.",
+        "gap_usd": "12500",
+        "reason": "Documented coverage shortfall/exclusion.",
+        "order": 3
+      },
+      {
+        "kind": "policy_review",
+        "category": "ordinance_law",
+        "priority_tier": 1,
+        "action": "Discuss higher protection for this scope.",
+        "gap_usd": "5000",
+        "reason": "Documented coverage shortfall/exclusion.",
+        "order": 4
+      },
+      {
+        "kind": "property_upgrade",
+        "project_id": "test-vents",
+        "priority_tier": 2,
+        "action": [
+          "Synthetic test vent upgrade"
+        ],
+        "low_usd": "100",
+        "high_usd": "200",
+        "practical_impacts": [
+          "high"
+        ],
+        "reason": "Named product/program requirement.",
+        "pricing_status": "priced",
+        "order": 5
+      },
+      {
+        "kind": "policy_review",
+        "category": "deductible",
+        "priority_tier": 3,
+        "action": "Plan for the applicable deductible; it is not an additional coverage limit.",
+        "gap_usd": null,
+        "reason": "Verify terms or plan for exposure.",
+        "order": 6
+      }
+    ],
+    "missing_inputs": [],
+    "prioritization_assumption": "Exclusions, coverage shortfalls, named requirements, verification tasks, then recommendations; documented high/medium/low practical impact followed by known cost ascending within each tier. This ordering is a transparent product assumption, not measured loss reduction.",
+    "limitations": [
+      "Preliminary planning report, not a claim settlement or insurer-certified valuation.",
+      "No product acceptance, premium savings or underwriting outcome is promised.",
+      "Source verification flags are trusted upstream attestations; no document extraction is performed."
+    ]
+  }
+}

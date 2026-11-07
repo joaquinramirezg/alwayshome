@@ -1,0 +1,134 @@
+[
+  {
+    "product_id": "ca_fair_dwelling",
+    "name": "Dwelling Property Policy",
+    "insurer": "California FAIR Plan Association",
+    "source_id": "fair_form",
+    "evidence_type": "public_description",
+    "county_fips": [
+      "06037"
+    ],
+    "geographic_applicability": "California description; LA property acceptance unknown",
+    "availability_status": "not_verified",
+    "annual_premium_usd": null,
+    "quote": null,
+    "coverage_terms": {
+      "dwelling": "Replacement-cost settlement requires declarations election and conditions.",
+      "extended_replacement": null,
+      "ale": "Fair rental value is specified; do not equate it to comprehensive ALE.",
+      "ordinance_law": "Optional declarations election and limits; damaged-property conditions apply.",
+      "debris": "Base removal uses damaged-property limits; optional additional coverage has exclusions.",
+      "limits_usd": null,
+      "effective_date": null,
+      "form_edition": "05/2026"
+    },
+    "features": {
+      "dwelling_replacement_cost": {
+        "value": "Optional, subject to settlement conditions",
+        "source_id": "fair_form"
+      },
+      "debris_limit_basis": {
+        "value": "Shared base; optional additional cover",
+        "source_id": "fair_form"
+      }
+    },
+    "deductibles": [
+      {
+        "structure": "Declarations amount per occurrence; specified exceptions",
+        "amount_usd": null
+      }
+    ],
+    "exclusions": [
+      "Water/earth-movement limitations; review form.",
+      "Optional debris excludes hazardous-material abatement."
+    ],
+    "requirement_ids": [],
+    "verification_status": "verified_public_description_only"
+  },
+  {
+    "product_id": "farmers_ca_smart",
+    "name": "Smart Plan Home (California overview)",
+    "insurer": "Farmers",
+    "source_id": "farmers_ca",
+    "evidence_type": "public_description",
+    "county_fips": [
+      "06037"
+    ],
+    "geographic_applicability": "California description; LA property acceptance unknown",
+    "availability_status": "not_verified",
+    "annual_premium_usd": null,
+    "quote": null,
+    "coverage_terms": {
+      "dwelling": "Covered-event protection described.",
+      "extended_replacement": "Option advertised; extent unspecified.",
+      "ale": "Covered uninhabitability described; amount/duration unknown.",
+      "ordinance_law": null,
+      "debris": null,
+      "limits_usd": null
+    },
+    "features": {
+      "extended_replacement_cost": {
+        "value": "Option advertised",
+        "source_id": "farmers_ca"
+      },
+      "ale": {
+        "value": "Described for covered loss",
+        "source_id": "farmers_ca"
+      }
+    },
+    "deductibles": [
+      {
+        "structure": "Declining Deductibles option advertised; actual terms/amount unknown",
+        "amount_usd": null
+      }
+    ],
+    "exclusions": [
+      "Flood and earthquake require separate coverage."
+    ],
+    "requirement_ids": [],
+    "verification_status": "verified_public_description_only"
+  },
+  {
+    "product_id": "mercury_home_overview",
+    "name": "Homeowners (multistate overview)",
+    "insurer": "Mercury Insurance",
+    "source_id": "mercury_home",
+    "evidence_type": "public_description",
+    "county_fips": [
+      "06037"
+    ],
+    "geographic_applicability": "California description; LA property acceptance unknown",
+    "availability_status": "not_verified",
+    "annual_premium_usd": null,
+    "quote": null,
+    "coverage_terms": {
+      "dwelling": "Fire-related protection described.",
+      "extended_replacement": "Advertised total up to 150% of dwelling limit; CA applicability unverified.",
+      "ale": "Covered uninhabitability described; CA terms require confirmation.",
+      "ordinance_law": null,
+      "debris": null,
+      "limits_usd": null
+    },
+    "features": {
+      "extended_replacement_cost": {
+        "value": null,
+        "source_id": "mercury_home"
+      },
+      "ale": {
+        "value": null,
+        "source_id": "mercury_home"
+      }
+    },
+    "deductibles": [
+      {
+        "structure": "Unspecified in reviewed overview",
+        "amount_usd": null
+      }
+    ],
+    "exclusions": [
+      "Some features unavailable in some states; obtain CA form."
+    ],
+    "requirement_ids": [],
+    "verification_status": "verified_public_description_only"
+  }
+]
