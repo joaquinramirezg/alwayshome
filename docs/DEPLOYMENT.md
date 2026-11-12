@@ -17,7 +17,7 @@ Two phases. Phase 1 puts the current Streamlit app online today, for judging and
 Free, deploys straight from GitHub, built for exactly this app.
 
 1. Go to https://share.streamlit.io and sign in with the GitHub account that owns the repo (joaquinramirezg).
-2. **Create app** → repository `joaquinramirezg/msba-vibathon-2026`, branch `main`, main file `app.py`.
+2. **Create app** → repository `joaquinramirezg/alwayshome`, branch `main`, main file `app.py`.
 3. **Advanced settings**:
    - Python version: 3.14 if offered, otherwise 3.13 (the code needs 3.12 or newer).
    - Secrets (TOML):

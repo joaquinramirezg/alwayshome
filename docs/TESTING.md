@@ -10,8 +10,8 @@ Works on macOS, Linux and Windows. Takes about 5 minutes the first time.
    - Windows: `powershell -c "irm https://astral.sh/uv/install.ps1 | iex"`
 2. Get the code (everything is on `main`):
    ```
-   git clone https://github.com/joaquinramirezg/msba-vibathon-2026.git
-   cd msba-vibathon-2026
+   git clone https://github.com/joaquinramirezg/alwayshome.git
+   cd alwayshome
    ```
    Already cloned? `git switch main && git pull` instead.
 3. Install everything:

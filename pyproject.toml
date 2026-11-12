@@ -1,7 +1,7 @@
 [project]
 name = "msba-vibathon-2026"
 version = "0.1.0"
-description = "Add your description here"
+description = "AlwaysHome: fire-safety fixes and coverage gaps for California homeowners on the FAIR Plan"
 readme = "README.md"
 authors = [
     { name = "David Ewenczyk", email = "david.ewenczyk@gmail.com" }
