@@ -14,12 +14,13 @@ A web app that shows a Los Angeles County homeowner on the California FAIR Plan 
 
 For a sample Altadena homeowner (a 1952 wood-roof house, FAIR Plan only, $10,000 budget):
 
-- If the house burned, rebuilding and living elsewhere would cost **$850K to $1.5M**; the policy would pay **$595K to $715K**, leaving **$255K to $805K** out of pocket.
-- Seven fixes costing from **$5,600** cut the chance of losing the house if fire reaches it from **36% to 15%**.
+- The model estimates that seven fixes cut the chance of losing the house if fire reaches it from **36% to 15%**. That is an estimate from associations in two fires, not a measured effect of the fixes.
 - The house-loss model behind that estimate reaches a cross-validated **AUC of 0.80** on the 4,525 homes with every feature recorded, out of **22,071 CAL FIRE inspections** from the January 2025 Eaton and Palisades fires.
 - In those 4,525 homes, 20.6% were destroyed. The model also uses the neighborhood (fire and ZIP); with whole neighborhoods held out in cross-validation, the house features alone reach an AUC of **0.68**, the honest number for an address the model has not seen.
 
-![Seven fixes from $5,600 cut the chance of losing the house from 36% to 15%](docs/images/plan-altadena.png)
+![Seven fixes cut the estimated chance of losing the house from 36% to 15%](docs/images/plan-altadena.png)
+
+> Dollar figures in the app and the demo (fix costs, insurance discounts, rebuild and out-of-pocket amounts) come from placeholder inputs built for the one-day demo, not real quotes or claims data. The loss-chance model and its evaluation use real CAL FIRE data.
 
 ## Who it is for, and who pays
 
