@@ -6,7 +6,7 @@ A web app that shows a Los Angeles County homeowner on the California FAIR Plan 
 
 [![tests](https://github.com/joaquinramirezg/alwayshome/actions/workflows/ci.yml/badge.svg)](https://github.com/joaquinramirezg/alwayshome/actions/workflows/ci.yml)
 
-**[Try the live app](https://msba-vibathon-2026.vercel.app)** · built in one day by a team of three at the UCLA Anderson MSBA Vibathon 2026 (Nov 6 2026), theme 04 "Uninsurable".
+**[Try the live app](https://alwayshome-mvp.vercel.app)** · built in one day by a team of three at the UCLA Anderson MSBA Vibathon 2026 (Nov 6 2026), theme 04 "Uninsurable".
 
 > The API runs on a free host that sleeps when idle, so the first request can take up to a minute. The app shows a wake-up message while it waits. Pick an address under **Examples** to see a full run without typing.
 

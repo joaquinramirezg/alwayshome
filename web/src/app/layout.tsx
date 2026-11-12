@@ -10,7 +10,7 @@ const description =
   "Enter your address, your home and your policy. See your wildfire exposure, what your insurance would really pay, and the fire-safety fixes that move you closest to affordable private coverage.";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://msba-vibathon-2026.vercel.app"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://alwayshome-mvp.vercel.app"),
   title: { default: title, template: "%s · AlwaysHome" },
   description,
   applicationName: "AlwaysHome",

@@ -132,7 +132,7 @@ Run `uv run pytest` before every push to `main`.
 ## 5. The web app: click every button
 
 ```
-cd web && npm run e2e -- https://msba-vibathon-2026.vercel.app   # or http://localhost:3000
+cd web && npm run e2e -- https://alwayshome-mvp.vercel.app   # or http://localhost:3000
 ```
 Drives Google Chrome through the home page, all 5 steps, every button, policy upload, report and download, every sample homeowner in the demo menu, deep links, dark mode and the credits page (25 checks).
 
