@@ -16,7 +16,7 @@ Read first:
 - `docs/data_dictionary.md`: every processed table, its columns, join keys and limitations
 - `docs/validation_report.md`: data checks and known data problems
 - `docs/TESTING.md`: setup, running the app, the test scripts
-- `docs/DEPLOYMENT.md`: hosting plan (Streamlit Cloud now; Next.js on Vercel + API container later)
+- `docs/DEPLOYMENT.md`: hosting (Next.js on Vercel, FastAPI container on Render; Streamlit kept as a test bench)
 - `docs/coverage_handoff_for_agents.md`: read this before connecting the ROI and plan-comparison model to the coverage module
 
 ## Rules
@@ -48,10 +48,10 @@ src/msba_vibathon_2026/  app logic:
   contract.py            validate_inputs/validate_output for the model contract
   report.py              plain-language plan (template, optional AI rewrite)
   scenarios.py           sample homeowners -> assess() inputs
-  assess_stub.py         placeholder assess() until the model replaces it (contract in docs/inputs_and_contract.md)
-app.py                   Streamlit app (phase 1 hosting: Streamlit Community Cloud)
-api/main.py              FastAPI backend for the phase 2 React frontend (Dockerfile at repo root)
-web/                     phase 2 frontend (Next.js, not started)
+  assess_stub.py         assess(): runs the house model and the fix ranking (falls back to placeholders only if the trained model file is missing; contract in docs/inputs_and_contract.md)
+app.py                   Streamlit app (internal test bench and backup)
+api/main.py              FastAPI backend for the web app (Dockerfile at repo root, deployed on Render)
+web/                     the homeowner-facing app (Next.js on Vercel, alwayshome-mvp.vercel.app)
 data/demo/               cached lookups and extractions so the demo runs offline
 data/samples/policies/   synthetic declarations pages + answer_key.json
 data/samples/scenarios.json  sample homeowners with expected results

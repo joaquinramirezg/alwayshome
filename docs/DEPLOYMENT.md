@@ -1,5 +1,7 @@
 # Hosting plan
 
+> **Current state (Nov 2026):** phase 2 is live. The web app runs on Vercel at https://alwayshome-mvp.vercel.app and the API (`alwayson-api`) is a Docker container on Render's free plan, deployed from `render.yaml`. The Streamlit app is kept as an internal test bench. The rest of this file is the plan as written on Nov 6, kept for the record.
+
 Two phases. Phase 1 puts the current Streamlit app online today, for judging and as a backup if a laptop fails. Phase 2 is the real product: a React frontend on Vercel talking to a Python API.
 
 ## Constraints that drive the design
